@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import java.util.Arrays;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
@@ -46,18 +45,31 @@ public class MotionExample {
                 compileShader("motionTest.frag", GL_FRAGMENT_SHADER)
         );
 
+        int offsetLocation = glGetUniformLocation(program, "offset");
+
         while (!Display.isCloseRequested()) {
-            draw(vertexBuffer, program);
-            updateVertexBuffer(vertexBuffer, VERTEX_DATA);
+            draw(vertexBuffer, program, offsetLocation);
         }
 
         Display.destroy();
     }
 
-    private void draw(final int vertexBuffer, final int program) {
+    private void updateOffset(int offsetLocation) {
+        double time = System.currentTimeMillis() * 1e-3;
+        double freq = 2 * Math.PI / 5.0;
+        double xOffset = 0.5 * Math.cos(freq * time);
+        double yOffset = 0.5 * Math.sin(freq * time);
+
+        glUniform2f(offsetLocation, (float) xOffset, (float) yOffset);
+    }
+
+    private void draw(final int vertexBuffer, final int program, int offsetLocation) {
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(program);
+
+        updateOffset(offsetLocation);
+
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
         glEnableVertexAttribArray(0);
 
@@ -95,16 +107,8 @@ public class MotionExample {
         return program;
     }
 
-    private void updateVertexBuffer(final int vertexBufferObject, final float[] vertices) {
-        FloatBuffer vertexDataBuffer = createVertexDataBuffer(vertices);
-
-        glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, vertexDataBuffer);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
-
     private int initializeVertexBuffer(final float[] vertices) {
-        FloatBuffer vertexDataBuffer = createVertexDataBuffer(vertices);
+        FloatBuffer vertexDataBuffer = createDataBuffer(vertices);
 
         int vertexBufferObject = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
@@ -113,24 +117,11 @@ public class MotionExample {
         return vertexBufferObject;
     }
 
-    private FloatBuffer createVertexDataBuffer(final float[] vertices) {
-        double time = System.currentTimeMillis() * 1e-3;
-        double freq = 2 * Math.PI / 5.0;
-        double xOffset = 0.5 * Math.cos(freq * time);
-        double yOffset = 0.5 * Math.sin(freq * time);
-
-        int dataLength = vertices.length;
-        float[] transformedVertices = Arrays.copyOf(vertices, dataLength);
-
-        for (int i = 0; i < dataLength; i += 4) {
-            transformedVertices[i] += (float) xOffset;
-            transformedVertices[i+1] += (float) yOffset;
-        }
-
-        FloatBuffer vertexDataBuffer = BufferUtils.createFloatBuffer(dataLength);
-        vertexDataBuffer.put(transformedVertices);
-        vertexDataBuffer.flip();
-        return vertexDataBuffer;
+    private FloatBuffer createDataBuffer(final float[] data) {
+        FloatBuffer dataBuffer = BufferUtils.createFloatBuffer(data.length);
+        dataBuffer.put(data);
+        dataBuffer.flip();
+        return dataBuffer;
     }
 
     private void initializeDisplay() throws LWJGLException {
