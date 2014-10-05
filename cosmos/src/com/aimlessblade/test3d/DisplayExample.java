@@ -11,7 +11,7 @@ import org.lwjgl.opengl.PixelFormat;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.DoubleBuffer;
+import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
@@ -19,13 +19,17 @@ import static org.lwjgl.opengl.GL20.*;
 
 public class DisplayExample {
 
-    public static final int WIDTH = 800;
-    public static final int HEIGHT = 600;
+    public static final int WIDTH = 500;
+    public static final int HEIGHT = 500;
 
-    public static final double[] VERTICES = new double[]{
-            0.75, 0.75, 0.0, 1.0,
-            0.75, -0.75, 0.0, 1.0,
-            -0.75, -0.75, 0.0, 1.0
+    public static final float[] VERTEX_DATA = new float[]{
+            1.0f, 0.0f, 0.0f, 1.0f,
+            0.0f, 1.0f, 0.0f, 1.0f,
+            0.0f, 0.0f, 1.0f, 1.0f,
+
+            0.0f, 0.5f, 0.0f, 1.0f,
+            0.5f, -0.366f, 0.0f, 1.0f,
+            -0.5f, -0.366f, 0.0f, 1.0f
     };
 
     public static void main(String[] argv) {
@@ -40,7 +44,7 @@ public class DisplayExample {
     private void start() throws IOException, LWJGLException {
 
         initializeDisplay();
-        int vertexBuffer = initializeVertexBuffer(VERTICES);
+        int vertexBuffer = initializeVertexBuffer(VERTEX_DATA);
 
         int program = linkProgram(
                 compileShader("screen.vert", GL_VERTEX_SHADER),
@@ -60,7 +64,9 @@ public class DisplayExample {
 
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 4, GL_DOUBLE, false, 0, 0);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(0, 4, GL_FLOAT, false, 0, 0);
+        glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 48);
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glUseProgram(0);
@@ -91,8 +97,8 @@ public class DisplayExample {
         return program;
     }
 
-    private int initializeVertexBuffer(double[] vertices) {
-        DoubleBuffer vertexDataBuffer = BufferUtils.createDoubleBuffer(vertices.length);
+    private int initializeVertexBuffer(float[] vertices) {
+        FloatBuffer vertexDataBuffer = BufferUtils.createFloatBuffer(vertices.length);
         vertexDataBuffer.put(vertices);
         vertexDataBuffer.flip();
 
@@ -112,7 +118,7 @@ public class DisplayExample {
         Display.create(pixelFormat, contextAtrributes);
 
         glViewport(0, 0, WIDTH, HEIGHT);
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
         System.out.println("OpenGL version: " + glGetString(GL_VERSION));
     }
