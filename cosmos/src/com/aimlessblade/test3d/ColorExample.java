@@ -1,23 +1,16 @@
 package com.aimlessblade.test3d;
 
-import org.apache.commons.io.FileUtils;
-import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.ContextAttribs;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.opengl.PixelFormat;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
 
+import static com.aimlessblade.test3d.GraphicsUtils.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.glBindBuffer;
 import static org.lwjgl.opengl.GL20.*;
 
-public class ColorExample {
+public class ColorExample extends DisplayFramework {
 
     public static final int WIDTH = 500;
     public static final int HEIGHT = 500;
@@ -31,9 +24,15 @@ public class ColorExample {
             0.5f, -0.366f, 0.0f, 1.0f,
             -0.5f, -0.366f, 0.0f, 1.0f
     };
+    private int vertexBuffer;
+    private int program;
+
+    public ColorExample(int width, int height) {
+        super(width, height);
+    }
 
     public static void main(String[] argv) {
-        ColorExample colorExample = new ColorExample();
+        ColorExample colorExample = new ColorExample(WIDTH, HEIGHT);
         try {
             colorExample.start();
         } catch (IOException | LWJGLException e) {
@@ -41,25 +40,16 @@ public class ColorExample {
         }
     }
 
-    private void start() throws IOException, LWJGLException {
+    public void initialize() throws IOException {
+        vertexBuffer = initializeVertexBuffer(VERTEX_DATA);
 
-        initializeDisplay();
-        int vertexBuffer = initializeVertexBuffer(VERTEX_DATA);
-
-        int program = linkProgram(
+        program = linkProgram(
                 compileShader("colorTest.vert", GL_VERTEX_SHADER),
                 compileShader("colorTest.frag", GL_FRAGMENT_SHADER)
         );
-
-        while (!Display.isCloseRequested()) {
-            draw(vertexBuffer, program);
-        }
-
-        Display.destroy();
     }
 
-    private void draw(int vertexBuffer, int program) {
-        glClear(GL_COLOR_BUFFER_BIT);
+    public void draw () {
         glUseProgram(program);
 
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
@@ -70,79 +60,5 @@ public class ColorExample {
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glUseProgram(0);
-        Display.update();
-    }
-
-    private int linkProgram(Integer... shaders) {
-        int program = glCreateProgram();
-
-        for (int shader : shaders) {
-            glAttachShader(program, shader);
-        }
-
-        glLinkProgram(program);
-
-        int status = glGetProgrami(program, GL_LINK_STATUS);
-        if (status == GL_FALSE) {
-            int logLength = glGetProgrami(program, GL_INFO_LOG_LENGTH);
-            System.out.println("Compile log:");
-            System.out.println(glGetProgramInfoLog(program, logLength));
-            throw new RuntimeException("Linking failed!");
-        }
-
-        for (int shader : shaders) {
-            glDetachShader(program, shader);
-        }
-
-        return program;
-    }
-
-    private int initializeVertexBuffer(float[] vertices) {
-        FloatBuffer vertexDataBuffer = BufferUtils.createFloatBuffer(vertices.length);
-        vertexDataBuffer.put(vertices);
-        vertexDataBuffer.flip();
-
-        int vertexBufferObject = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
-        glBufferData(GL_ARRAY_BUFFER, vertexDataBuffer, GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        return vertexBufferObject;
-    }
-
-    private void initializeDisplay() throws LWJGLException {
-        PixelFormat pixelFormat = new PixelFormat();
-        ContextAttribs contextAtrributes = new ContextAttribs(3, 0)
-                .withForwardCompatible(true);
-
-        Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
-        Display.create(pixelFormat, contextAtrributes);
-
-        glViewport(0, 0, WIDTH, HEIGHT);
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
-        System.out.println("OpenGL version: " + glGetString(GL_VERSION));
-    }
-
-    private int compileShader(String filename, int shaderType) throws IOException {
-        File shaderFile = new File("/home/nick/IdeaProjects/cosmos/cosmos/shaders/" + filename);
-        byte[] shaderSourceBytes = FileUtils.readFileToByteArray(shaderFile);
-        ByteBuffer shaderSource = BufferUtils.createByteBuffer(shaderSourceBytes.length);
-        shaderSource.put(shaderSourceBytes);
-        shaderSource.flip();
-
-        int shader = glCreateShader(shaderType);
-        glShaderSource(shader, shaderSource);
-        glCompileShader(shader);
-
-        int status = glGetShaderi(shader, GL_COMPILE_STATUS);
-
-        if (status == GL_FALSE) {
-            int logLength = glGetShaderi(shader, GL_INFO_LOG_LENGTH);
-            System.out.println("Compile log:");
-            System.out.println(glGetShaderInfoLog(shader, logLength));
-            throw new RuntimeException(filename + " compilation failed!");
-        }
-
-        return shader;
     }
 }
