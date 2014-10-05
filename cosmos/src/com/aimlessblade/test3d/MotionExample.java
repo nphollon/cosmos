@@ -26,6 +26,10 @@ public class MotionExample {
             -0.5f, -0.366f, 0.0f, 1.0f
     };
 
+    public static final float PERIOD = 5.0f;
+
+    public static final long START_TIME = System.currentTimeMillis();
+
     public static void main(final String[] argv) {
         MotionExample displayExample = new MotionExample();
         try {
@@ -45,30 +49,28 @@ public class MotionExample {
                 compileShader("motionTest.frag", GL_FRAGMENT_SHADER)
         );
 
-        int offsetLocation = glGetUniformLocation(program, "offset");
+        int periodLocation = glGetUniformLocation(program, "period");
+        int timeLocation = glGetUniformLocation(program, "time");
+
+        glUseProgram(program);
+        glUniform1f(periodLocation, PERIOD);
+        glUseProgram(0);
+
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
         while (!Display.isCloseRequested()) {
-            draw(vertexBuffer, program, offsetLocation);
+            draw(vertexBuffer, program, timeLocation);
         }
 
         Display.destroy();
     }
 
-    private void updateOffset(int offsetLocation) {
-        double time = System.currentTimeMillis() * 1e-3;
-        double freq = 2 * Math.PI / 5.0;
-        double xOffset = 0.5 * Math.cos(freq * time);
-        double yOffset = 0.5 * Math.sin(freq * time);
-
-        glUniform2f(offsetLocation, (float) xOffset, (float) yOffset);
-    }
-
-    private void draw(final int vertexBuffer, final int program, int offsetLocation) {
+    private void draw(final int vertexBuffer, final int program, int timeLocation) {
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(program);
 
-        updateOffset(offsetLocation);
+        glUniform1f(timeLocation, getElapsedTime());
 
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
         glEnableVertexAttribArray(0);
@@ -81,6 +83,10 @@ public class MotionExample {
         glUseProgram(0);
         Display.sync(60);
         Display.update();
+    }
+
+    private float getElapsedTime() {
+        return (System.currentTimeMillis() - START_TIME) * 0.001f;
     }
 
     private int linkProgram(final Integer... shaders) {
@@ -131,9 +137,7 @@ public class MotionExample {
 
         Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
         Display.create(pixelFormat, contextAtrributes);
-
         glViewport(0, 0, WIDTH, HEIGHT);
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     }
 
     private int compileShader(final String filename, final int shaderType) throws IOException {
