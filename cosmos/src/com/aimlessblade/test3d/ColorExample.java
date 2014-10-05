@@ -3,6 +3,7 @@ package com.aimlessblade.test3d;
 import org.lwjgl.LWJGLException;
 
 import java.io.IOException;
+import java.nio.FloatBuffer;
 
 import static com.aimlessblade.test3d.GraphicsUtils.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -14,6 +15,11 @@ public class ColorExample extends DisplayFramework {
 
     public static final int WIDTH = 500;
     public static final int HEIGHT = 500;
+
+    public static final float FRUSTUM_SCALE = 1.0f;
+    public static final float Z_NEAR = 1.0f;
+    public static final float Z_FAR = 3.0f;
+    public static final float[] PERSPECTIVE_MATRIX = getPerspectiveMatrix(FRUSTUM_SCALE, Z_NEAR, Z_FAR);
 
     public static final float[] VERTEX_DATA = new float[]{
             0.0f, 0.0f, 1.0f, 1.0f,
@@ -113,6 +119,7 @@ public class ColorExample extends DisplayFramework {
             -0.25f, -0.25f, -2.75f, 1.0f,
             -0.25f, -0.25f, -1.25f, 1.0f
     };
+
     private int vertexBuffer;
     private int program;
 
@@ -138,15 +145,12 @@ public class ColorExample extends DisplayFramework {
         );
 
         int offsetLocation = glGetUniformLocation(program, "offset");
-        int frustumScaleLocation = glGetUniformLocation(program, "frustumScale");
-        int zNearLocation = glGetUniformLocation(program, "zNear");
-        int zFarLocation = glGetUniformLocation(program, "zFar");
+        int perspectiveMatrixLocation = glGetUniformLocation(program, "perspectiveMatrix");
 
         glUseProgram(program);
         glUniform2f(offsetLocation, 0.5f, 0.5f);
-        glUniform1f(frustumScaleLocation, 1.0f);
-        glUniform1f(zNearLocation, 1.0f);
-        glUniform1f(zFarLocation, 3.0f);
+        FloatBuffer perspectiveBuffer = createDataBuffer(PERSPECTIVE_MATRIX);
+        glUniformMatrix4(perspectiveMatrixLocation, false, perspectiveBuffer);
         glUseProgram(0);
 
         glEnable(GL_CULL_FACE);

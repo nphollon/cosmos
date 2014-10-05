@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.util.Arrays;
 
 import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL15.*;
@@ -92,5 +93,19 @@ public class GraphicsUtils {
             if (Display.isCreated()) Display.destroy();
             System.exit(-1);
         }
+    }
+
+    public static float[] getPerspectiveMatrix(float frustumScale, float zNear, float zFar) {
+        // 2D matrix stored in a 1D array (column-major order)
+        float[] matrix = new float[16]; // 4x4
+        Arrays.fill(matrix, 0.0f);
+
+        matrix[0] = frustumScale; // M.xx
+        matrix[5] = frustumScale; // M.yy
+        matrix[10] = (zFar + zNear) / (zFar - zNear); // M.zz
+        matrix[11] = -1; // M.zw
+        matrix[14] = 2 * zFar * zNear / (zFar - zNear); // M.wz
+
+        return matrix;
     }
 }
