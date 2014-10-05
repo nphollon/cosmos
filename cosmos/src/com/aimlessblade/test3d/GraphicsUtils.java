@@ -95,12 +95,12 @@ public class GraphicsUtils {
         }
     }
 
-    public static float[] getPerspectiveMatrix(float frustumScale, float zNear, float zFar) {
+    public static float[] getPerspectiveMatrix(float frustumScale, float zNear, float zFar, float aspectRatio) {
         // 2D matrix stored in a 1D array (column-major order)
         float[] matrix = new float[16]; // 4x4
         Arrays.fill(matrix, 0.0f);
 
-        matrix[0] = frustumScale; // M.xx
+        matrix[0] = frustumScale / aspectRatio; // M.xx
         matrix[5] = frustumScale; // M.yy
         matrix[10] = (zFar + zNear) / (zFar - zNear); // M.zz
         matrix[11] = -1; // M.zw

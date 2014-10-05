@@ -13,15 +13,16 @@ import static org.lwjgl.opengl.GL20.*;
 
 public class ColorExample extends DisplayFramework {
 
-    public static final int WIDTH = 500;
-    public static final int HEIGHT = 500;
+    private static final int WIDTH = 1000;
+    private static final int HEIGHT = 200;
+    private static final float ASPECT_RATIO = (float) WIDTH / HEIGHT;
 
-    public static final float FRUSTUM_SCALE = 1.0f;
-    public static final float Z_NEAR = 1.0f;
-    public static final float Z_FAR = 3.0f;
-    public static final float[] PERSPECTIVE_MATRIX = getPerspectiveMatrix(FRUSTUM_SCALE, Z_NEAR, Z_FAR);
+    private static final float FRUSTUM_SCALE = 1.0f;
+    private static final float Z_NEAR = 1.0f;
+    private static final float Z_FAR = 3.0f;
+    private static final float[] PERSPECTIVE_MATRIX = getPerspectiveMatrix(FRUSTUM_SCALE, Z_NEAR, Z_FAR, ASPECT_RATIO);
 
-    public static final float[] VERTEX_DATA = new float[]{
+    private static final float[] VERTEX_DATA = new float[]{
             0.0f, 0.0f, 1.0f, 1.0f,
             0.0f, 0.0f, 1.0f, 1.0f,
             0.0f, 0.0f, 1.0f, 1.0f,
