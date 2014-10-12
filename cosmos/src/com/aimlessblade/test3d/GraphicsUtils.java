@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import java.util.Arrays;
+import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL15.*;
@@ -43,18 +43,37 @@ public class GraphicsUtils {
         return program;
     }
 
-    public static int initializeVertexBuffer(final float[] vertices) {
-        FloatBuffer vertexDataBuffer = createDataBuffer(vertices);
+    public static int initializeBufferObject(final int target, final float[] data, final int drawMode) {
+        FloatBuffer dataBuffer = createDataBuffer(data);
 
-        int vertexBufferObject = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
-        glBufferData(GL_ARRAY_BUFFER, vertexDataBuffer, GL_STREAM_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        return vertexBufferObject;
+        int bufferObject = glGenBuffers();
+        glBindBuffer(target, bufferObject);
+        glBufferData(target, dataBuffer, drawMode);
+
+        glBindBuffer(target, 0);
+        return bufferObject;
+    }
+
+    public static int initializeBufferObject(final int target, final int[] data, final int drawMode) {
+        IntBuffer dataBuffer = createDataBuffer(data);
+
+        int bufferObject = glGenBuffers();
+        glBindBuffer(target, bufferObject);
+        glBufferData(target, dataBuffer, drawMode);
+
+        glBindBuffer(target, 0);
+        return bufferObject;
     }
 
     public static FloatBuffer createDataBuffer(final float[] data) {
         FloatBuffer dataBuffer = BufferUtils.createFloatBuffer(data.length);
+        dataBuffer.put(data);
+        dataBuffer.flip();
+        return dataBuffer;
+    }
+
+    public static IntBuffer createDataBuffer(final int[] data) {
+        IntBuffer dataBuffer = BufferUtils.createIntBuffer(data.length);
         dataBuffer.put(data);
         dataBuffer.flip();
         return dataBuffer;
@@ -96,16 +115,29 @@ public class GraphicsUtils {
     }
 
     public static float[] getPerspectiveMatrix(float frustumScale, float zNear, float zFar, float aspectRatio) {
-        // 2D matrix stored in a 1D array (column-major order)
-        float[] matrix = new float[16]; // 4x4
-        Arrays.fill(matrix, 0.0f);
+        // 2D matrix stored in a 1D array (row-major order)
+        return new float[] {
+            frustumScale/aspectRatio,      0,                 0,                        0,
+                          0,          frustumScale,           0,                        0,
+                          0,               0,      (zFar+zNear)/(zFar-zNear), 2*zFar*zNear/(zFar-zNear),
+                          0,               0,                -1,                        0
+        };
+    }
 
-        matrix[0] = frustumScale / aspectRatio; // M.xx
-        matrix[5] = frustumScale; // M.yy
-        matrix[10] = (zFar + zNear) / (zFar - zNear); // M.zz
-        matrix[11] = -1; // M.zw
-        matrix[14] = 2 * zFar * zNear / (zFar - zNear); // M.wz
+    public static float[] getYawRotationMatrix(float yaw) {
+        return new float[] {
+             cos(yaw), 0, sin(yaw), 0,
+                 0,    1,    0,     0,
+            -sin(yaw), 0, cos(yaw), 0,
+                 0,    0,    0,     1
+        };
+    }
 
-        return matrix;
+    private static float cos(float degrees) {
+        return (float) Math.cos(Math.toRadians(degrees));
+    }
+
+    private static float sin(float degrees) {
+        return (float) Math.sin(Math.toRadians(degrees));
     }
 }

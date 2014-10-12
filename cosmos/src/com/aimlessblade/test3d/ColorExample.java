@@ -4,122 +4,88 @@ import org.lwjgl.LWJGLException;
 
 import java.io.IOException;
 import java.nio.FloatBuffer;
+import java.util.Arrays;
 
+import static com.aimlessblade.test3d.Color.*;
 import static com.aimlessblade.test3d.GraphicsUtils.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.glBindBuffer;
+import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 public class ColorExample extends DisplayFramework {
 
-    private static final int WIDTH = 1000;
-    private static final int HEIGHT = 200;
+    private static final int WIDTH = 800;
+    private static final int HEIGHT = 600;
     private static final float ASPECT_RATIO = (float) WIDTH / HEIGHT;
 
     private static final float FRUSTUM_SCALE = 1.0f;
     private static final float Z_NEAR = 1.0f;
     private static final float Z_FAR = 3.0f;
     private static final float[] PERSPECTIVE_MATRIX = getPerspectiveMatrix(FRUSTUM_SCALE, Z_NEAR, Z_FAR, ASPECT_RATIO);
+    
+    private static final float[] ROTATION_MATRIX = getYawRotationMatrix(15);
 
-    private static final float[] VERTEX_DATA = new float[]{
-            0.0f, 0.0f, 1.0f, 1.0f,
-            0.0f, 0.0f, 1.0f, 1.0f,
-            0.0f, 0.0f, 1.0f, 1.0f,
+    private static final float LEFT = -0.25f;
+    private static final float RIGHT = 0.25f;
+    private static final float UP = 0.25f;
+    private static final float DOWN = -0.25f;
+    private static final float FRONT = -1.25f;
+    private static final float BACK = -2.75f;
 
-            0.0f, 0.0f, 1.0f, 1.0f,
-            0.0f, 0.0f, 1.0f, 1.0f,
-            0.0f, 0.0f, 1.0f, 1.0f,
+    private static final Position UFL = new Position(LEFT, UP, FRONT);
+    private static final Position UFR = new Position(RIGHT, UP, FRONT);
+    private static final Position UBL = new Position(LEFT, UP, BACK);
+    private static final Position UBR = new Position(RIGHT, UP, BACK);
+    private static final Position DFL = new Position(LEFT, DOWN, FRONT);
+    private static final Position DFR = new Position(RIGHT, DOWN, FRONT);
+    private static final Position DBL = new Position(LEFT, DOWN, BACK);
+    private static final Position DBR = new Position(RIGHT, DOWN, BACK);
 
-            0.8f, 0.8f, 0.8f, 1.0f,
-            0.8f, 0.8f, 0.8f, 1.0f,
-            0.8f, 0.8f, 0.8f, 1.0f,
+    private static final float[] VERTEX_DATA = Vertex.asFloatArray(Arrays.asList(
+            new Vertex(UFL, BLUE),
+            new Vertex(UBL, BLUE),
+            new Vertex(UBR, BLUE),
+            new Vertex(UBR, BLUE),
+            new Vertex(UFR, BLUE),
+            new Vertex(UFL, BLUE),
 
-            0.8f, 0.8f, 0.8f, 1.0f,
-            0.8f, 0.8f, 0.8f, 1.0f,
-            0.8f, 0.8f, 0.8f, 1.0f,
+            new Vertex(DFL, GRAY),
+            new Vertex(DFR, GRAY),
+            new Vertex(DBR, GRAY),
+            new Vertex(DBR, GRAY),
+            new Vertex(DBL, GRAY),
+            new Vertex(DFL, GRAY),
 
-            0.0f, 1.0f, 0.0f, 1.0f,
-            0.0f, 1.0f, 0.0f, 1.0f,
-            0.0f, 1.0f, 0.0f, 1.0f,
+            new Vertex(UFL, GREEN),
+            new Vertex(DFL, GREEN),
+            new Vertex(DBL, GREEN),
+            new Vertex(DBL, GREEN),
+            new Vertex(UBL, GREEN),
+            new Vertex(UFL, GREEN),
 
-            0.0f, 1.0f, 0.0f, 1.0f,
-            0.0f, 1.0f, 0.0f, 1.0f,
-            0.0f, 1.0f, 0.0f, 1.0f,
+            new Vertex(UFR, YELLOW),
+            new Vertex(UBR, YELLOW),
+            new Vertex(DBR, YELLOW),
+            new Vertex(DBR, YELLOW),
+            new Vertex(DFR, YELLOW),
+            new Vertex(UFR, YELLOW),
 
-            0.5f, 0.5f, 0.0f, 1.0f,
-            0.5f, 0.5f, 0.0f, 1.0f,
-            0.5f, 0.5f, 0.0f, 1.0f,
+            new Vertex(UFL, RED),
+            new Vertex(UFR, RED),
+            new Vertex(DFR, RED),
+            new Vertex(DFR, RED),
+            new Vertex(DFL, RED),
+            new Vertex(UFL, RED),
 
-            0.5f, 0.5f, 0.0f, 1.0f,
-            0.5f, 0.5f, 0.0f, 1.0f,
-            0.5f, 0.5f, 0.0f, 1.0f,
-
-            1.0f, 0.0f, 0.0f, 1.0f,
-            1.0f, 0.0f, 0.0f, 1.0f,
-            1.0f, 0.0f, 0.0f, 1.0f,
-
-            1.0f, 0.0f, 0.0f, 1.0f,
-            1.0f, 0.0f, 0.0f, 1.0f,
-            1.0f, 0.0f, 0.0f, 1.0f,
-
-            0.0f, 1.0f, 1.0f, 1.0f,
-            0.0f, 1.0f, 1.0f, 1.0f,
-            0.0f, 1.0f, 1.0f, 1.0f,
-
-            0.0f, 1.0f, 1.0f, 1.0f,
-            0.0f, 1.0f, 1.0f, 1.0f,
-            0.0f, 1.0f, 1.0f, 1.0f,
-
-
-            0.25f,  0.25f, -1.25f, 1.0f,
-            0.25f, -0.25f, -1.25f, 1.0f,
-            -0.25f,  0.25f, -1.25f, 1.0f,
-
-            0.25f, -0.25f, -1.25f, 1.0f,
-            -0.25f, -0.25f, -1.25f, 1.0f,
-            -0.25f,  0.25f, -1.25f, 1.0f,
-
-            0.25f,  0.25f, -2.75f, 1.0f,
-            -0.25f,  0.25f, -2.75f, 1.0f,
-            0.25f, -0.25f, -2.75f, 1.0f,
-
-            0.25f, -0.25f, -2.75f, 1.0f,
-            -0.25f,  0.25f, -2.75f, 1.0f,
-            -0.25f, -0.25f, -2.75f, 1.0f,
-
-            -0.25f,  0.25f, -1.25f, 1.0f,
-            -0.25f, -0.25f, -1.25f, 1.0f,
-            -0.25f, -0.25f, -2.75f, 1.0f,
-
-            -0.25f,  0.25f, -1.25f, 1.0f,
-            -0.25f, -0.25f, -2.75f, 1.0f,
-            -0.25f,  0.25f, -2.75f, 1.0f,
-
-            0.25f,  0.25f, -1.25f, 1.0f,
-            0.25f, -0.25f, -2.75f, 1.0f,
-            0.25f, -0.25f, -1.25f, 1.0f,
-
-            0.25f,  0.25f, -1.25f, 1.0f,
-            0.25f,  0.25f, -2.75f, 1.0f,
-            0.25f, -0.25f, -2.75f, 1.0f,
-
-            0.25f,  0.25f, -2.75f, 1.0f,
-            0.25f,  0.25f, -1.25f, 1.0f,
-            -0.25f,  0.25f, -1.25f, 1.0f,
-
-            0.25f,  0.25f, -2.75f, 1.0f,
-            -0.25f,  0.25f, -1.25f, 1.0f,
-            -0.25f,  0.25f, -2.75f, 1.0f,
-
-            0.25f, -0.25f, -2.75f, 1.0f,
-            -0.25f, -0.25f, -1.25f, 1.0f,
-            0.25f, -0.25f, -1.25f, 1.0f,
-
-            0.25f, -0.25f, -2.75f, 1.0f,
-            -0.25f, -0.25f, -2.75f, 1.0f,
-            -0.25f, -0.25f, -1.25f, 1.0f
-    };
+            new Vertex(UBL, CYAN),
+            new Vertex(DBL, CYAN),
+            new Vertex(DBR, CYAN),
+            new Vertex(DBR, CYAN),
+            new Vertex(UBR, CYAN),
+            new Vertex(UBL, CYAN)
+    ));
 
     private int vertexBuffer;
     private int program;
@@ -138,7 +104,10 @@ public class ColorExample extends DisplayFramework {
     }
 
     public void initialize() throws IOException {
-        vertexBuffer = initializeVertexBuffer(VERTEX_DATA);
+        int vertexArray = glGenVertexArrays();
+        glBindVertexArray(vertexArray);
+
+        vertexBuffer = initializeBufferObject(GL_ARRAY_BUFFER, VERTEX_DATA, GL_STREAM_DRAW);
 
         program = linkProgram(
                 compileShader("colorTest.vert", GL_VERTEX_SHADER),
@@ -147,11 +116,14 @@ public class ColorExample extends DisplayFramework {
 
         int offsetLocation = glGetUniformLocation(program, "offset");
         int perspectiveMatrixLocation = glGetUniformLocation(program, "perspectiveMatrix");
+        int rotationMatrixLocation = glGetUniformLocation(program, "rotationMatrix");
 
         glUseProgram(program);
         glUniform2f(offsetLocation, 0.5f, 0.5f);
         FloatBuffer perspectiveBuffer = createDataBuffer(PERSPECTIVE_MATRIX);
-        glUniformMatrix4(perspectiveMatrixLocation, false, perspectiveBuffer);
+        FloatBuffer rotationBuffer = createDataBuffer(ROTATION_MATRIX);
+        glUniformMatrix4(perspectiveMatrixLocation, true, perspectiveBuffer);
+        glUniformMatrix4(rotationMatrixLocation, true, rotationBuffer);
         glUseProgram(0);
 
         glEnable(GL_CULL_FACE);
