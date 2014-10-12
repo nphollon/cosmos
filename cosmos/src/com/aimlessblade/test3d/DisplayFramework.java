@@ -1,6 +1,7 @@
 package com.aimlessblade.test3d;
 
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -19,24 +20,43 @@ public abstract class DisplayFramework {
         this.height = height;
     }
 
-    public void start() throws IOException, LWJGLException {
+    public abstract void initialize() throws IOException;
+
+    public abstract void draw();
+
+    public void event() {}
+
+
+    public final void start() throws IOException, LWJGLException {
         initializeDisplay();
         initialize();
 
         while (!Display.isCloseRequested()) {
-            glClear(GL_COLOR_BUFFER_BIT);
-            draw();
-            Display.sync(60);
-            Display.update();
+            clearDisplay();
+            updateDisplay();
+            pollInput();
         }
 
         Display.destroy();
     }
 
-    public abstract void initialize() throws IOException;
+    private void pollInput() {
+        while (Keyboard.next()) {
+            event();
+        }
+    }
 
-    public abstract void draw();
+    private void updateDisplay() {
+        draw();
+        Display.sync(60);
+        Display.update();
+    }
 
+    private void clearDisplay() {
+        glClearColor(0, 0, 0, 0);
+        glClearDepth(0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
 
     private void initializeDisplay() throws LWJGLException {
         PixelFormat pixelFormat = new PixelFormat();

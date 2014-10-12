@@ -1,6 +1,7 @@
 package com.aimlessblade.test3d;
 
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -93,7 +94,6 @@ public class DepthExample extends DisplayFramework {
 
     private static final long VERTEX_DATA_SIZE = VERTEX_DATA.length * Float.BYTES;
 
-
     private static final int[] INDEX_DATA = new int[]{
             // Index list is reused for both prisms
             0, 1, 2,
@@ -139,6 +139,11 @@ public class DepthExample extends DisplayFramework {
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
         glFrontFace(GL_CW);
+
+        glEnable(GL_DEPTH_TEST);
+        glDepthMask(true);
+        glDepthFunc(GL_GEQUAL);
+        glDepthRange(0, 1);
     }
 
     private void initializeVertexArrays() {
@@ -197,14 +202,28 @@ public class DepthExample extends DisplayFramework {
         glUseProgram(program);
 
         glBindVertexArray(vertexArray1);
-        glUniform3f(offsetUniform, 0, 0, 0);
+        glUniform3f(offsetUniform, 0, 0, -1);
         glDrawElements(GL_TRIANGLES, NUMBER_OF_POINTS, GL_UNSIGNED_INT, 0);
 
         glBindVertexArray(vertexArray2);
-        glUniform3f(offsetUniform, 0, 0, -1);
+        glUniform3f(offsetUniform, 0, 0, 0.5f);
         glDrawElements(GL_TRIANGLES, NUMBER_OF_POINTS, GL_UNSIGNED_INT, 0);
 
         glBindVertexArray(0);
         glUseProgram(0);
+    }
+
+    @Override
+    public void event() {
+        if (Keyboard.getEventCharacter() == ' ') {
+            toggleDepthClamping();
+        }
+    }
+
+    private void toggleDepthClamping() {
+        // Depth clamp toggling not introduced until OpenGL 3.2 :-(
+        /*if (depthClampingActive) {
+            glDisable(GL_DEPTH_CLAMP);
+        }*/
     }
 }
