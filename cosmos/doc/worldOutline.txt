@@ -1,0 +1,26 @@
+World:
+- List<Object>
+- Camera
+
+Object:
+- List<Vertex>
+- GeometricTransform
+
+Camera:
+- GeometricTransform
+- PerspectiveTransform
+
+Vertex:
+- Position :: Vector[3]
+- Color :: Vector[3]
+
+GeometricTransform :: (Offset, Orientation) -> Matrix[4,4]
+- Offset :: Vector[3]
+- Orientation :: Vector[3]
+
+PerspectiveTransform :: (FrustumScale, ZNear, ZFar, AspectRatio) -> Matrix[4,4]
+- FrustumScale :: Scalar
+- ZNear :: Scalar
+- ZFar :: Scalar
+- AspectRatio :: Scalar
+

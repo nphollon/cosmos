@@ -2,37 +2,35 @@ package com.aimlessblade.test3d;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.apache.commons.lang.ArrayUtils;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Getter
 @AllArgsConstructor
 public class Vertex {
+    public static final List<Attribute> ATTRIBUTES = Arrays.asList(
+            new Attribute(0, 3, 0),
+            new Attribute(1, 3, Float.BYTES * 3)
+    );
+    public static final int STRIDE = Float.BYTES * 6;
+
     private final Position position;
     private final Color color;
 
-    public static float[] asFloatArray(final List<Vertex> vertices) {
-        int capacity = 4*vertices.size();
-        int index = 0;
+    public static List<Attribute> getAttributes() {
+        return ATTRIBUTES;
+    }
 
-        float[] positions = new float[capacity];
-        float[] colors = new float[capacity];
+    public static int getStride() {
+        return STRIDE;
+    }
 
-        for (Vertex vertex : vertices) {
-            colors[index] = vertex.color.getRed();
-            colors[index+1] = vertex.color.getGreen();
-            colors[index+2] = vertex.color.getBlue();
-            colors[index+3] = 1.0f;
-            
-            positions[index] = vertex.position.getX();
-            positions[index+1] = vertex.position.getY();
-            positions[index+2] = vertex.position.getZ();
-            positions[index+3] = 1.0f;
-
-            index += 4;
-        }
-
-        return ArrayUtils.addAll(colors, positions);
+    @Getter
+    @AllArgsConstructor
+    public static class Attribute {
+        private final int index;
+        private final int length;
+        private final int offset;
     }
 }

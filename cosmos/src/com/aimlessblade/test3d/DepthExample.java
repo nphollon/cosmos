@@ -1,32 +1,26 @@
 package com.aimlessblade.test3d;
 
 import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 import static com.aimlessblade.test3d.Color.*;
-import static com.aimlessblade.test3d.GraphicsUtils.*;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 public class DepthExample extends DisplayFramework {
 
-    public static final int SCREEN_WIDTH = 500;
-    private static final float ASPECT_RATIO = 1.5f;
-    private static final float FRUSTUM_SCALE = 1;
-    private static final float Z_NEAR = 1;
-    private static final float Z_FAR = 3;
+    public static final int SCREEN_WIDTH = 800;
+    private static final double ASPECT_RATIO = 1.5;
+    private static final double FRUSTUM_SCALE = 1;
+    private static final double Z_NEAR = 1;
+    private static final double Z_FAR = 3;
 
-    private static final float SHORT = 0.2f;
-    private static final float LONG = 0.8f;
-    private static final float CENTER = 0.0f;
-    private static final float NEAR = -1.25f;
-    private static final float FAR = -1.75f;
+    private static final double SHORT = 0.2;
+    private static final double LONG = 0.8;
+    private static final double CENTER = 0.0;
+    private static final double NEAR = -1.25;
+    private static final double FAR = -1.75;
 
     private static final Position TOP_POINT = new Position(CENTER, LONG, NEAR);
     private static final Position BOTTOM_POINT = new Position(CENTER, -LONG, NEAR);
@@ -42,8 +36,7 @@ public class DepthExample extends DisplayFramework {
     private static final Position RIGHT_TOP_BASE = new Position(LONG, SHORT, FAR);
     private static final Position RIGHT_BOTTOM_BASE = new Position(LONG, -SHORT, FAR);
 
-    private static final float[] VERTEX_DATA = Vertex.asFloatArray(Arrays.asList(
-            // Horizontal prism
+    private static final List<Vertex> vertices1 = Arrays.asList(
             new Vertex(LEFT_POINT, GREEN),
             new Vertex(LEFT_BOTTOM_BASE, GREEN),
             new Vertex(LEFT_TOP_BASE, GREEN),
@@ -56,18 +49,19 @@ public class DepthExample extends DisplayFramework {
             new Vertex(LEFT_TOP_BASE, RED),
             new Vertex(RIGHT_TOP_BASE, RED),
             new Vertex(RIGHT_POINT, RED),
-            
+
             new Vertex(LEFT_POINT, YELLOW),
             new Vertex(RIGHT_POINT, YELLOW),
             new Vertex(RIGHT_BOTTOM_BASE, YELLOW),
             new Vertex(LEFT_BOTTOM_BASE, YELLOW),
-            
+
             new Vertex(LEFT_TOP_BASE, CYAN),
             new Vertex(LEFT_BOTTOM_BASE, CYAN),
             new Vertex(RIGHT_BOTTOM_BASE, CYAN),
-            new Vertex(RIGHT_TOP_BASE, CYAN),
-            
-            // Vertical prism
+            new Vertex(RIGHT_TOP_BASE, CYAN)
+    );
+
+    private static final List<Vertex> vertices2 = Arrays.asList(
             new Vertex(TOP_POINT, GREEN),
             new Vertex(TOP_LEFT_BASE, GREEN),
             new Vertex(TOP_RIGHT_BASE, GREEN),
@@ -80,22 +74,19 @@ public class DepthExample extends DisplayFramework {
             new Vertex(TOP_RIGHT_BASE, BLUE),
             new Vertex(BOTTOM_RIGHT_BASE, BLUE),
             new Vertex(BOTTOM_POINT, BLUE),
-            
+
             new Vertex(TOP_POINT, GRAY),
             new Vertex(BOTTOM_POINT, GRAY),
             new Vertex(BOTTOM_LEFT_BASE, GRAY),
             new Vertex(TOP_LEFT_BASE, GRAY),
-            
+
             new Vertex(TOP_RIGHT_BASE, CYAN),
             new Vertex(TOP_LEFT_BASE, CYAN),
             new Vertex(BOTTOM_LEFT_BASE, CYAN),
             new Vertex(BOTTOM_RIGHT_BASE, CYAN)
-    ));
+    );
 
-    private static final long VERTEX_DATA_SIZE = VERTEX_DATA.length * Float.BYTES;
-
-    private static final int[] INDEX_DATA = new int[]{
-            // Index list is reused for both prisms
+    private static final List<Integer> elementList = Arrays.asList(
             0, 1, 2,
 
             3, 4, 5,
@@ -108,15 +99,12 @@ public class DepthExample extends DisplayFramework {
 
             14, 15, 16,
             16, 17, 14
-    };
+    );
 
-    private int vertexBuffer;
-    private int indexBuffer;
-    private int program;
-    private int offsetUniform;
-    private int vertexArray1;
-    private int vertexArray2;
-    public static final int NUMBER_OF_POINTS = VERTEX_DATA.length / 16;
+    private static final DrawableObject horizontalPrism = new DrawableObject(vertices1, elementList);
+    private static final DrawableObject verticalPrism = new DrawableObject(vertices2, elementList);
+
+    private WorldRenderer renderer;
 
     public static void main(String[] args) {
         try {
@@ -132,98 +120,17 @@ public class DepthExample extends DisplayFramework {
 
     @Override
     public void initialize() throws IOException {
-        initializeProgram();
-        initializeVertexBuffer();
-        initializeVertexArrays();
+        Program program = ProgramFactory.build("simple.vert", "simple.frag");
+        Camera camera = new Camera(FRUSTUM_SCALE, Z_NEAR, Z_FAR, ASPECT_RATIO);
+        World world = new World(horizontalPrism, verticalPrism);
+        renderer = new WorldRenderer(world, program, camera);
 
-        glEnable(GL_CULL_FACE);
-        glCullFace(GL_BACK);
-        glFrontFace(GL_CW);
-
-        glEnable(GL_DEPTH_TEST);
-        glDepthMask(true);
-        glDepthFunc(GL_GEQUAL);
-        glDepthRange(0, 1);
-    }
-
-    private void initializeVertexArrays() {
-        long positionDataOffset1 = 0;
-        long colorDataOffset1 = VERTEX_DATA_SIZE / 2;
-
-        vertexArray1 = glGenVertexArrays();
-        glBindVertexArray(vertexArray1);
-
-        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(0, 4, GL_FLOAT, false, 0, positionDataOffset1);
-        glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, colorDataOffset1);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-
-        long positionDataOffset2 = VERTEX_DATA_SIZE / 4;
-        long colorDataOffset2 = VERTEX_DATA_SIZE * 3 / 4;
-
-        vertexArray2 = glGenVertexArrays();
-        glBindVertexArray(vertexArray2);
-
-        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(0, 4, GL_FLOAT, false, 0, positionDataOffset2);
-        glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, colorDataOffset2);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-
-        glBindVertexArray(0);
-    }
-
-    private void initializeVertexBuffer() {
-        vertexBuffer = initializeBufferObject(GL_ARRAY_BUFFER, VERTEX_DATA, GL_STATIC_DRAW);
-        indexBuffer = initializeBufferObject(GL_ELEMENT_ARRAY_BUFFER, INDEX_DATA, GL_STATIC_DRAW);
-    }
-
-    private void initializeProgram() throws IOException {
-        program = linkProgram(
-                compileShader("depthTest.vert", GL_VERTEX_SHADER),
-                compileShader("depthTest.frag", GL_FRAGMENT_SHADER)
-        );
-
-        offsetUniform = glGetUniformLocation(program, "offset");
-        int perspectiveUniform = glGetUniformLocation(program, "perspectiveMatrix");
-
-        glUseProgram(program);
-        float[] perspectiveMatrix = getPerspectiveMatrix(FRUSTUM_SCALE, Z_NEAR, Z_FAR, ASPECT_RATIO);
-        glUniformMatrix4(perspectiveUniform, true, createDataBuffer(perspectiveMatrix));
-
-        glUseProgram(0);
+        horizontalPrism.setOffset(0, 0, -1);
+        verticalPrism.setOffset(0, 0, -0.8);
     }
 
     @Override
     public void draw() {
-        glUseProgram(program);
-
-        glBindVertexArray(vertexArray1);
-        glUniform3f(offsetUniform, 0, 0, -1);
-        glDrawElements(GL_TRIANGLES, NUMBER_OF_POINTS, GL_UNSIGNED_INT, 0);
-
-        glBindVertexArray(vertexArray2);
-        glUniform3f(offsetUniform, 0, 0, 0.5f);
-        glDrawElements(GL_TRIANGLES, NUMBER_OF_POINTS, GL_UNSIGNED_INT, 0);
-
-        glBindVertexArray(0);
-        glUseProgram(0);
-    }
-
-    @Override
-    public void event() {
-        if (Keyboard.getEventCharacter() == ' ') {
-            toggleDepthClamping();
-        }
-    }
-
-    private void toggleDepthClamping() {
-        // Depth clamp toggling not introduced until OpenGL 3.2 :-(
-        /*if (depthClampingActive) {
-            glDisable(GL_DEPTH_CLAMP);
-        }*/
+        renderer.draw();
     }
 }

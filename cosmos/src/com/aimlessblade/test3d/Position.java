@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class Position {
-    private final float x;
-    private final float y;
-    private final float z;
+    private final double x;
+    private final double y;
+    private final double z;
 }
