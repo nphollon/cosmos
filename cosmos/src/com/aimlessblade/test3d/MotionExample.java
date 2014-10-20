@@ -70,6 +70,11 @@ public class MotionExample extends DisplayFramework {
         lastFrameTime = time;
     }
 
+    @Override
+    public void event() {
+
+    }
+
     private double getElapsedTime() {
         return (System.currentTimeMillis() - START_TIME) * 0.001;
     }

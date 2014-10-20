@@ -1,6 +1,7 @@
 package com.aimlessblade.test3d;
 
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -8,19 +9,19 @@ import java.util.List;
 
 import static com.aimlessblade.test3d.Color.*;
 
-public class DepthExample extends DisplayFramework {
+public class Sandbox extends DisplayFramework {
 
     public static final int SCREEN_WIDTH = 800;
     private static final double ASPECT_RATIO = 1.5;
     private static final double FRUSTUM_SCALE = 1;
     private static final double Z_NEAR = 1;
-    private static final double Z_FAR = 3;
+    private static final double Z_FAR = 50;
 
     private static final double SHORT = 0.2;
     private static final double LONG = 0.8;
     private static final double CENTER = 0.0;
-    private static final double NEAR = -1.25;
-    private static final double FAR = -1.75;
+    private static final double NEAR = 0.25;
+    private static final double FAR = -0.25;
 
     private static final Position TOP_POINT = new Position(CENTER, LONG, NEAR);
     private static final Position BOTTOM_POINT = new Position(CENTER, -LONG, NEAR);
@@ -101,36 +102,101 @@ public class DepthExample extends DisplayFramework {
             16, 17, 14
     );
 
-    private static final DrawableObject horizontalPrism = new DrawableObject(vertices1, elementList);
-    private static final DrawableObject verticalPrism = new DrawableObject(vertices2, elementList);
+    private static final DrawableObject[] ENTITIES = new DrawableObject[] {
+            new DrawableObject(vertices1, elementList),
+            new DrawableObject(vertices2, elementList)
+    };
 
+    private static final double SPIN_INCREMENT = 2;
+    private static final double NUDGE_INCREMENT = 0.2;
+
+    private int roll;
+    private int yaw;
+    private int pitch;
+    private int nudgeX;
+    private int nudgeY;
+    private int nudgeZ;
     private WorldRenderer renderer;
+    private DrawableObject selectedEntity;
 
-    public static void main(String[] args) {
+    public Sandbox(int width, int height) {
+        super(width, height);
+    }
+
+    public static void main(String[] argv) {
+        Sandbox sandbox = new Sandbox(SCREEN_WIDTH, (int)(SCREEN_WIDTH / ASPECT_RATIO));
         try {
-            new DepthExample(SCREEN_WIDTH, (int)(SCREEN_WIDTH / ASPECT_RATIO)).start();
-        } catch (IOException|LWJGLException e) {
+            sandbox.start();
+        } catch (IOException | LWJGLException e) {
             e.printStackTrace();
         }
     }
 
-    public DepthExample(int width, int height) {
-        super(width, height);
-    }
-
-    @Override
     public void initialize() throws IOException {
         Program program = ProgramFactory.build("simple.vert", "simple.frag");
         Camera camera = new Camera(FRUSTUM_SCALE, Z_NEAR, Z_FAR, ASPECT_RATIO);
-        World world = new World(horizontalPrism, verticalPrism);
-        renderer = new WorldRenderer(world, program, camera);
 
-        horizontalPrism.nudge(0, 0, -1);
-        verticalPrism.nudge(0, 0, -0.8);
+        for (DrawableObject entity : ENTITIES) {
+            entity.nudge(0, 0, -3);
+        }
+        selectedEntity = ENTITIES[0];
+        World world = new World(ENTITIES);
+        renderer = new WorldRenderer(world, program, camera);
     }
 
-    @Override
-    public void draw() {
+    public void draw () {
+        selectedEntity.nudge(nudgeX * NUDGE_INCREMENT, nudgeY * NUDGE_INCREMENT, nudgeZ * NUDGE_INCREMENT);
+        selectedEntity.spin(pitch * SPIN_INCREMENT, yaw * SPIN_INCREMENT, roll * SPIN_INCREMENT);
         renderer.draw();
+    }
+
+    public void event() {
+        int shiftDirection = Keyboard.getEventKeyState() ? 1 : -1;
+
+        switch (Keyboard.getEventKey()) {
+            case Keyboard.KEY_A:
+                yaw += shiftDirection;
+                break;
+            case Keyboard.KEY_D:
+                yaw -= shiftDirection;
+                break;
+            case Keyboard.KEY_W:
+                pitch += shiftDirection;
+                break;
+            case Keyboard.KEY_S:
+                pitch -= shiftDirection;
+                break;
+            case Keyboard.KEY_Q:
+                roll += shiftDirection;
+                break;
+            case Keyboard.KEY_E:
+                roll -= shiftDirection;
+                break;
+            case Keyboard.KEY_J:
+                nudgeX -= shiftDirection;
+                break;
+            case Keyboard.KEY_L:
+                nudgeX += shiftDirection;
+                break;
+            case Keyboard.KEY_I:
+                nudgeY += shiftDirection;
+                break;
+            case Keyboard.KEY_K:
+                nudgeY -= shiftDirection;
+                break;
+            case Keyboard.KEY_U:
+                nudgeZ += shiftDirection;
+                break;
+            case Keyboard.KEY_O:
+                nudgeZ -= shiftDirection;
+                break;
+            case Keyboard.KEY_1:
+                selectedEntity = ENTITIES[0];
+                break;
+            case Keyboard.KEY_2:
+                selectedEntity = ENTITIES[1];
+                break;
+            default: break;
+        }
     }
 }

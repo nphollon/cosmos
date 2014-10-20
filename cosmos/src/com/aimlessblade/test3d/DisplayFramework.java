@@ -24,7 +24,7 @@ public abstract class DisplayFramework {
 
     public abstract void draw();
 
-    public void event() {}
+    public abstract void event();
 
 
     public final void start() throws IOException, LWJGLException {
