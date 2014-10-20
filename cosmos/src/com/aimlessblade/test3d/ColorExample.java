@@ -1,6 +1,7 @@
 package com.aimlessblade.test3d;
 
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -15,15 +16,15 @@ public class ColorExample extends DisplayFramework {
     private static final float ASPECT_RATIO = (float) WIDTH / HEIGHT;
 
     private static final double FRUSTUM_SCALE = 1.0;
-    private static final double Z_NEAR = 1.0;
-    private static final double Z_FAR = 3.0;
+    private static final double Z_NEAR = 0.1;
+    private static final double Z_FAR = 50.0;
 
     private static final double LEFT = -0.25;
     private static final double RIGHT = 0.25;
     private static final double UP = 0.25;
     private static final double DOWN = -0.25;
-    private static final double FRONT = -1.25;
-    private static final double BACK = -2.75;
+    private static final double FRONT = 0.75;
+    private static final double BACK = -0.75;
 
     private static final Position UFL = new Position(LEFT, UP, FRONT);
     private static final Position UFR = new Position(RIGHT, UP, FRONT);
@@ -86,8 +87,17 @@ public class ColorExample extends DisplayFramework {
             22, 23, 20
     );
 
+    private static final DrawableObject OBJECT = new DrawableObject(vertices, drawOrder);
+    private static final double SPIN_INCREMENT = 2;
+    private static final double NUDGE_INCREMENT = 0.2;
+
+    private int roll;
+    private int yaw;
+    private int pitch;
+    private int nudgeX;
+    private int nudgeY;
+    private int nudgeZ;
     private WorldRenderer renderer;
-    public static final DrawableObject OBJECT = new DrawableObject(vertices, drawOrder);
 
     public ColorExample(int width, int height) {
         super(width, height);
@@ -106,12 +116,58 @@ public class ColorExample extends DisplayFramework {
         Program program = ProgramFactory.build("simple.vert", "simple.frag");
         Camera camera = new Camera(FRUSTUM_SCALE, Z_NEAR, Z_FAR, ASPECT_RATIO);
 
-        OBJECT.setOffset(1, 0.5, 0);
+        OBJECT.nudge(1, 1, -5);
         World world = new World(OBJECT);
         renderer = new WorldRenderer(world, program, camera);
     }
 
     public void draw () {
+        OBJECT.nudge(nudgeX * NUDGE_INCREMENT, nudgeY * NUDGE_INCREMENT, nudgeZ * NUDGE_INCREMENT);
+        OBJECT.spin(pitch * SPIN_INCREMENT, yaw * SPIN_INCREMENT, roll * SPIN_INCREMENT);
         renderer.draw();
+    }
+
+    public void event() {
+        int shiftDirection = Keyboard.getEventKeyState() ? 1 : -1;
+
+        switch (Keyboard.getEventKey()) {
+            case Keyboard.KEY_A:
+                yaw += shiftDirection;
+                break;
+            case Keyboard.KEY_D:
+                yaw -= shiftDirection;
+                break;
+            case Keyboard.KEY_W:
+                pitch += shiftDirection;
+                break;
+            case Keyboard.KEY_S:
+                pitch -= shiftDirection;
+                break;
+            case Keyboard.KEY_Q:
+                roll += shiftDirection;
+                break;
+            case Keyboard.KEY_E:
+                roll -= shiftDirection;
+                break;
+            case Keyboard.KEY_J:
+                nudgeX -= shiftDirection;
+                break;
+            case Keyboard.KEY_L:
+                nudgeX += shiftDirection;
+                break;
+            case Keyboard.KEY_I:
+                nudgeY += shiftDirection;
+                break;
+            case Keyboard.KEY_K:
+                nudgeY -= shiftDirection;
+                break;
+            case Keyboard.KEY_U:
+                nudgeZ += shiftDirection;
+                break;
+            case Keyboard.KEY_O:
+                nudgeZ -= shiftDirection;
+                break;
+            default: break;
+        }
     }
 }

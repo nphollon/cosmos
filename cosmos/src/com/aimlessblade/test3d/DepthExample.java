@@ -125,8 +125,8 @@ public class DepthExample extends DisplayFramework {
         World world = new World(horizontalPrism, verticalPrism);
         renderer = new WorldRenderer(world, program, camera);
 
-        horizontalPrism.setOffset(0, 0, -1);
-        verticalPrism.setOffset(0, 0, -0.8);
+        horizontalPrism.nudge(0, 0, -1);
+        verticalPrism.nudge(0, 0, -0.8);
     }
 
     @Override
