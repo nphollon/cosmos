@@ -9,26 +9,27 @@ import org.ejml.simple.SimpleMatrix;
 @EqualsAndHashCode
 @ToString
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Quaternion {
+public class Orientation {
+    private static final Orientation NULL_VECTOR = Orientation.quaternion(0, 0, 0, 0);
     private final double x;
     private final double y;
     private final double z;
     private final double w;
 
-    public static Quaternion axisAngleDegrees(final double x, final double y, final double z, final double angle) {
+    public static Orientation axisAngleDegrees(final double x, final double y, final double z, final double angle) {
         return axisAngle(x, y, z, Math.toRadians(angle));
     }
 
-    public static Quaternion axisAngle(final double x, final double y, final double z, final double angle) {
+    public static Orientation axisAngle(final double x, final double y, final double z, final double angle) {
         final double qx = x*Math.sin(angle / 2);
         final double qy = y*Math.sin(angle / 2);
         final double qz = z*Math.sin(angle / 2);
         final double qw = Math.cos(angle / 2);
-        return Quaternion.components(qx, qy, qz, qw);
+        return Orientation.quaternion(qx, qy, qz, qw);
     }
 
-    public static Quaternion components(final double x, final double y, final double z, final double w) {
-        return new Quaternion(x, y, z, w);
+    public static Orientation quaternion(final double x, final double y, final double z, final double w) {
+        return new Orientation(x, y, z, w);
     }
 
     public SimpleMatrix toMatrix() {
@@ -50,34 +51,38 @@ public class Quaternion {
         return matrix;
     }
 
-    public Quaternion times(final Quaternion factor) {
-        return Quaternion.components(
-                w*factor.x + x*factor.w + y*factor.z - z*factor.y,
-                w*factor.y + y*factor.w + z*factor.x - x*factor.z,
-                w*factor.z + z*factor.w + x*factor.y - y*factor.x,
-                w*factor.w - x*factor.x - y*factor.y - z*factor.z
+    public Orientation times(final Orientation factor) {
+        return Orientation.quaternion(
+                w * factor.x + x * factor.w + y * factor.z - z * factor.y,
+                w * factor.y + y * factor.w + z * factor.x - x * factor.z,
+                w * factor.z + z * factor.w + x * factor.y - y * factor.x,
+                w * factor.w - x * factor.x - y * factor.y - z * factor.z
         );
     }
 
-    public Quaternion normalize(final double tolerance) {
+    public Orientation normalize(final double tolerance) {
         double magnitudeSquared = x*x + y*y + z*z + w*w;
 
         if (doublesEqual(magnitudeSquared, 1, tolerance)) {
             return this;
         }
 
+        if (magnitudeSquared == 0) {
+            return NULL_VECTOR;
+        }
+
         double magnitude = Math.sqrt(magnitudeSquared);
-        return Quaternion.components(x/magnitude, y/magnitude, z/magnitude, w/magnitude);
+        return Orientation.quaternion(x / magnitude, y / magnitude, z / magnitude, w / magnitude);
     }
 
-    public boolean isIdentical(final Quaternion other, final double tolerance) {
+    public boolean isIdentical(final Orientation other, final double tolerance) {
         return doublesEqual(x, other.x, tolerance) &&
                 doublesEqual(y, other.y, tolerance) &&
                 doublesEqual(z, other.z, tolerance) &&
                 doublesEqual(w, other.w, tolerance);
     }
 
-    private boolean doublesEqual(double a, double b, double epsilon) {
-        return Math.abs(a - b) < epsilon;
+    private boolean doublesEqual(double a, double b, double tolerance) {
+        return Math.abs(a - b) < tolerance;
     }
 }
