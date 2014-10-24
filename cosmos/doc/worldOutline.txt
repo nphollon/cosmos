@@ -1,26 +1,64 @@
-World:
-- List<Object>
-- Camera
 
-Object:
-- List<Vertex>
-- GeometricTransform
+* initialize
+  - reads vertices from entities
+  - reads perspective from camera
+* pollInput
+  - modifies velocities
+  - treats camera and entities the same
+* move
+  - reads velocities
+  - modifies positions
+  - treats camera and entities the same
+* draw
+  - reads positions
+  - treats camera and entities differently
 
-Camera:
-- GeometricTransform
-- PerspectiveTransform
+Camera
+  - has perspective (read-only)
+  - has velocity
+  - has position
 
-Vertex:
-- Position :: Vector[3]
-- Color :: Vector[3]
+Entity
+  - has vertices (read-only)
+  - has velocity
+  - has position
 
-GeometricTransform :: (Offset, Orientation) -> Matrix[4,4]
-- Offset :: Vector[3]
-- Orientation :: Vector[3]
+start() {
+    initialize()
 
-PerspectiveTransform :: (FrustumScale, ZNear, ZFar, AspectRatio) -> Matrix[4,4]
-- FrustumScale :: Scalar
-- ZNear :: Scalar
-- ZFar :: Scalar
-- AspectRatio :: Scalar
+    loop {
+        pollInput()
+        move()
+        draw()
+    }
+}
 
+initialize() {
+    compile shaders
+    load vertex data into vao
+}
+
+pollInput() {
+    for each keyboard event {
+        if event key is a number {
+            switch active entity
+        }
+        if event key is a direction {
+            set entity velocity
+        }
+    }
+}
+
+move() {
+    for each entity {
+        apply velocities to displacement & orientation
+    }
+}
+
+draw() {
+    set camera->ndc transform
+    for each entity {
+        set displacement & orientation transforms
+        draw entity
+    }
+}
