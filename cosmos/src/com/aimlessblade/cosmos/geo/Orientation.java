@@ -16,11 +16,11 @@ public class Orientation {
     private final double z;
     private final double w;
 
-    public static Orientation axisAngleDegrees(final double x, final double y, final double z, final double angle) {
-        return axisAngle(x, y, z, Math.toRadians(angle));
+    public static Orientation axisAngle(final double x, final double y, final double z, final double angle) {
+        return axisAngleRadians(x, y, z, Math.toRadians(angle));
     }
 
-    public static Orientation axisAngle(final double x, final double y, final double z, final double angle) {
+    public static Orientation axisAngleRadians(final double x, final double y, final double z, final double angle) {
         final double qx = x*Math.sin(angle / 2);
         final double qy = y*Math.sin(angle / 2);
         final double qz = z*Math.sin(angle / 2);

@@ -12,14 +12,14 @@ public class OrientationTest {
 
     @Test
     public void rotationMatrixShouldBeIdentityIfWIsZero() {
-        Orientation quaternion = Orientation.axisAngleDegrees(1.0, 0.0, 0.0, 0.0);
+        Orientation quaternion = Orientation.axisAngle(1.0, 0.0, 0.0, 0.0);
 
         assertMatrixEquality(quaternion.toMatrix(), SimpleMatrix.identity(4));
     }
 
     @Test
     public void rotationMatrixShouldChangePitchIfAxisIsX() {
-        Orientation quaternion = Orientation.axisAngleDegrees(1.0, 0.0, 0.0, 90.0);
+        Orientation quaternion = Orientation.axisAngle(1.0, 0.0, 0.0, 90.0);
 
         SimpleMatrix expectedMatrix = new SimpleMatrix(4, 4);
         expectedMatrix.set(0, 0, 1);
@@ -32,7 +32,7 @@ public class OrientationTest {
 
     @Test
     public void rotationMatrixShouldChangeYawIfAxisIsY() {
-        Orientation quaternion = Orientation.axisAngleDegrees(0.0, 1.0, 0.0, 90.0);
+        Orientation quaternion = Orientation.axisAngle(0.0, 1.0, 0.0, 90.0);
 
         SimpleMatrix expectedMatrix = new SimpleMatrix(4, 4);
         expectedMatrix.set(0, 2, 1);
@@ -45,7 +45,7 @@ public class OrientationTest {
 
     @Test
     public void rotationMatrixShouldChangeRollIfAxisIsZ() {
-        Orientation quaternion = Orientation.axisAngleDegrees(0.0, 0.0, 1.0, 90.0);
+        Orientation quaternion = Orientation.axisAngle(0.0, 0.0, 1.0, 90.0);
 
         SimpleMatrix expectedMatrix = new SimpleMatrix(4, 4);
         expectedMatrix.set(0, 1, -1);
@@ -58,7 +58,7 @@ public class OrientationTest {
 
     @Test
     public void rotationMatrixShouldRotateAroundXZDiagonal() {
-        Orientation quaternion = Orientation.axisAngleDegrees(0.707107, 0.0, 0.707107, 90.0);
+        Orientation quaternion = Orientation.axisAngle(0.707107, 0.0, 0.707107, 90.0);
 
         SimpleMatrix expectedMatrix = new SimpleMatrix(4, 4);
         expectedMatrix.set(0, 0, 0.5);
@@ -76,7 +76,7 @@ public class OrientationTest {
 
     @Test
     public void rotationMatrixShouldRotateAroundXYDiagonal() {
-        Orientation quaternion = Orientation.axisAngleDegrees(0.707107, 0.707107, 0.0, 90.0);
+        Orientation quaternion = Orientation.axisAngle(0.707107, 0.707107, 0.0, 90.0);
 
         SimpleMatrix expectedMatrix = new SimpleMatrix(4, 4);
         expectedMatrix.set(0, 0, 0.5);
@@ -94,7 +94,7 @@ public class OrientationTest {
 
     @Test
     public void rotationMatrixShouldRotateAroundYZDiagonal() {
-        Orientation quaternion = Orientation.axisAngleDegrees(0.0, 0.707107, 0.707107, 90.0);
+        Orientation quaternion = Orientation.axisAngle(0.0, 0.707107, 0.707107, 90.0);
 
         SimpleMatrix expectedMatrix = new SimpleMatrix(4, 4);
         expectedMatrix.set(0, 1, -0.707107);
@@ -112,7 +112,7 @@ public class OrientationTest {
 
     @Test
     public void rotationMatrixShouldRotateByArbitraryAngle() {
-        Orientation quaternion = Orientation.axisAngleDegrees(0.632456, 0.6, 0.2, 10.0);
+        Orientation quaternion = Orientation.axisAngle(0.632456, 0.6, 0.2, 10.0);
 
         SimpleMatrix expectedMatrix = new SimpleMatrix(4, 4);
         expectedMatrix.set(0, 0, 0.993923);
@@ -131,44 +131,44 @@ public class OrientationTest {
 
     @Test
     public void quaternionFactoryWithRadiansShouldMatchFactoryWithDegrees() {
-        Orientation degreeQuaternion = Orientation.axisAngleDegrees(1, 0, 0, 180);
-        Orientation radianQuaternion = Orientation.axisAngle(1, 0, 0, Math.PI);
+        Orientation degreeQuaternion = Orientation.axisAngle(1, 0, 0, 180);
+        Orientation radianQuaternion = Orientation.axisAngleRadians(1, 0, 0, Math.PI);
 
         assertThat(degreeQuaternion, is(radianQuaternion));
     }
 
     @Test
     public void isIdenticalShouldBeTrueForExactlyEqualQuaternions() {
-        Orientation quaternion1 = Orientation.axisAngleDegrees(0, 1, 0, 12);
-        Orientation quaternion2 = Orientation.axisAngleDegrees(0, 1, 0, 12);
+        Orientation quaternion1 = Orientation.axisAngle(0, 1, 0, 12);
+        Orientation quaternion2 = Orientation.axisAngle(0, 1, 0, 12);
         assertQuaternionEquality(quaternion1, quaternion2, true);
     }
 
     @Test
     public void isIdenticalShouldBeTrueForQuaternionsWithinTolerance() {
-        Orientation quaternion1 = Orientation.axisAngleDegrees(-0.000009, 1.000009, 0.000009, 11.999999);
-        Orientation quaternion2 = Orientation.axisAngleDegrees(0, 1, 0, 12);
+        Orientation quaternion1 = Orientation.axisAngle(-0.000009, 1.000009, 0.000009, 11.999999);
+        Orientation quaternion2 = Orientation.axisAngle(0, 1, 0, 12);
         assertQuaternionEquality(quaternion1, quaternion2, true);
     }
 
     @Test
     public void isIdenticalShouldBeFalseIfXsAreDifferent() {
-        Orientation quaternion1 = Orientation.axisAngleDegrees(0.0001, 1, 0, 12);
-        Orientation quaternion2 = Orientation.axisAngleDegrees(0, 1, 0, 12);
+        Orientation quaternion1 = Orientation.axisAngle(0.0001, 1, 0, 12);
+        Orientation quaternion2 = Orientation.axisAngle(0, 1, 0, 12);
         assertQuaternionEquality(quaternion1, quaternion2, false);
     }
 
     @Test
     public void isIdenticalShouldBeFalseIfYsAreDifferent() {
-        Orientation quaternion1 = Orientation.axisAngleDegrees(0, 1, 0, 12);
-        Orientation quaternion2 = Orientation.axisAngleDegrees(0, 0.999, 0, 12);
+        Orientation quaternion1 = Orientation.axisAngle(0, 1, 0, 12);
+        Orientation quaternion2 = Orientation.axisAngle(0, 0.999, 0, 12);
         assertQuaternionEquality(quaternion1, quaternion2, false);
     }
 
     @Test
     public void isIdenticalShouldBeFalseIfZsAreDifferent() {
-        Orientation quaternion1 = Orientation.axisAngleDegrees(0, 1, 0.0001, 12);
-        Orientation quaternion2 = Orientation.axisAngleDegrees(0, 1, 0, 12);
+        Orientation quaternion1 = Orientation.axisAngle(0, 1, 0.0001, 12);
+        Orientation quaternion2 = Orientation.axisAngle(0, 1, 0, 12);
         assertQuaternionEquality(quaternion1, quaternion2, false);
     }
 
@@ -176,8 +176,8 @@ public class OrientationTest {
     public void isIdenticalShouldBeFalseIfWsAreDifferent() {
         // Because the quaternion quaternion are products of the factory parameters
         //   very different quaternions can have identical Y parameters
-        Orientation quaternion1 = Orientation.axisAngleDegrees(0, 1, 0, 12);
-        Orientation quaternion2 = Orientation.axisAngleDegrees(0, 0.104528, 0, 180);
+        Orientation quaternion1 = Orientation.axisAngle(0, 1, 0, 12);
+        Orientation quaternion2 = Orientation.axisAngle(0, 0.104528, 0, 180);
         assertQuaternionEquality(quaternion1, quaternion2, false);
     }
 
