@@ -2,14 +2,19 @@ package com.aimlessblade.test3d;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.ContextAttribs;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.PixelFormat;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 import static com.aimlessblade.test3d.Color.*;
+import static org.lwjgl.opengl.GL11.*;
 
-public class Sandbox extends DisplayFramework {
+public class Sandbox {
 
     public static final int SCREEN_WIDTH = 800;
     private static final double ASPECT_RATIO = 1.5;
@@ -109,6 +114,8 @@ public class Sandbox extends DisplayFramework {
 
     private static final double SPIN_INCREMENT = 2;
     private static final double NUDGE_INCREMENT = 0.2;
+    private final int width;
+    private final int height;
 
     private int roll;
     private int yaw;
@@ -120,7 +127,8 @@ public class Sandbox extends DisplayFramework {
     private DrawableObject selectedEntity;
 
     public Sandbox(int width, int height) {
-        super(width, height);
+        this.width = width;
+        this.height = height;
     }
 
     public static void main(String[] argv) {
@@ -132,25 +140,57 @@ public class Sandbox extends DisplayFramework {
         }
     }
 
-    public void initialize() throws IOException {
+    public final void start() throws IOException, LWJGLException {
+        initializeDisplay();
+        initializeWorld();
+
+        while (!Display.isCloseRequested()) {
+            updateDisplay();
+
+            while (Keyboard.next()) {
+                event();
+            }
+        }
+
+        Display.destroy();
+    }
+
+    private void initializeDisplay() throws LWJGLException {
+        PixelFormat pixelFormat = new PixelFormat();
+        ContextAttribs contextAtrributes = new ContextAttribs(3, 0)
+                .withForwardCompatible(true);
+
+        Display.setDisplayMode(new DisplayMode(width, height));
+        Display.create(pixelFormat, contextAtrributes);
+        glViewport(0, 0, width, height);
+    }
+
+    private void initializeWorld() throws IOException {
         Program program = ProgramFactory.build("simple.vert", "simple.frag");
         Camera camera = new Camera(FRUSTUM_SCALE, Z_NEAR, Z_FAR, ASPECT_RATIO);
 
         for (DrawableObject entity : ENTITIES) {
             entity.nudge(0, 0, -3);
         }
+
         selectedEntity = ENTITIES[0];
-        World world = new World(ENTITIES);
-        renderer = new WorldRenderer(world, program, camera);
+        renderer = new WorldRenderer(new World(ENTITIES), program, camera);
     }
 
-    public void draw () {
+    private void updateDisplay() {
+        glClearColor(0, 0, 0, 0);
+        glClearDepth(0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         selectedEntity.nudge(nudgeX * NUDGE_INCREMENT, nudgeY * NUDGE_INCREMENT, nudgeZ * NUDGE_INCREMENT);
         selectedEntity.spin(pitch * SPIN_INCREMENT, yaw * SPIN_INCREMENT, roll * SPIN_INCREMENT);
         renderer.draw();
+
+        Display.sync(60);
+        Display.update();
     }
 
-    public void event() {
+    private void event() {
         int shiftDirection = Keyboard.getEventKeyState() ? 1 : -1;
 
         switch (Keyboard.getEventKey()) {
