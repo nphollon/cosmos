@@ -1,14 +1,13 @@
-package com.aimlessblade.cosmos.render;
+package com.aimlessblade.cosmos.app;
 
-import com.aimlessblade.cosmos.app.CompositeProcessor;
-import com.aimlessblade.cosmos.app.Processor;
-import com.aimlessblade.cosmos.app.PuppeteerProcessorFactory;
 import com.aimlessblade.cosmos.geo.Camera;
 import com.aimlessblade.cosmos.geo.Entity;
 import com.aimlessblade.cosmos.geo.MotionProcessor;
 import com.aimlessblade.cosmos.geo.Movable;
 import com.aimlessblade.cosmos.input.InputProcessor;
 import com.aimlessblade.cosmos.input.Keymap;
+import com.aimlessblade.cosmos.render.DrawingProcessor;
+import com.aimlessblade.cosmos.render.Program;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -11,17 +11,16 @@ import java.util.List;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-public class PuppeteerTest {
-
-    private Puppeteer puppeteer;
-    private List<Pose> entities;
+public class MotionProcessorTest {
+    private MotionProcessor processor;
+    private List<Movable> movables;
 
     @Before
     public void setup() {
         DateTimeUtils.setCurrentMillisFixed(10);
 
-        entities = new ArrayList<>();
-        puppeteer = new Puppeteer(entities);
+        movables = new ArrayList<>();
+        processor = new MotionProcessor(movables);
     }
 
     @After
@@ -31,36 +30,36 @@ public class PuppeteerTest {
 
     @Test
     public void moveShouldSendElapsedTimeToEntity() {
-        entities.add(mock(Pose.class));
+        movables.add(mock(Movable.class));
 
         DateTimeUtils.setCurrentMillisFixed(25);
-        puppeteer.move();
+        processor.run();
 
-        verify(entities.get(0)).evolve(15);
+        verify(movables.get(0)).evolve(15);
     }
 
     @Test
     public void moveShouldSendElapsedTimeToAllEntities() {
-        entities.add(mock(Pose.class));
-        entities.add(mock(Pose.class));
+        movables.add(mock(Movable.class));
+        movables.add(mock(Movable.class));
 
         DateTimeUtils.setCurrentMillisFixed(30);
-        puppeteer.move();
+        processor.run();
 
-        verify(entities.get(0)).evolve(20);
-        verify(entities.get(1)).evolve(20);
+        verify(movables.get(0)).evolve(20);
+        verify(movables.get(1)).evolve(20);
     }
 
     @Test
     public void moveShouldSendTimeSinceLastMovement() {
         DateTimeUtils.setCurrentMillisFixed(110);
-        puppeteer.move();
+        processor.run();
 
-        entities.add(mock((Pose.class)));
+        movables.add(mock((Movable.class)));
 
         DateTimeUtils.setCurrentMillisFixed(180);
-        puppeteer.move();
+        processor.run();
 
-        verify(entities.get(0)).evolve(70);
+        verify(movables.get(0)).evolve(70);
     }
 }
