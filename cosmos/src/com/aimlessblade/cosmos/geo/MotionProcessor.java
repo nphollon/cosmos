@@ -7,7 +7,7 @@ import org.joda.time.DateTimeUtils;
 import java.util.List;
 
 @Getter
-public class MotionProcessor implements Processor {
+public final class MotionProcessor implements Processor {
     private final List<Movable> movables;
     private long lastUpdateTime;
 
@@ -18,12 +18,9 @@ public class MotionProcessor implements Processor {
 
     @Override
     public void run() {
-        long currentTime = DateTimeUtils.currentTimeMillis();
-        long dt = currentTime - lastUpdateTime;
+        final long currentTime = DateTimeUtils.currentTimeMillis();
+        final long dt = currentTime - lastUpdateTime;
         lastUpdateTime = DateTimeUtils.currentTimeMillis();
-
-        for (Movable movable : movables) {
-            movable.evolve(dt);
-        }
+        movables.stream().forEach(m -> m.evolve(dt));
     }
 }

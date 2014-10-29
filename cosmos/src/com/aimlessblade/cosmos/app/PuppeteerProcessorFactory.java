@@ -15,21 +15,21 @@ import java.util.Arrays;
 import java.util.List;
 
 @AllArgsConstructor
-public class PuppeteerProcessorFactory implements ProcessorFactory {
+public final class PuppeteerProcessorFactory implements ProcessorFactory {
     private final Keymap keymap;
     private final Program program;
 
     @Override
     public Processor build(final Camera camera, final List<Entity> entities) {
-        List<Movable> movables = new ArrayList<>();
+        final List<Movable> movables = new ArrayList<>();
         movables.add(camera);
         movables.addAll(entities);
 
-        Processor inputStage = new InputProcessor(keymap, movables);
-        Processor motionStage = new MotionProcessor(movables);
-        Processor drawingStage = new DrawingProcessor(program, camera, entities);
+        final Processor inputStage = new InputProcessor(keymap, movables);
+        final Processor motionStage = new MotionProcessor(movables);
+        final Processor drawingStage = new DrawingProcessor(program, camera, entities);
 
-        List<Processor> stages = Arrays.asList(inputStage, motionStage, drawingStage);
+        final List<Processor> stages = Arrays.asList(inputStage, motionStage, drawingStage);
         return new CompositeProcessor(stages);
     }
 }

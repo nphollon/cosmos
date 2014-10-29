@@ -2,6 +2,7 @@ package com.aimlessblade.cosmos.app;
 
 import com.aimlessblade.cosmos.geo.Camera;
 import com.aimlessblade.cosmos.geo.Entity;
+import lombok.AllArgsConstructor;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
@@ -13,21 +14,16 @@ import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class DisplayFramework {
+@AllArgsConstructor
+public final class DisplayFramework {
     private final int width;
     private final int height;
     private final ProcessorFactory processorFactory;
 
-    public DisplayFramework(int width, int height, ProcessorFactory processorFactory) {
-        this.width = width;
-        this.height = height;
-        this.processorFactory = processorFactory;
-    }
-
-    public final void start(Camera camera, List<Entity> entities) throws IOException, LWJGLException {
+    public void start(final Camera camera, final List<Entity> entities) throws IOException, LWJGLException {
         initializeDisplay();
 
-        Processor processor = processorFactory.build(camera, entities);
+        final Processor processor = processorFactory.build(camera, entities);
 
         while (!Display.isCloseRequested()) {
             clearDisplay();
@@ -39,8 +35,8 @@ public class DisplayFramework {
     }
 
     private void initializeDisplay() throws LWJGLException {
-        PixelFormat pixelFormat = new PixelFormat();
-        ContextAttribs contextAtrributes = new ContextAttribs(3, 0)
+        final PixelFormat pixelFormat = new PixelFormat();
+        final ContextAttribs contextAtrributes = new ContextAttribs(3, 0)
                 .withForwardCompatible(true);
 
         Display.setDisplayMode(new DisplayMode(width, height));

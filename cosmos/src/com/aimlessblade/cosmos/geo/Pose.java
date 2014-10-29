@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor(staticName = "create")
-public class Pose {
+public final class Pose {
     private Displacement displacement;
     private Orientation orientation;
 
@@ -31,10 +31,6 @@ public class Pose {
 
     public void adjustRoll(final double delta) {
         rotate(0, 0, 1, delta);
-    }
-
-    public void evolve(final long dt) {
-
     }
 
     private void move(final double dx, final double dy, final double dz) {

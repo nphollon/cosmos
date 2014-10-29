@@ -9,7 +9,7 @@ import org.ejml.simple.SimpleMatrix;
 @EqualsAndHashCode
 @ToString
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Orientation {
+public final class Orientation {
     private static final Orientation NULL_VECTOR = Orientation.quaternion(0, 0, 0, 0);
     private final double x;
     private final double y;
@@ -33,7 +33,7 @@ public class Orientation {
     }
 
     public SimpleMatrix toMatrix() {
-        SimpleMatrix matrix = new SimpleMatrix(4, 4);
+        final SimpleMatrix matrix = new SimpleMatrix(4, 4);
 
         matrix.set(0, 0, 1 - 2*y*y - 2*z*z);
         matrix.set(0, 1, 2*x*y - 2*z*w);
@@ -61,7 +61,7 @@ public class Orientation {
     }
 
     public Orientation normalize(final double tolerance) {
-        double magnitudeSquared = x*x + y*y + z*z + w*w;
+        final double magnitudeSquared = x*x + y*y + z*z + w*w;
 
         if (doublesEqual(magnitudeSquared, 1, tolerance)) {
             return this;
@@ -71,7 +71,7 @@ public class Orientation {
             return NULL_VECTOR;
         }
 
-        double magnitude = Math.sqrt(magnitudeSquared);
+        final double magnitude = Math.sqrt(magnitudeSquared);
         return Orientation.quaternion(x / magnitude, y / magnitude, z / magnitude, w / magnitude);
     }
 
@@ -82,7 +82,7 @@ public class Orientation {
                 doublesEqual(w, other.w, tolerance);
     }
 
-    private boolean doublesEqual(double a, double b, double tolerance) {
+    private boolean doublesEqual(final double a, final double b, final double tolerance) {
         return Math.abs(a - b) < tolerance;
     }
 }

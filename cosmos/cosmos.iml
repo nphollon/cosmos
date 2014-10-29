@@ -18,6 +18,8 @@
     <orderEntry type="library" name="org.mockito:mockito-core:1.10.8" level="project" />
     <orderEntry type="library" name="org.apache.commons:com.springsource.org.apache.commons.collections:3.2.1" level="project" />
     <orderEntry type="library" name="joda-time:joda-time:2.2" level="project" />
+    <orderEntry type="library" name="org.powermock:powermock-api-mockito:1.5" level="project" />
+    <orderEntry type="library" name="org.powermock:powermock-module-junit4:1.5" level="project" />
   </component>
 </module>
 

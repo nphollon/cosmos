@@ -10,7 +10,7 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class DrawingProcessor implements Processor {
+public final class DrawingProcessor implements Processor {
     private final Program program;
     private final Camera camera;
     private final List<Entity> entities;

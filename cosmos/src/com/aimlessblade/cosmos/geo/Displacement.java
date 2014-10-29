@@ -8,7 +8,7 @@ import org.ejml.simple.SimpleMatrix;
 @EqualsAndHashCode
 @ToString
 @AllArgsConstructor(staticName = "cartesian")
-public class Displacement {
+public final class Displacement {
     private final double x;
     private final double y;
     private final double z;
@@ -24,7 +24,7 @@ public class Displacement {
     }
 
     public SimpleMatrix toMatrix() {
-        SimpleMatrix matrix = SimpleMatrix.identity(4);
+        final SimpleMatrix matrix = SimpleMatrix.identity(4);
         matrix.set(0, 3, x);
         matrix.set(1, 3, y);
         matrix.set(2, 3, z);
