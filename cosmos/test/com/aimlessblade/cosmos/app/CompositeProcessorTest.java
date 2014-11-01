@@ -6,8 +6,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -22,11 +20,6 @@ public class CompositeProcessorTest {
         stages.add(mock(Processor.class));
 
         compositeProcessor = new CompositeProcessor(stages);
-    }
-
-    @Test
-    public void pipelineShouldContainStages() {
-        assertThat(compositeProcessor.getStages(), is(stages));
     }
 
     @Test

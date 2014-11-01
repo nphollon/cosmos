@@ -2,9 +2,34 @@ package com.aimlessblade.cosmos.app;
 
 import com.aimlessblade.cosmos.geo.Camera;
 import com.aimlessblade.cosmos.geo.Entity;
+import com.aimlessblade.cosmos.geo.MotionProcessor;
+import com.aimlessblade.cosmos.geo.Movable;
+import com.aimlessblade.cosmos.input.InputProcessor;
+import com.aimlessblade.cosmos.input.Keymap;
+import com.aimlessblade.cosmos.render.DrawingProcessor;
+import lombok.AllArgsConstructor;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public interface ProcessorFactory {
-    Processor build(Camera camera, List<Entity> entities);
+@AllArgsConstructor
+public final class ProcessorFactory {
+    private final Keymap keymap;
+    private final File vertexShader;
+    private final File fragmentShader;
+
+    public Processor build(final Camera camera, final List<Entity> entities) throws IOException {
+        final List<Movable> movables = new ArrayList<>();
+        movables.add(camera);
+        movables.addAll(entities);
+
+        final Processor inputStage = new InputProcessor(keymap, movables);
+        final Processor motionStage = new MotionProcessor(movables);
+        final Processor drawingStage = DrawingProcessor.build(vertexShader, fragmentShader, camera, entities);
+
+        return new CompositeProcessor(Arrays.asList(inputStage, motionStage, drawingStage));
+    }
 }
