@@ -31,7 +31,7 @@ public class InputProcessorTest {
     public void setup() {
         mockStatic(Keyboard.class);
         keymap = new HashMap<>();
-        movables = Arrays.asList(mock(Movable.class));
+        movables = Arrays.asList(mock(Movable.class), mock(Movable.class));
         processor = new InputProcessor(keymap, movables);
     }
 
@@ -73,7 +73,7 @@ public class InputProcessorTest {
     public void shouldProcessEventsUntilQueueIsEmpty() {
         InputState commandAOutput = new InputState(movables, 1);
 
-        Function<InputState, InputState> commandA = s -> new InputState(s.getMovables(), s.getActiveIndex() + 1);
+        Function<InputState, InputState> commandA = s -> new InputState(s.getMovables(), 1);
         Function<InputState, InputState> commandB = mock(Function.class);
 
         keymap.put(press(Keyboard.KEY_A), commandA);
@@ -93,7 +93,7 @@ public class InputProcessorTest {
     public void shouldRememberInputStateBetweenMethodCalls() {
         InputState commandAOutput = new InputState(movables, 1);
 
-        Function<InputState, InputState> commandA = s -> new InputState(s.getMovables(), s.getActiveIndex() + 1);
+        Function<InputState, InputState> commandA = s -> new InputState(s.getMovables(), 1);
         Function<InputState, InputState> commandB = mock(Function.class);
 
         keymap.put(press(Keyboard.KEY_A), commandA);
