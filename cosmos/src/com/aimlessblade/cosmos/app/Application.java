@@ -1,7 +1,6 @@
 package com.aimlessblade.cosmos.app;
 
 import com.aimlessblade.cosmos.geo.*;
-import com.aimlessblade.cosmos.input.Keymap;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
@@ -17,10 +16,9 @@ import static org.lwjgl.opengl.GL11.*;
 
 public final class Application {
     public static void main(final String[] args) {
-        final Keymap keymap = null;
         final File vertexShader = new File("/home/nick/IdeaProjects/cosmos/cosmos/shaders/simple.vert");
         final File fragmentShader = new File("/home/nick/IdeaProjects/cosmos/cosmos/shaders/simple.frag");
-        final ProcessorFactory factory = new ProcessorFactory(keymap, vertexShader, fragmentShader);
+        final ProcessorFactory factory = new ProcessorFactory(null, vertexShader, fragmentShader);
 
         final Displacement cameraLocation = Displacement.cartesian(0, 0, 0);
         final Orientation cameraOrientation = Orientation.axisAngle(1, 0, 0, 0);

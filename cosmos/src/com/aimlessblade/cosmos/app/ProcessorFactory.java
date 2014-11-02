@@ -5,7 +5,8 @@ import com.aimlessblade.cosmos.geo.Entity;
 import com.aimlessblade.cosmos.geo.MotionProcessor;
 import com.aimlessblade.cosmos.geo.Movable;
 import com.aimlessblade.cosmos.input.InputProcessor;
-import com.aimlessblade.cosmos.input.Keymap;
+import com.aimlessblade.cosmos.input.InputState;
+import com.aimlessblade.cosmos.input.KeyboardEvent;
 import com.aimlessblade.cosmos.render.DrawingProcessor;
 import lombok.AllArgsConstructor;
 
@@ -14,10 +15,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 @AllArgsConstructor
 public final class ProcessorFactory {
-    private final Keymap keymap;
+    private final Map<KeyboardEvent, Function<InputState, InputState>> keymap;
     private final File vertexShader;
     private final File fragmentShader;
 
