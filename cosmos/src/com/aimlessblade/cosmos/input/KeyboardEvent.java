@@ -17,7 +17,7 @@ public class KeyboardEvent {
         return new KeyboardEvent(keycode, true);
     }
 
-    public static KeyboardEvent depress(int keycode) {
+    public static KeyboardEvent lift(int keycode) {
         return new KeyboardEvent(keycode, false);
     }
 }

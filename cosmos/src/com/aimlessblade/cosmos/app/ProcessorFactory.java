@@ -16,11 +16,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.function.Consumer;
 
 @AllArgsConstructor
 public final class ProcessorFactory {
-    private final Map<KeyboardEvent, Function<InputState, InputState>> keymap;
+    private final Map<KeyboardEvent, Consumer<InputState>> keymap;
     private final File vertexShader;
     private final File fragmentShader;
 

@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.lwjgl.input.Keyboard;
+import org.mockito.InOrder;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -12,9 +13,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.function.Consumer;
 
-import static com.aimlessblade.cosmos.input.KeyboardEvent.depress;
+import static com.aimlessblade.cosmos.input.KeyboardEvent.lift;
 import static com.aimlessblade.cosmos.input.KeyboardEvent.press;
 import static org.mockito.Mockito.*;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
@@ -23,7 +24,7 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 @RunWith(PowerMockRunner.class)
 public class InputProcessorTest {
 
-    private Map<KeyboardEvent, Function<InputState, InputState>> keymap;
+    private Map<KeyboardEvent, Consumer<InputState>> keymap;
     private InputProcessor processor;
     private List<Movable> movables;
 
@@ -38,7 +39,7 @@ public class InputProcessorTest {
     @Test
     @SuppressWarnings("unchecked")
     public void shouldInvokeCommandForNextEventInQueue() {
-        Function<InputState, InputState> command = mock(Function.class);
+        Consumer<InputState> command = mock(Consumer.class);
         keymap.put(press(Keyboard.KEY_A), command);
 
         when(Keyboard.next()).thenReturn(true, false);
@@ -47,16 +48,15 @@ public class InputProcessorTest {
 
         processor.run();
 
-        InputState state = new InputState(movables, 0);
-        verify(command).apply(state);
+        verify(command).accept(new InputState(movables, 0));
     }
 
     @Test
     @SuppressWarnings("unchecked")
     public void shouldDoNothingIfEventHasNoMapping() {
-        Function<InputState, InputState> command = mock(Function.class);
+        Consumer<InputState> command = mock(Consumer.class);
 
-        keymap.put(depress(Keyboard.KEY_B), command);
+        keymap.put(lift(Keyboard.KEY_B), command);
 
         when(Keyboard.next()).thenReturn(true, true, false);
         when(Keyboard.getEventKey()).thenReturn(Keyboard.KEY_A, Keyboard.KEY_B);
@@ -64,20 +64,18 @@ public class InputProcessorTest {
 
         processor.run();
 
-        InputState state = new InputState(movables, 0);
-        verify(command).apply(state);
+        verify(command).accept(new InputState(movables, 0));
     }
 
     @Test
     @SuppressWarnings("unchecked")
     public void shouldProcessEventsUntilQueueIsEmpty() {
-        InputState commandAOutput = new InputState(movables, 1);
-
-        Function<InputState, InputState> commandA = s -> new InputState(s.getMovables(), 1);
-        Function<InputState, InputState> commandB = mock(Function.class);
+        Consumer<InputState> commandA = mock(Consumer.class);
+        Consumer<InputState> commandB = mock(Consumer.class);
+        InOrder inOrder = inOrder(commandA, commandB);
 
         keymap.put(press(Keyboard.KEY_A), commandA);
-        keymap.put(depress(Keyboard.KEY_B), commandB);
+        keymap.put(lift(Keyboard.KEY_B), commandB);
 
         when(Keyboard.next()).thenReturn(true, true, false);
         when(Keyboard.getEventKey()).thenReturn(Keyboard.KEY_A, Keyboard.KEY_B);
@@ -85,19 +83,19 @@ public class InputProcessorTest {
 
         processor.run();
 
-        verify(commandB).apply(commandAOutput);
+        inOrder.verify(commandA).accept(new InputState(movables, 0));
+        inOrder.verify(commandB).accept(new InputState(movables, 0));
     }
 
     @Test
     @SuppressWarnings("unchecked")
     public void shouldRememberInputStateBetweenMethodCalls() {
-        InputState commandAOutput = new InputState(movables, 1);
-
-        Function<InputState, InputState> commandA = s -> new InputState(s.getMovables(), 1);
-        Function<InputState, InputState> commandB = mock(Function.class);
+        Consumer<InputState> commandA = mock(Consumer.class);
+        Consumer<InputState> commandB = mock(Consumer.class);
+        InOrder inOrder = inOrder(commandA, commandB);
 
         keymap.put(press(Keyboard.KEY_A), commandA);
-        keymap.put(depress(Keyboard.KEY_B), commandB);
+        keymap.put(lift(Keyboard.KEY_B), commandB);
 
         when(Keyboard.next()).thenReturn(true, false, true, false);
         when(Keyboard.getEventKey()).thenReturn(Keyboard.KEY_A, Keyboard.KEY_B);
@@ -106,6 +104,7 @@ public class InputProcessorTest {
         processor.run();
         processor.run();
 
-        verify(commandB).apply(commandAOutput);
+        inOrder.verify(commandA).accept(new InputState(movables, 0));
+        inOrder.verify(commandB).accept(new InputState(movables, 0));
     }
 }

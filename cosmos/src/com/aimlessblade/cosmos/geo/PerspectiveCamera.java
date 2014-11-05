@@ -12,6 +12,16 @@ public final class PerspectiveCamera implements Camera {
     }
 
     @Override
+    public void impulse(final double vx, final double vy, final double vz) {
+
+    }
+
+    @Override
+    public void angularImpulse(final double vPitch, final double vYaw, final double vRoll) {
+
+    }
+
+    @Override
     public SimpleMatrix getPerspective() {
         return null;
     }
