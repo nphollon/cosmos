@@ -28,21 +28,6 @@ public final class PerspectiveCamera implements Camera {
         return perspective;
     }
 
-    @Override
-    public void evolve(final long dt) {
-
-    }
-
-    @Override
-    public void impulse(final double vx, final double vy, final double vz) {
-
-    }
-
-    @Override
-    public void angularImpulse(final double vPitch, final double vYaw, final double vRoll) {
-
-    }
-
     private void validateGeometry(final double frustumScale, final double zNear, final double zFar, final double aspectRatio) {
         if (frustumScale <= 0 || zNear <= 0 || zFar <= zNear || aspectRatio <= 0) {
             throw new ArithmeticException("Invalid perspective parameters: frustumScale = " + frustumScale +

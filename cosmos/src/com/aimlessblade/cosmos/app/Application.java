@@ -1,7 +1,6 @@
 package com.aimlessblade.cosmos.app;
 
 import com.aimlessblade.cosmos.geo.Camera;
-import com.aimlessblade.cosmos.geo.Entity;
 import com.aimlessblade.cosmos.geo.PerspectiveCamera;
 import com.aimlessblade.cosmos.input.InputState;
 import com.aimlessblade.cosmos.input.KeyboardEvent;
@@ -65,7 +64,7 @@ public final class Application {
 
         final Camera camera = new PerspectiveCamera(1.0, 0.1, 50.0, 1.5);
 
-        final List<Entity> entities = new ArrayList<>();
+        final List<RigidBody> entities = new ArrayList<>();
 
         try {
             createWindow(800, 600);

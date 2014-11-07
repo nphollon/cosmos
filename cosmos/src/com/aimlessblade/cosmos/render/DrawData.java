@@ -19,7 +19,7 @@ import static java.util.Arrays.stream;
 @RequiredArgsConstructor
 public final class DrawData {
     private final Camera camera;
-    private final List<Entity> entities;
+    private final List<? extends Entity> entities;
     private List<Target> targets;
 
     public FloatBuffer getPerspective() {

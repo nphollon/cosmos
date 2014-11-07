@@ -1,7 +1,6 @@
 package com.aimlessblade.cosmos.app;
 
 import com.aimlessblade.cosmos.geo.Camera;
-import com.aimlessblade.cosmos.geo.Entity;
 import com.aimlessblade.cosmos.geo.MotionProcessor;
 import com.aimlessblade.cosmos.geo.Movable;
 import com.aimlessblade.cosmos.input.InputProcessor;
@@ -24,9 +23,8 @@ public final class ProcessorFactory {
     private final File vertexShader;
     private final File fragmentShader;
 
-    public Processor build(final Camera camera, final List<Entity> entities) throws IOException {
+    public Processor build(final Camera camera, final List<RigidBody> entities) throws IOException {
         final List<Movable> movables = new ArrayList<>();
-        movables.add(camera);
         movables.addAll(entities);
 
         final Processor inputStage = new InputProcessor(keymap, movables);

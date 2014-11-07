@@ -23,7 +23,7 @@ public final class DrawingProcessor implements Processor {
     private final Program program;
     private final DrawData drawData;
 
-    public static Processor build(final File vertexShader, final File fragmentShader, final Camera camera, final List<Entity> entities) throws IOException {
+    public static Processor build(final File vertexShader, final File fragmentShader, final Camera camera, final List<? extends Entity> entities) throws IOException {
         final Program program = Program.build(vertexShader, fragmentShader);
         final DrawData drawData = new DrawData(camera, entities);
 

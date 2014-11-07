@@ -2,7 +2,7 @@ package com.aimlessblade.cosmos.geo;
 
 import org.ejml.simple.SimpleMatrix;
 
-public interface Entity extends Movable {
+public interface Entity {
 
     double[] getVertexData();
 
