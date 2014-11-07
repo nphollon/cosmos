@@ -26,9 +26,9 @@ public class RigidBodyTest {
     );
     private static final double TOLERANCE = 1e-5;
 
-    @Mock Pose pose;
+    @Mock private Pose pose;
 
-    RigidBody body;
+    private RigidBody body;
 
     @Before
     public void setup() {

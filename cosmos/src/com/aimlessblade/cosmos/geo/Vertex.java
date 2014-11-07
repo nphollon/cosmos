@@ -33,7 +33,7 @@ public class Vertex {
     }
 
     public static Attribute[] getAttributes() {
-        return new Attribute[0];
+        return Attribute.values();
     }
 
     public static Vertex build(double x, double y, double z, double r, double g, double b) {
@@ -42,9 +42,11 @@ public class Vertex {
 
     @Getter
     @AllArgsConstructor
-    public class Attribute {
-        private int index;
-        private int length;
-        private int offset;
+    public static enum Attribute {
+        POSITION(0, 3, 0), COLOR(0, 3, 3 * Float.BYTES);
+
+        private final int index;
+        private final int length;
+        private final int offset;
     }
 }
