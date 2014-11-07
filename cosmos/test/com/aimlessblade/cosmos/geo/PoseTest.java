@@ -3,6 +3,7 @@ package com.aimlessblade.cosmos.geo;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.aimlessblade.cosmos.util.Assert.assertQuaternionEquality;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -15,7 +16,7 @@ public class PoseTest {
 
     @Before
     public void setup() {
-        pose = Pose.create(DISPLACEMENT, ORIENTATION);
+        pose = Pose.build(DISPLACEMENT, ORIENTATION);
     }
 
     @Test
@@ -57,7 +58,7 @@ public class PoseTest {
 
         pose.adjustPitch(30.0);
 
-        assertQuaternionEquality(pose.getOrientation(), expectedOrientation);
+        assertQuaternionEquality(pose.getOrientation(), expectedOrientation, TOLERANCE);
     }
 
     @Test
@@ -66,7 +67,7 @@ public class PoseTest {
 
         pose.adjustYaw(90.0);
 
-        assertQuaternionEquality(pose.getOrientation(), expectedOrientation);
+        assertQuaternionEquality(pose.getOrientation(), expectedOrientation, TOLERANCE);
     }
 
     @Test
@@ -75,12 +76,6 @@ public class PoseTest {
 
         pose.adjustRoll(90.0);
 
-        assertQuaternionEquality(pose.getOrientation(), expectedOrientation);
-    }
-
-    private void assertQuaternionEquality(final Orientation quaternion1, final Orientation quaternion2) {
-        String message = "\nActual:\n" + quaternion1 + "\nExpected:\n" + quaternion2;
-        assertThat(message, quaternion1.isIdentical(quaternion2, TOLERANCE), is(true));
-        assertThat(message, quaternion2.isIdentical(quaternion1, TOLERANCE), is(true));
+        assertQuaternionEquality(pose.getOrientation(), expectedOrientation, TOLERANCE);
     }
 }

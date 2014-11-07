@@ -1,5 +1,6 @@
 package com.aimlessblade.cosmos.geo;
 
+import com.aimlessblade.cosmos.util.Assert;
 import org.ejml.simple.SimpleMatrix;
 import org.junit.Test;
 
@@ -39,7 +40,7 @@ public class DisplacementTest {
 
     @Test
     public void translationMatrixShouldBeIdentityIfNoOffset() {
-        assertMatrixEquality(ORIGIN.toMatrix(), SimpleMatrix.identity(4));
+        Assert.assertMatrixEquality(ORIGIN.toMatrix(), SimpleMatrix.identity(4), TOLERANCE);
     }
 
     @Test
@@ -51,7 +52,7 @@ public class DisplacementTest {
         expectedMatrix.set(1, 3, 3);
         expectedMatrix.set(2, 3, 5);
 
-        assertMatrixEquality(displacement.toMatrix(), expectedMatrix);
+        Assert.assertMatrixEquality(displacement.toMatrix(), expectedMatrix, TOLERANCE);
     }
 
     @Test
@@ -67,10 +68,5 @@ public class DisplacementTest {
         Displacement expectedSum = Displacement.cartesian(3, 16, 12);
 
         assertThat(first.plus(second), is(expectedSum));
-    }
-
-    private void assertMatrixEquality(SimpleMatrix actual, SimpleMatrix expected) {
-        String error = "Actual:\n" + actual.toString() + "Expected:\n" + expected;
-        assertThat(error, actual.isIdentical(expected, TOLERANCE), is(true));
     }
 }

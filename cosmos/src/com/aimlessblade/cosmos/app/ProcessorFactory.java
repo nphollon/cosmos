@@ -3,6 +3,7 @@ package com.aimlessblade.cosmos.app;
 import com.aimlessblade.cosmos.geo.Camera;
 import com.aimlessblade.cosmos.geo.MotionProcessor;
 import com.aimlessblade.cosmos.geo.Movable;
+import com.aimlessblade.cosmos.geo.RigidBody;
 import com.aimlessblade.cosmos.input.InputProcessor;
 import com.aimlessblade.cosmos.input.InputState;
 import com.aimlessblade.cosmos.input.KeyboardEvent;

@@ -3,6 +3,7 @@ package com.aimlessblade.cosmos.render;
 import com.aimlessblade.cosmos.geo.Camera;
 import com.aimlessblade.cosmos.geo.Entity;
 import com.aimlessblade.cosmos.render.DrawData.Target;
+import com.aimlessblade.cosmos.util.Assert;
 import org.ejml.simple.SimpleMatrix;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,16 +15,12 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.DoubleConsumer;
-import java.util.function.IntConsumer;
 
-import static java.util.Arrays.stream;
 import static org.apache.commons.lang.ArrayUtils.addAll;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.number.IsCloseTo.closeTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -55,14 +52,14 @@ public class DrawDataTest {
         final DrawData drawData = new DrawData(camera, entities);
         final FloatBuffer perspectiveBuffer = drawData.getPerspective();
 
-        assertBufferContents(perspectiveBuffer, MATRIX_DATA);
+        Assert.assertBufferContents(perspectiveBuffer, MATRIX_DATA, PRECISION);
     }
 
     @Test
     public void vertexBufferShouldBeEmptyIfNoEntities() {
         final DrawData drawData = new DrawData(camera, entities);
         final FloatBuffer vertexBuffer = drawData.getVertexBuffer();
-        assertBufferContents(vertexBuffer, new double[0]);
+        Assert.assertBufferContents(vertexBuffer, new double[0], PRECISION);
     }
 
     @Test
@@ -73,7 +70,7 @@ public class DrawDataTest {
         final DrawData drawData = new DrawData(camera, entities);
         final FloatBuffer vertexBuffer = drawData.getVertexBuffer();
 
-        assertBufferContents(vertexBuffer, expectedVertexData);
+        Assert.assertBufferContents(vertexBuffer, expectedVertexData, PRECISION);
     }
 
     @Test
@@ -86,14 +83,14 @@ public class DrawDataTest {
         final DrawData drawData = new DrawData(camera, entities);
         final FloatBuffer vertexBuffer = drawData.getVertexBuffer();
 
-        assertBufferContents(vertexBuffer, addAll(vertexDataA, vertexDataB));
+        Assert.assertBufferContents(vertexBuffer, addAll(vertexDataA, vertexDataB), PRECISION);
     }
 
     @Test
     public void elementBufferShouldBeEmptyIfNoEntities() {
         final DrawData drawData = new DrawData(camera, entities);
         final IntBuffer elementBuffer = drawData.getElementBuffer();
-        assertBufferContents(elementBuffer, new int[0]);
+        Assert.assertBufferContents(elementBuffer, new int[0]);
     }
 
     @Test
@@ -104,7 +101,7 @@ public class DrawDataTest {
         final DrawData drawData = new DrawData(camera, entities);
         final IntBuffer elementBuffer = drawData.getElementBuffer();
 
-        assertBufferContents(elementBuffer, expectedElementList);
+        Assert.assertBufferContents(elementBuffer, expectedElementList);
     }
 
     @Test
@@ -117,7 +114,7 @@ public class DrawDataTest {
         final DrawData drawData = new DrawData(camera, entities);
         final IntBuffer elementBuffer = drawData.getElementBuffer();
 
-        assertBufferContents(elementBuffer, expectedContents);
+        Assert.assertBufferContents(elementBuffer, expectedContents);
     }
 
     @Test
@@ -130,7 +127,7 @@ public class DrawDataTest {
         final DrawData drawData = new DrawData(camera, entities);
         final IntBuffer elementBuffer = drawData.getElementBuffer();
 
-        assertBufferContents(elementBuffer, expectedContents);
+        Assert.assertBufferContents(elementBuffer, expectedContents);
     }
 
     @Test
@@ -143,7 +140,7 @@ public class DrawDataTest {
         final DrawData drawData = new DrawData(camera, entities);
         final IntBuffer elementBuffer = drawData.getElementBuffer();
 
-        assertBufferContents(elementBuffer, expectedContents);
+        Assert.assertBufferContents(elementBuffer, expectedContents);
     }
 
     @Test
@@ -162,7 +159,7 @@ public class DrawDataTest {
         final DrawData drawData = new DrawData(camera, entities);
         final IntBuffer elementBuffer = drawData.getElementBuffer();
 
-        assertBufferContents(elementBuffer, expectedContents);
+        Assert.assertBufferContents(elementBuffer, expectedContents);
     }
 
     @Test
@@ -206,7 +203,7 @@ public class DrawDataTest {
         final List<Target> targets = new DrawData(camera, entities).getTargets();
         final Target target = targets.get(0);
 
-        assertBufferContents(target.getGeoTransform(), MATRIX_DATA);
+        Assert.assertBufferContents(target.getGeoTransform(), MATRIX_DATA, PRECISION);
     }
 
     @Test
@@ -233,23 +230,5 @@ public class DrawDataTest {
         final Entity entity = mock(Entity.class);
         when(entity.getVertexData()).thenReturn(data);
         entities.add(entity);
-    }
-
-    private void assertBufferContents(final FloatBuffer buffer, final double[] expectedData) {
-        assertThat(buffer.limit(), is(expectedData.length));
-        stream(expectedData).forEach(checkNextBufferEntry(buffer));
-    }
-
-    private void assertBufferContents(final IntBuffer buffer, final int[] expectedData) {
-        assertThat(buffer.limit(), is(expectedData.length));
-        stream(expectedData).forEach(checkNextBufferEntry(buffer));
-    }
-
-    private DoubleConsumer checkNextBufferEntry(final FloatBuffer buffer) {
-        return d -> assertThat((double) buffer.get(), closeTo(d, PRECISION));
-    }
-
-    private IntConsumer checkNextBufferEntry(final IntBuffer buffer) {
-        return i -> assertThat(buffer.get(), is(i));
     }
 }
