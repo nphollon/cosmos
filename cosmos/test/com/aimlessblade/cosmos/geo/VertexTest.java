@@ -29,21 +29,26 @@ public class VertexTest {
     @Test
     public void shouldHaveColorAttribute() {
         final Vertex.Attribute color = Vertex.Attribute.COLOR;
-        assertThat(color.getIndex(), is(0));
+        assertThat(color.getIndex(), is(1));
         assertThat(color.getLength(), is(3));
         assertThat(color.getOffset(), is(3 * Float.BYTES));
     }
 
     @Test
-    public void shouldHaveStrideOfSix() {
-        assertThat(Vertex.getStride(), is(6));
+    public void shouldHaveStrideOfSixTimesSizeOfFloat() {
+        assertThat(Vertex.getStride(), is(6 * Float.BYTES));
     }
 
     @Test
-    public void shouldPackConstructorArgsIntoDataList() {
-        Vertex vertex = Vertex.build(0, 1, 2, 3, 4, 5);
-        final List<Double> expectedData = Arrays.asList(valueOf(0), valueOf(1), valueOf(2),
-                valueOf(3), valueOf(4), valueOf(5));
+    public void shouldHaveLengthOfSix() {
+        assertThat(Vertex.getLength(), is(6));
+    }
+
+    @Test
+    public void shouldPlaceColorBeforePositionInDataList() {
+        Vertex vertex = Vertex.build(0, 1, 2, 0.1, 0.2, 0.3);
+        final List<Double> expectedData = Arrays.asList(valueOf(0.1), valueOf(0.2), valueOf(0.3),
+                valueOf(0), valueOf(1), valueOf(2));
         assertThat(vertex.data(), is(expectedData));
     }
 }

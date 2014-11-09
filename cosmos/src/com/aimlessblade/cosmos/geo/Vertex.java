@@ -7,7 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Vertex {
-    private static final int STRIDE = 6;
+    private static final int LENGTH = 6;
+
     private final double x;
     private final double y;
     private final double z;
@@ -25,11 +26,15 @@ public class Vertex {
     }
 
     public List<Double> data() {
-        return Arrays.asList(x, y, z, r, g, b);
+        return Arrays.asList(r, g, b, x, y, z);
     }
 
     public static int getStride() {
-        return STRIDE;
+        return Float.BYTES * getLength();
+    }
+
+    public static int getLength() {
+        return LENGTH;
     }
 
     public static Attribute[] getAttributes() {
@@ -43,7 +48,7 @@ public class Vertex {
     @Getter
     @AllArgsConstructor
     public static enum Attribute {
-        POSITION(0, 3, 0), COLOR(0, 3, 3 * Float.BYTES);
+        POSITION(0, 3, 0), COLOR(1, 3, 3 * Float.BYTES);
 
         private final int index;
         private final int length;

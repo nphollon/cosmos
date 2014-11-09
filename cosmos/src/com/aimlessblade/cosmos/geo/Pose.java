@@ -10,30 +10,6 @@ public class Pose implements Movable {
     private Displacement displacement;
     private Orientation orientation;
 
-    public void moveLeft(final double delta) {
-        move(delta, 0, 0);
-    }
-
-    public void moveUp(final double delta) {
-        move(0, delta, 0);
-    }
-
-    public void moveForward(final double delta) {
-        move(0, 0, delta);
-    }
-
-    public void adjustPitch(final double delta) {
-        rotate(1, 0, 0, delta);
-    }
-
-    public void adjustYaw(final double delta) {
-        rotate(0, 1, 0, delta);
-    }
-
-    public void adjustRoll(final double delta) {
-        rotate(0, 0, 1, delta);
-    }
-
     private void move(final double dx, final double dy, final double dz) {
         displacement = displacement.plus(Displacement.cartesian(dx, dy, dz));
     }
@@ -43,7 +19,7 @@ public class Pose implements Movable {
     }
 
     public SimpleMatrix toMatrix() {
-        return null;
+        return SimpleMatrix.identity(4);
     }
 
     @Override

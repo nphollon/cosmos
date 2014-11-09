@@ -17,7 +17,7 @@ public class RigidBody implements Entity, Movable {
 
     @Override
     public double[] getVertexData() {
-        final int size = getVertexCount() * Vertex.getStride();
+        final int size = getVertexCount() * Vertex.getLength();
         final double[] data = new double[size];
 
         int i = 0;
