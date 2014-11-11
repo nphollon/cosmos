@@ -1,7 +1,7 @@
 package com.aimlessblade.cosmos.geo;
 
 public interface Movable {
-    void evolve(long dt);
+    void evolve(double dt);
 
     void impulse(double vx, double vy, double vz);
 

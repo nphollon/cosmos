@@ -1,6 +1,7 @@
 package com.aimlessblade.cosmos.util;
 
 import com.aimlessblade.cosmos.geo.Orientation;
+import com.aimlessblade.cosmos.geo.Pose;
 import org.ejml.simple.SimpleMatrix;
 
 import java.nio.FloatBuffer;
@@ -27,6 +28,16 @@ public class Assert {
         String message = "\nActual:\n" + quaternion1 + "\nExpected:\n" + quaternion2;
         assertThat(message, quaternion1.isIdentical(quaternion2, tolerance), is(expected));
         assertThat(message, quaternion2.isIdentical(quaternion1, tolerance), is(expected));
+    }
+    
+    public static void assertPoseEquality(final Pose pose1, final Pose pose2, final double tolerance) {
+        assertPoseEquality(pose1, pose2, tolerance, true);
+    }
+
+    public static void assertPoseEquality(final Pose pose1, final Pose pose2, final double tolerance, final boolean expected) {
+        String message = "\nActual:\n" + pose1 + "\nExpected:\n" + pose2;
+        assertThat(message, pose1.isIdentical(pose2, tolerance), is(expected));
+        assertThat(message, pose2.isIdentical(pose1, tolerance), is(expected));
     }
 
     public static void assertBufferContents(final FloatBuffer buffer, final double[] expectedData, final double tolerance) {

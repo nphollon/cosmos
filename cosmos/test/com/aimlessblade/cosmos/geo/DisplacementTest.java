@@ -69,4 +69,12 @@ public class DisplacementTest {
 
         assertThat(first.plus(second), is(expectedSum));
     }
+
+    @Test
+    public void multiplyingByScalarShouldScaleAllComponents() {
+        Displacement original = Displacement.cartesian(-1, 0.5, 3);
+        Displacement expectedResult = Displacement.cartesian(-8, 4, 24);
+
+        assertThat(original.times(8), is(expectedResult));
+    }
 }

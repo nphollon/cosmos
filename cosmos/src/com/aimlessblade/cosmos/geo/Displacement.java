@@ -34,4 +34,8 @@ public final class Displacement {
     public Displacement plus(final Displacement addend) {
         return Displacement.cartesian(x + addend.x, y + addend.y, z + addend.z);
     }
+
+    public Displacement times(final double scale) {
+        return Displacement.cartesian(x * scale, y * scale, z * scale);
+    }
 }

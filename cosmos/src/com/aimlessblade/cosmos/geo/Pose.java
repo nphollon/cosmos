@@ -1,39 +1,45 @@
 package com.aimlessblade.cosmos.geo;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 import org.ejml.simple.SimpleMatrix;
 
-@Getter
-@AllArgsConstructor(staticName = "build")
+@ToString(exclude = "velocityPerSecond")
 public class Pose implements Movable {
-    private Displacement displacement;
-    private Orientation orientation;
+    @Getter private Displacement displacement;
+    @Getter private Orientation orientation;
+    private Displacement velocityPerSecond;
 
-    private void move(final double dx, final double dy, final double dz) {
-        displacement = displacement.plus(Displacement.cartesian(dx, dy, dz));
-    }
-
-    private void rotate(final double x, final double y, final double z, final double angle) {
-        orientation = orientation.times(Orientation.axisAngle(x, y, z, angle));
+    public static Pose build(Displacement displacement, Orientation orientation) {
+        return new Pose(displacement, orientation);
     }
 
     public SimpleMatrix toMatrix() {
-        return SimpleMatrix.identity(4);
+        return displacement.toMatrix().mult(orientation.toMatrix());
     }
 
     @Override
-    public void evolve(final long dt) {
+    public void evolve(final double dt) {
 
+        displacement = displacement.plus(velocityPerSecond.times(dt));
     }
 
     @Override
     public void impulse(final double vx, final double vy, final double vz) {
-
+        velocityPerSecond = Displacement.cartesian(vx, vy, vz);
     }
 
     @Override
     public void angularImpulse(final double vPitch, final double vYaw, final double vRoll) {
 
+    }
+
+    public boolean isIdentical(final Pose otherPose, final double tolerance) {
+        return toMatrix().isIdentical(otherPose.toMatrix(), tolerance);
+    }
+
+    private Pose(final Displacement displacement, final Orientation orientation) {
+        this.displacement = displacement;
+        this.orientation = orientation;
     }
 }

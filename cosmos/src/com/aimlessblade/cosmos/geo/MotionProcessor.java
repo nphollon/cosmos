@@ -8,6 +8,7 @@ import java.util.List;
 
 @Getter
 public final class MotionProcessor implements Processor {
+    private static final double CONVERT_TO_SECONDS = 1e-3;
     private final List<Movable> movables;
     private long lastUpdateTime;
 
@@ -19,8 +20,8 @@ public final class MotionProcessor implements Processor {
     @Override
     public void run() {
         final long currentTime = DateTimeUtils.currentTimeMillis();
-        final long dt = currentTime - lastUpdateTime;
-        lastUpdateTime = DateTimeUtils.currentTimeMillis();
+        final double dt = (currentTime - lastUpdateTime) * CONVERT_TO_SECONDS;
+        lastUpdateTime = currentTime;
         movables.stream().forEach(m -> m.evolve(dt));
     }
 }

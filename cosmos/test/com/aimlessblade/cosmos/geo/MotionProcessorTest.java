@@ -32,10 +32,10 @@ public class MotionProcessorTest {
     public void moveShouldSendElapsedTimeToEntity() {
         movables.add(mock(Movable.class));
 
-        DateTimeUtils.setCurrentMillisFixed(25);
+        DateTimeUtils.setCurrentMillisFixed(1010);
         processor.run();
 
-        verify(movables.get(0)).evolve(15);
+        verify(movables.get(0)).evolve(1);
     }
 
     @Test
@@ -43,11 +43,11 @@ public class MotionProcessorTest {
         movables.add(mock(Movable.class));
         movables.add(mock(Movable.class));
 
-        DateTimeUtils.setCurrentMillisFixed(30);
+        DateTimeUtils.setCurrentMillisFixed(510);
         processor.run();
 
-        verify(movables.get(0)).evolve(20);
-        verify(movables.get(1)).evolve(20);
+        verify(movables.get(0)).evolve(0.5);
+        verify(movables.get(1)).evolve(0.5);
     }
 
     @Test
@@ -57,9 +57,9 @@ public class MotionProcessorTest {
 
         movables.add(mock((Movable.class)));
 
-        DateTimeUtils.setCurrentMillisFixed(180);
+        DateTimeUtils.setCurrentMillisFixed(360);
         processor.run();
 
-        verify(movables.get(0)).evolve(70);
+        verify(movables.get(0)).evolve(0.25);
     }
 }

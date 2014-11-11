@@ -47,7 +47,7 @@ public class RigidBody implements Entity, Movable {
     }
 
     @Override
-    public void evolve(final long dt) {
+    public void evolve(final double dt) {
         pose.evolve(dt);
     }
 
