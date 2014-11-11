@@ -10,11 +10,23 @@ import org.ejml.simple.SimpleMatrix;
 @ToString
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Orientation {
-    private static final Orientation NULL_VECTOR = Orientation.quaternion(0, 0, 0, 0);
+    private static final Orientation NULL_QUATERNION = quaternion(0, 0, 0, 0);
+    private static final Orientation NULL_ROTATION = quaternion(0, 0, 0, 1);
     private final double x;
     private final double y;
     private final double z;
     private final double w;
+
+    public static Orientation rotationVector(final double rx, final double ry, final double rz) {
+        final double magnitudeSquared = rx * rx + ry * ry + rz * rz;
+
+        if (magnitudeSquared == 0) {
+            return NULL_ROTATION;
+        }
+
+        final double magnitude = Math.sqrt(magnitudeSquared);
+        return axisAngle(rx/magnitude, ry/magnitude, rz/magnitude, magnitude);
+    }
 
     public static Orientation axisAngle(final double x, final double y, final double z, final double angle) {
         return axisAngleRadians(x, y, z, Math.toRadians(angle));
@@ -25,7 +37,7 @@ public final class Orientation {
         final double qy = y*Math.sin(angle / 2);
         final double qz = z*Math.sin(angle / 2);
         final double qw = Math.cos(angle / 2);
-        return Orientation.quaternion(qx, qy, qz, qw);
+        return quaternion(qx, qy, qz, qw);
     }
 
     public static Orientation quaternion(final double x, final double y, final double z, final double w) {
@@ -52,7 +64,7 @@ public final class Orientation {
     }
 
     public Orientation times(final Orientation factor) {
-        return Orientation.quaternion(
+        return quaternion(
                 w * factor.x + x * factor.w + y * factor.z - z * factor.y,
                 w * factor.y + y * factor.w + z * factor.x - x * factor.z,
                 w * factor.z + z * factor.w + x * factor.y - y * factor.x,
@@ -68,11 +80,11 @@ public final class Orientation {
         }
 
         if (magnitudeSquared == 0) {
-            return NULL_VECTOR;
+            return NULL_QUATERNION;
         }
 
         final double magnitude = Math.sqrt(magnitudeSquared);
-        return Orientation.quaternion(x / magnitude, y / magnitude, z / magnitude, w / magnitude);
+        return quaternion(x / magnitude, y / magnitude, z / magnitude, w / magnitude);
     }
 
     public boolean isIdentical(final Orientation other, final double tolerance) {
