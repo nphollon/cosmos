@@ -5,7 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static com.aimlessblade.cosmos.util.Assert.assertMatrixEquality;
-import static com.aimlessblade.cosmos.util.Assert.assertPoseEquality;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 public class PoseTest {
     private static final Orientation DEFAULT_ORIENTATION = Orientation.axisAngle(1, 0, 0, 0);
@@ -61,6 +62,15 @@ public class PoseTest {
     }
 
     @Test
+    public void evolveShouldDoNothingIfNoImpulses() {
+        final Pose otherPose = Pose.build(DEFAULT_DISPLACEMENT, DEFAULT_ORIENTATION);
+
+        testPose.evolve(10);
+
+        assertPoseEquality(testPose, otherPose, TOLERANCE);
+    }
+
+    @Test
     public void impulseShouldSetVelocity() {
         testPose.impulse(1, 2, 3);
         testPose.evolve(1);
@@ -98,5 +108,15 @@ public class PoseTest {
         final Pose expectedFinalPose = Pose.build(Displacement.cartesian(1, 1.5, 3.5), DEFAULT_ORIENTATION);
 
         assertPoseEquality(testPose, expectedFinalPose, TOLERANCE);
+    }
+
+    public static void assertPoseEquality(final Pose pose1, final Pose pose2, final double tolerance) {
+        assertPoseEquality(pose1, pose2, tolerance, true);
+    }
+
+    public static void assertPoseEquality(final Pose pose1, final Pose pose2, final double tolerance, final boolean expected) {
+        String message = "\nActual:\n" + pose1 + "\nExpected:\n" + pose2;
+        assertThat(message, pose1.isIdentical(pose2, tolerance), is(expected));
+        assertThat(message, pose2.isIdentical(pose1, tolerance), is(expected));
     }
 }

@@ -1,6 +1,7 @@
 package com.aimlessblade.cosmos.input;
 
 import com.aimlessblade.cosmos.geo.Movable;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -8,14 +9,14 @@ import lombok.ToString;
 import java.util.List;
 import java.util.function.Consumer;
 
-@Getter
+@Getter(AccessLevel.PACKAGE)
 @EqualsAndHashCode
 @ToString
-public class InputState {
+public final class InputState {
     private final List<Movable> movables;
     private Movable activeMovable;
 
-    public InputState(final List<Movable> movables, final int activeIndex) {
+    InputState(final List<Movable> movables, final int activeIndex) {
         this.movables = movables;
         setActiveMovable(activeIndex);
     }

@@ -10,5 +10,5 @@ public interface Entity {
 
     int[] getElementData();
 
-    SimpleMatrix getGeoTransform();
+    SimpleMatrix getTransform();
 }

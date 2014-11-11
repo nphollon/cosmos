@@ -13,17 +13,13 @@ public final class Displacement {
     private final double y;
     private final double z;
 
-    public boolean isIdentical(final Displacement other, final double tolerance) {
+    boolean isIdentical(final Displacement other, final double tolerance) {
         return doublesEqual(x, other.x, tolerance) &&
                 doublesEqual(y, other.y, tolerance) &&
                 doublesEqual(z, other.z, tolerance);
     }
 
-    public boolean doublesEqual(final double a, final double b, final double tolerance) {
-        return Math.abs(a - b) < tolerance;
-    }
-
-    public SimpleMatrix toMatrix() {
+    SimpleMatrix toMatrix() {
         final SimpleMatrix matrix = SimpleMatrix.identity(4);
         matrix.set(0, 3, x);
         matrix.set(1, 3, y);
@@ -31,11 +27,15 @@ public final class Displacement {
         return matrix;
     }
 
-    public Displacement plus(final Displacement addend) {
+    Displacement plus(final Displacement addend) {
         return Displacement.cartesian(x + addend.x, y + addend.y, z + addend.z);
     }
 
-    public Displacement times(final double scale) {
+    Displacement times(final double scale) {
         return Displacement.cartesian(x * scale, y * scale, z * scale);
+    }
+
+    private static boolean doublesEqual(final double a, final double b, final double tolerance) {
+        return Math.abs(a - b) < tolerance;
     }
 }

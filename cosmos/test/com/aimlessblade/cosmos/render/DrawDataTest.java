@@ -197,7 +197,7 @@ public class DrawDataTest {
     public void targetGeoTransformShouldContainPoseMatrixData() {
         final Entity entity = mock(Entity.class);
         when(entity.getElementData()).thenReturn(new int[0]);
-        when(entity.getGeoTransform()).thenReturn(SimpleMatrix.identity(4));
+        when(entity.getTransform()).thenReturn(SimpleMatrix.identity(4));
         entities.add(entity);
 
         final List<Target> targets = new DrawData(camera, entities).getTargets();

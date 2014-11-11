@@ -14,12 +14,12 @@ import java.util.function.Consumer;
 import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL20.*;
 
-public final class Program {
+final class Program {
     private final int id;
     private final int perspectiveUniform;
     private final int geoTransformUniform;
 
-    public static Program build(final File vertexShader, final File fragmentShader) throws IOException {
+    static Program build(final File vertexShader, final File fragmentShader) throws IOException {
         final int id = linkProgram(
                 compileShader(vertexShader, GL20.GL_VERTEX_SHADER),
                 compileShader(fragmentShader, GL20.GL_FRAGMENT_SHADER)
@@ -27,19 +27,19 @@ public final class Program {
         return new Program(id);
     }
 
-    public void setPerspective(final FloatBuffer perspective) {
+    void setPerspective(final FloatBuffer perspective) {
         setUniformMatrix(perspectiveUniform, perspective);
     }
 
-    public void setGeoTransform(final FloatBuffer geoTransform) {
+    void setGeoTransform(final FloatBuffer geoTransform) {
         setUniformMatrix(geoTransformUniform, geoTransform);
     }
 
-    public void use() {
+    void use() {
         glUseProgram(id);
     }
 
-    public void clear() {
+    void clear() {
         glUseProgram(0);
     }
 

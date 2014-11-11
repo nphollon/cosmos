@@ -29,22 +29,19 @@ public final class Orientation {
     }
 
     public static Orientation axisAngle(final double x, final double y, final double z, final double angle) {
-        return axisAngleRadians(x, y, z, Math.toRadians(angle));
-    }
-
-    public static Orientation axisAngleRadians(final double x, final double y, final double z, final double angle) {
-        final double qx = x*Math.sin(angle / 2);
-        final double qy = y*Math.sin(angle / 2);
-        final double qz = z*Math.sin(angle / 2);
-        final double qw = Math.cos(angle / 2);
+        final double radianAngle = Math.toRadians(angle);
+        final double qx = x *Math.sin(radianAngle / 2);
+        final double qy = y *Math.sin(radianAngle / 2);
+        final double qz = z *Math.sin(radianAngle / 2);
+        final double qw = Math.cos(radianAngle / 2);
         return quaternion(qx, qy, qz, qw);
     }
 
-    public static Orientation quaternion(final double x, final double y, final double z, final double w) {
+    static Orientation quaternion(final double x, final double y, final double z, final double w) {
         return new Orientation(x, y, z, w);
     }
 
-    public SimpleMatrix toMatrix() {
+    SimpleMatrix toMatrix() {
         final SimpleMatrix matrix = new SimpleMatrix(4, 4);
 
         matrix.set(0, 0, 1 - 2*y*y - 2*z*z);
@@ -63,7 +60,7 @@ public final class Orientation {
         return matrix;
     }
 
-    public Orientation times(final Orientation factor) {
+    Orientation times(final Orientation factor) {
         return quaternion(
                 w * factor.x + x * factor.w + y * factor.z - z * factor.y,
                 w * factor.y + y * factor.w + z * factor.x - x * factor.z,
@@ -72,7 +69,7 @@ public final class Orientation {
         );
     }
 
-    public Orientation normalize(final double tolerance) {
+    Orientation normalize(final double tolerance) {
         final double magnitudeSquared = x*x + y*y + z*z + w*w;
 
         if (doublesEqual(magnitudeSquared, 1, tolerance)) {
@@ -87,14 +84,14 @@ public final class Orientation {
         return quaternion(x / magnitude, y / magnitude, z / magnitude, w / magnitude);
     }
 
-    public boolean isIdentical(final Orientation other, final double tolerance) {
+    boolean isIdentical(final Orientation other, final double tolerance) {
         return doublesEqual(x, other.x, tolerance) &&
                 doublesEqual(y, other.y, tolerance) &&
                 doublesEqual(z, other.z, tolerance) &&
                 doublesEqual(w, other.w, tolerance);
     }
 
-    private boolean doublesEqual(final double a, final double b, final double tolerance) {
+    private static boolean doublesEqual(final double a, final double b, final double tolerance) {
         return Math.abs(a - b) < tolerance;
     }
 }

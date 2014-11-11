@@ -19,12 +19,12 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 @AllArgsConstructor
-public final class ProcessorFactory {
+final class ProcessorFactory {
     private final Map<KeyboardEvent, Consumer<InputState>> keymap;
     private final File vertexShader;
     private final File fragmentShader;
 
-    public Processor build(final Camera camera, final List<RigidBody> entities) throws IOException {
+    Processor build(final Camera camera, final List<RigidBody> entities) throws IOException {
         final List<Movable> movables = new ArrayList<>();
         movables.addAll(entities);
 

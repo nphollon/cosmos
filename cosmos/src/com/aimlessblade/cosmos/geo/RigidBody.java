@@ -4,12 +4,12 @@ import org.ejml.simple.SimpleMatrix;
 
 import java.util.List;
 
-public class RigidBody implements Entity, Movable {
-    private final Pose pose;
+public final class RigidBody implements Entity, Movable {
+    private final Movable pose;
     private final List<Vertex> vertexList;
     private final int[] drawOrder;
 
-    public RigidBody(final Pose pose, final List<Vertex> vertexList, final int[] drawOrder) {
+    public RigidBody(final Movable pose, final List<Vertex> vertexList, final int[] drawOrder) {
         this.pose = pose;
         this.vertexList = vertexList;
         this.drawOrder = drawOrder;
@@ -42,7 +42,12 @@ public class RigidBody implements Entity, Movable {
     }
 
     @Override
-    public SimpleMatrix getGeoTransform() {
+    public SimpleMatrix getTransform() {
+        return toMatrix();
+    }
+
+    @Override
+    public SimpleMatrix toMatrix() {
         return pose.toMatrix();
     }
 

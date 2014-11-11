@@ -2,6 +2,7 @@ package com.aimlessblade.cosmos.render;
 
 import com.aimlessblade.cosmos.geo.Camera;
 import com.aimlessblade.cosmos.geo.Entity;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -17,23 +18,23 @@ import java.util.stream.Stream;
 import static java.util.Arrays.stream;
 
 @RequiredArgsConstructor
-public final class DrawData {
+final class DrawData {
     private final Camera camera;
     private final List<? extends Entity> entities;
     private List<Target> targets;
 
-    public FloatBuffer getPerspective() {
+    FloatBuffer getPerspective() {
         return bufferMatrix(camera.getPerspective());
     }
 
-    public List<Target> getTargets() {
+    List<Target> getTargets() {
         if (targets == null) {
             createTargets();
         }
         return targets;
     }
 
-    public FloatBuffer getVertexBuffer() {
+    FloatBuffer getVertexBuffer() {
         final int dataLength = streamVertexData().mapToInt(e -> e.length).sum();
 
         final FloatBuffer buffer = BufferUtils.createFloatBuffer(dataLength);
@@ -43,7 +44,7 @@ public final class DrawData {
         return buffer;
     }
 
-    public IntBuffer getElementBuffer() {
+    IntBuffer getElementBuffer() {
         final int elementLength = streamElementData().mapToInt(e -> e.length).sum();
 
         final IntBuffer buffer = BufferUtils.createIntBuffer(elementLength);
@@ -91,15 +92,17 @@ public final class DrawData {
     }
 
     @AllArgsConstructor
-    public final class Target {
+    final class Target {
         private final Entity entity;
-        @Getter private final int elementOffset;
 
-        public FloatBuffer getGeoTransform() {
-            return bufferMatrix(entity.getGeoTransform());
+        @Getter(AccessLevel.PACKAGE)
+        private final int elementOffset;
+
+        FloatBuffer getGeoTransform() {
+            return bufferMatrix(entity.getTransform());
         }
 
-        public int getElementCount() {
+        int getElementCount() {
             return entity.getElementData().length;
         }
     }

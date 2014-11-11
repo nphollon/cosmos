@@ -18,6 +18,7 @@ public final class PerspectiveCamera implements Camera {
 
     }
 
+    @Override
     public SimpleMatrix getPerspective() {
         SimpleMatrix perspective = new SimpleMatrix(4, 4);
         perspective.set(0, 0, frustumScale / aspectRatio);

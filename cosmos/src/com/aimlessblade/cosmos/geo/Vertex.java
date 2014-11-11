@@ -6,7 +6,7 @@ import lombok.Getter;
 import java.util.Arrays;
 import java.util.List;
 
-public class Vertex {
+public final class Vertex {
     private static final int LENGTH = 6;
 
     private final double x;
@@ -16,13 +16,8 @@ public class Vertex {
     private final double g;
     private final double b;
 
-    private Vertex(final double x, final double y, final double z, final double r, final double g, final double b) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.r = r;
-        this.g = g;
-        this.b = b;
+    public static Vertex build(double x, double y, double z, double r, double g, double b) {
+        return new Vertex(x, y, z, r, g, b);
     }
 
     public List<Double> data() {
@@ -41,8 +36,13 @@ public class Vertex {
         return Attribute.values();
     }
 
-    public static Vertex build(double x, double y, double z, double r, double g, double b) {
-        return new Vertex(x, y, z, r, g, b);
+    private Vertex(final double x, final double y, final double z, final double r, final double g, final double b) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.r = r;
+        this.g = g;
+        this.b = b;
     }
 
     @Getter

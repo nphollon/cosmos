@@ -1,6 +1,5 @@
 package com.aimlessblade.cosmos.geo;
 
-import com.aimlessblade.cosmos.util.Assert;
 import org.ejml.simple.SimpleMatrix;
 import org.junit.Test;
 
@@ -12,14 +11,6 @@ import static org.junit.Assert.assertThat;
 public class OrientationTest {
 
     private static final double TOLERANCE = 1e-5;
-
-    @Test
-    public void quaternionFactoryWithRadiansShouldMatchFactoryWithDegrees() {
-        Orientation degreeQuaternion = axisAngle(1, 0, 0, 180);
-        Orientation radianQuaternion = axisAngleRadians(1, 0, 0, Math.PI);
-
-        assertThat(degreeQuaternion, is(radianQuaternion));
-    }
 
     @Test
     public void rotationVectorFactoryShouldConvertMagnitudeToRotationAngle() {
@@ -157,35 +148,35 @@ public class OrientationTest {
     public void isIdenticalShouldBeTrueForExactlyEqualQuaternions() {
         Orientation quaternion1 = axisAngle(0, 1, 0, 12);
         Orientation quaternion2 = axisAngle(0, 1, 0, 12);
-        Assert.assertQuaternionEquality(quaternion1, quaternion2, TOLERANCE, true);
+        assertQuaternionEquality(quaternion1, quaternion2, TOLERANCE, true);
     }
 
     @Test
     public void isIdenticalShouldBeTrueForQuaternionsWithinTolerance() {
         Orientation quaternion1 = axisAngle(-0.000009, 1.000009, 0.000009, 11.999999);
         Orientation quaternion2 = axisAngle(0, 1, 0, 12);
-        Assert.assertQuaternionEquality(quaternion1, quaternion2, TOLERANCE, true);
+        assertQuaternionEquality(quaternion1, quaternion2, TOLERANCE, true);
     }
 
     @Test
     public void isIdenticalShouldBeFalseIfXsAreDifferent() {
         Orientation quaternion1 = axisAngle(0.0001, 1, 0, 12);
         Orientation quaternion2 = axisAngle(0, 1, 0, 12);
-        Assert.assertQuaternionEquality(quaternion1, quaternion2, TOLERANCE, false);
+        assertQuaternionEquality(quaternion1, quaternion2, TOLERANCE, false);
     }
 
     @Test
     public void isIdenticalShouldBeFalseIfYsAreDifferent() {
         Orientation quaternion1 = axisAngle(0, 1, 0, 12);
         Orientation quaternion2 = axisAngle(0, 0.999, 0, 12);
-        Assert.assertQuaternionEquality(quaternion1, quaternion2, TOLERANCE, false);
+        assertQuaternionEquality(quaternion1, quaternion2, TOLERANCE, false);
     }
 
     @Test
     public void isIdenticalShouldBeFalseIfZsAreDifferent() {
         Orientation quaternion1 = axisAngle(0, 1, 0.0001, 12);
         Orientation quaternion2 = axisAngle(0, 1, 0, 12);
-        Assert.assertQuaternionEquality(quaternion1, quaternion2, TOLERANCE, false);
+        assertQuaternionEquality(quaternion1, quaternion2, TOLERANCE, false);
     }
 
     @Test
@@ -194,102 +185,102 @@ public class OrientationTest {
         //   very different quaternions can have identical Y components
         Orientation quaternion1 = axisAngle(0, 1, 0, 12);
         Orientation quaternion2 = axisAngle(0, 0.104528, 0, 180);
-        Assert.assertQuaternionEquality(quaternion1, quaternion2, TOLERANCE, false);
+        assertQuaternionEquality(quaternion1, quaternion2, TOLERANCE, false);
     }
 
     @Test
     public void productXXShouldGoToW() {
         Orientation factorA = quaternion(2, 0, 0, 0);
         Orientation factorB = quaternion(3, 0, 0, 0);
-        Assert.assertQuaternionEquality(factorA.times(factorB), quaternion(0, 0, 0, -6), TOLERANCE);
-        Assert.assertQuaternionEquality(factorB.times(factorA), quaternion(0, 0, 0, -6), TOLERANCE);
+        assertQuaternionEquality(factorA.times(factorB), quaternion(0, 0, 0, -6), TOLERANCE);
+        assertQuaternionEquality(factorB.times(factorA), quaternion(0, 0, 0, -6), TOLERANCE);
     }
 
     @Test
     public void productXYShouldGoToZ() {
         Orientation factorA = quaternion(2, 0, 0, 0);
         Orientation factorB = quaternion(0, 3, 0, 0);
-        Assert.assertQuaternionEquality(factorA.times(factorB), quaternion(0, 0, 6, 0), TOLERANCE);
-        Assert.assertQuaternionEquality(factorB.times(factorA), quaternion(0, 0, -6, 0), TOLERANCE);
+        assertQuaternionEquality(factorA.times(factorB), quaternion(0, 0, 6, 0), TOLERANCE);
+        assertQuaternionEquality(factorB.times(factorA), quaternion(0, 0, -6, 0), TOLERANCE);
     }
 
     @Test
     public void productXZShouldGoToY() {
         Orientation factorA = quaternion(2, 0, 0, 0);
         Orientation factorB = quaternion(0, 0, 3, 0);
-        Assert.assertQuaternionEquality(factorA.times(factorB), quaternion(0, -6, 0, 0), TOLERANCE);
-        Assert.assertQuaternionEquality(factorB.times(factorA), quaternion(0, 6, 0, 0), TOLERANCE);
+        assertQuaternionEquality(factorA.times(factorB), quaternion(0, -6, 0, 0), TOLERANCE);
+        assertQuaternionEquality(factorB.times(factorA), quaternion(0, 6, 0, 0), TOLERANCE);
     }
 
     @Test
     public void productXWShouldGoToX() {
         Orientation factorA = quaternion(2, 0, 0, 0);
         Orientation factorB = quaternion(0, 0, 0, 3);
-        Assert.assertQuaternionEquality(factorA.times(factorB), quaternion(6, 0, 0, 0), TOLERANCE);
-        Assert.assertQuaternionEquality(factorB.times(factorA), quaternion(6, 0, 0, 0), TOLERANCE);
+        assertQuaternionEquality(factorA.times(factorB), quaternion(6, 0, 0, 0), TOLERANCE);
+        assertQuaternionEquality(factorB.times(factorA), quaternion(6, 0, 0, 0), TOLERANCE);
     }
 
     @Test
     public void productYYShouldGoToW() {
         Orientation factorA = quaternion(0, 2, 0, 0);
         Orientation factorB = quaternion(0, 3, 0, 0);
-        Assert.assertQuaternionEquality(factorA.times(factorB), quaternion(0, 0, 0, -6), TOLERANCE);
-        Assert.assertQuaternionEquality(factorB.times(factorA), quaternion(0, 0, 0, -6), TOLERANCE);
+        assertQuaternionEquality(factorA.times(factorB), quaternion(0, 0, 0, -6), TOLERANCE);
+        assertQuaternionEquality(factorB.times(factorA), quaternion(0, 0, 0, -6), TOLERANCE);
     }
 
     @Test
     public void productYZShouldGoToX() {
         Orientation factorA = quaternion(0, 2, 0, 0);
         Orientation factorB = quaternion(0, 0, 3, 0);
-        Assert.assertQuaternionEquality(factorA.times(factorB), quaternion(6, 0, 0, 0), TOLERANCE);
-        Assert.assertQuaternionEquality(factorB.times(factorA), quaternion(-6, 0, 0, 0), TOLERANCE);
+        assertQuaternionEquality(factorA.times(factorB), quaternion(6, 0, 0, 0), TOLERANCE);
+        assertQuaternionEquality(factorB.times(factorA), quaternion(-6, 0, 0, 0), TOLERANCE);
     }
 
     @Test
     public void productYWShouldGoToY() {
         Orientation factorA = quaternion(0, 2, 0, 0);
         Orientation factorB = quaternion(0, 0, 0, 3);
-        Assert.assertQuaternionEquality(factorA.times(factorB), quaternion(0, 6, 0, 0), TOLERANCE);
-        Assert.assertQuaternionEquality(factorB.times(factorA), quaternion(0, 6, 0, 0), TOLERANCE);
+        assertQuaternionEquality(factorA.times(factorB), quaternion(0, 6, 0, 0), TOLERANCE);
+        assertQuaternionEquality(factorB.times(factorA), quaternion(0, 6, 0, 0), TOLERANCE);
     }
 
     @Test
     public void productZZShouldGoToW() {
         Orientation factorA = quaternion(0, 0, 2, 0);
         Orientation factorB = quaternion(0, 0, 3, 0);
-        Assert.assertQuaternionEquality(factorA.times(factorB), quaternion(0, 0, 0, -6), TOLERANCE);
-        Assert.assertQuaternionEquality(factorB.times(factorA), quaternion(0, 0, 0, -6), TOLERANCE);
+        assertQuaternionEquality(factorA.times(factorB), quaternion(0, 0, 0, -6), TOLERANCE);
+        assertQuaternionEquality(factorB.times(factorA), quaternion(0, 0, 0, -6), TOLERANCE);
     }
 
     @Test
     public void productZWShouldGoToZ() {
         Orientation factorA = quaternion(0, 0, 2, 0);
         Orientation factorB = quaternion(0, 0, 0, 3);
-        Assert.assertQuaternionEquality(factorA.times(factorB), quaternion(0, 0, 6, 0), TOLERANCE);
-        Assert.assertQuaternionEquality(factorB.times(factorA), quaternion(0, 0, 6, 0), TOLERANCE);
+        assertQuaternionEquality(factorA.times(factorB), quaternion(0, 0, 6, 0), TOLERANCE);
+        assertQuaternionEquality(factorB.times(factorA), quaternion(0, 0, 6, 0), TOLERANCE);
     }
 
     @Test
     public void productWWShouldGoToW() {
         Orientation factorA = quaternion(0, 0, 0, 2);
         Orientation factorB = quaternion(0, 0, 0, 3);
-        Assert.assertQuaternionEquality(factorA.times(factorB), quaternion(0, 0, 0, 6), TOLERANCE);
-        Assert.assertQuaternionEquality(factorB.times(factorA), quaternion(0, 0, 0, 6), TOLERANCE);
+        assertQuaternionEquality(factorA.times(factorB), quaternion(0, 0, 0, 6), TOLERANCE);
+        assertQuaternionEquality(factorB.times(factorA), quaternion(0, 0, 0, 6), TOLERANCE);
     }
 
     @Test
     public void productShouldBeCompositeOfAllComponents() {
         Orientation factorA = quaternion(2, 5, 11, 17);
         Orientation factorB = quaternion(19, 13, 7, 3);
-        Assert.assertQuaternionEquality(factorA.times(factorB), quaternion(221, 431, 83, -129), TOLERANCE);
-        Assert.assertQuaternionEquality(factorB.times(factorA), quaternion(437, 41, 221, -129), TOLERANCE);
+        assertQuaternionEquality(factorA.times(factorB), quaternion(221, 431, 83, -129), TOLERANCE);
+        assertQuaternionEquality(factorB.times(factorA), quaternion(437, 41, 221, -129), TOLERANCE);
     }
 
     @Test
     public void normalizeShouldChangeMagnitudeToOneIfItIsNotOne() {
         Orientation quaternion = quaternion(0.5, 0.01, -0.5, 0.3);
         Orientation normalizedQuaternion = quaternion(0.650889, 0.013018, -0.650889, 0.390534);
-        Assert.assertQuaternionEquality(quaternion.normalize(TOLERANCE), normalizedQuaternion, TOLERANCE);
+        assertQuaternionEquality(quaternion.normalize(TOLERANCE), normalizedQuaternion, TOLERANCE);
     }
 
     @Test
@@ -303,5 +294,15 @@ public class OrientationTest {
         Orientation zero = quaternion(0, 0, 0, 0);
         Orientation quaternion = quaternion(0, 0, Double.MIN_VALUE, 0);
         assertThat(quaternion.normalize(TOLERANCE), is(zero));
+    }
+
+    private static void assertQuaternionEquality(final Orientation quaternion1, final Orientation quaternion2, final double tolerance) {
+        assertQuaternionEquality(quaternion1, quaternion2, tolerance, true);
+    }
+
+    private static void assertQuaternionEquality(final Orientation quaternion1, final Orientation quaternion2, final double tolerance, final boolean expected) {
+        String message = "\nActual:\n" + quaternion1 + "\nExpected:\n" + quaternion2;
+        assertThat(message, quaternion1.isIdentical(quaternion2, tolerance), is(expected));
+        assertThat(message, quaternion2.isIdentical(quaternion1, tolerance), is(expected));
     }
 }

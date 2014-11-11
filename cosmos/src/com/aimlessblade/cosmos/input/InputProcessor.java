@@ -2,6 +2,7 @@ package com.aimlessblade.cosmos.input;
 
 import com.aimlessblade.cosmos.app.Processor;
 import com.aimlessblade.cosmos.geo.Movable;
+import lombok.AccessLevel;
 import lombok.Getter;
 import org.lwjgl.input.Keyboard;
 
@@ -12,7 +13,7 @@ import java.util.function.Consumer;
 import static org.lwjgl.input.Keyboard.getEventKey;
 import static org.lwjgl.input.Keyboard.getEventKeyState;
 
-@Getter
+@Getter(AccessLevel.PACKAGE)
 public final class InputProcessor implements Processor {
     private final Map<KeyboardEvent, Consumer<InputState>> keymap;
     private final List<Movable> movables;

@@ -1,15 +1,12 @@
 package com.aimlessblade.cosmos.input;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
-@Getter
+@Getter(AccessLevel.PACKAGE)
 @EqualsAndHashCode
 @ToString
 @AllArgsConstructor
-public class KeyboardEvent {
+public final class KeyboardEvent {
     private final int eventKey;
     private final boolean isKeyDown;
 
