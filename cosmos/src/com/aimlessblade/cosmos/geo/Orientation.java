@@ -17,15 +17,20 @@ public final class Orientation {
     private final double z;
     private final double w;
 
-    public static Orientation rotationVector(final double rx, final double ry, final double rz) {
-        final double magnitudeSquared = rx * rx + ry * ry + rz * rz;
+    public static Orientation rotationVector(final Displacement rotation) {
+        final double magnitude = rotation.magnitude();
 
-        if (magnitudeSquared == 0) {
+        if (magnitude == 0) {
             return NULL_ROTATION;
         }
 
-        final double magnitude = Math.sqrt(magnitudeSquared);
-        return axisAngle(rx/magnitude, ry/magnitude, rz/magnitude, magnitude);
+        final double radians = Math.toRadians(magnitude);
+        final double qx = Math.sin(radians / 2) / magnitude * rotation.getX();
+        final double qy = Math.sin(radians / 2) / magnitude * rotation.getY();
+        final double qz = Math.sin(radians / 2) / magnitude * rotation.getZ();
+        final double qw = Math.cos(radians / 2);
+
+        return quaternion(qx, qy, qz, qw);
     }
 
     public static Orientation axisAngle(final double x, final double y, final double z, final double angle) {

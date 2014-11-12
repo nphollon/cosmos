@@ -62,7 +62,7 @@ public class RigidBodyTest {
 
     @Test
     public void angularImpulseShouldPassToPose() {
-        AngularVelocity angularVelocity = AngularVelocity.cartesian(0, 0, 0);
+        Velocity angularVelocity = Velocity.cartesian(0, 0, 0);
 
         body.angularImpulse(angularVelocity);
 

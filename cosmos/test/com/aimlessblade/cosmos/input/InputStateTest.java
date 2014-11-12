@@ -1,6 +1,5 @@
 package com.aimlessblade.cosmos.input;
 
-import com.aimlessblade.cosmos.geo.AngularVelocity;
 import com.aimlessblade.cosmos.geo.Movable;
 import com.aimlessblade.cosmos.geo.Velocity;
 import org.junit.Test;
@@ -52,7 +51,7 @@ public class InputStateTest {
 
     @Test
     public void angularImpulseShouldBeAppliedToActiveMovable() {
-        final AngularVelocity angularVelocity = AngularVelocity.cartesian(0, 0, 0);
+        final Velocity angularVelocity = Velocity.cartesian(0, 0, 0);
         final List<Movable> movables = movableList(2);
 
         final Consumer<InputState> impulseCommand = InputState.angularImpulse(angularVelocity);

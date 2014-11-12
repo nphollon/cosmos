@@ -121,6 +121,18 @@ public class PoseTest {
         assertPoseEquality(testPose, expectedFinalPose, TOLERANCE);
     }
 
+    @Test
+    public void angularImpulseShouldSetAngularVelocity() {
+        final Velocity angularVelocity = Velocity.cartesian(3, -7, 1);
+        testPose.angularImpulse(angularVelocity);
+        testPose.evolve(2);
+
+        final Orientation expectedOrientation = Orientation.rotationVector(angularVelocity.overTime(2));
+        final Pose expectedFinalPose = Pose.build(DEFAULT_DISPLACEMENT, expectedOrientation);
+
+        assertPoseEquality(testPose, expectedFinalPose, TOLERANCE);
+    }
+
     public static void assertPoseEquality(final Pose pose1, final Pose pose2, final double tolerance) {
         assertPoseEquality(pose1, pose2, tolerance, true);
     }

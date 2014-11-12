@@ -7,7 +7,7 @@ public interface Movable {
 
     void impulse(final Velocity velocity);
 
-    void angularImpulse(final AngularVelocity angularVelocity);
+    void angularImpulse(final Velocity angularVelocity);
 
     SimpleMatrix toMatrix();
 }

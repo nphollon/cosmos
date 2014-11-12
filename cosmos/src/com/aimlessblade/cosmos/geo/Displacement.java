@@ -1,17 +1,20 @@
 package com.aimlessblade.cosmos.geo;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import org.ejml.simple.SimpleMatrix;
 
 @EqualsAndHashCode
 @ToString
+@Getter(AccessLevel.PACKAGE)
 @AllArgsConstructor(staticName = "cartesian")
 public final class Displacement {
     private final double x;
     private final double y;
     private final double z;
+
+    double magnitude() {
+        return Math.sqrt(x * x + y * y + z * z);
+    }
 
     boolean isIdentical(final Displacement other, final double tolerance) {
         return doublesEqual(x, other.x, tolerance) &&

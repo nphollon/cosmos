@@ -1,6 +1,5 @@
 package com.aimlessblade.cosmos.input;
 
-import com.aimlessblade.cosmos.geo.AngularVelocity;
 import com.aimlessblade.cosmos.geo.Movable;
 import com.aimlessblade.cosmos.geo.Velocity;
 import lombok.AccessLevel;
@@ -35,7 +34,7 @@ public final class InputState {
         return a -> a.activeMovable.impulse(velocity);
     }
 
-    public static Consumer<InputState> angularImpulse(final AngularVelocity angularVelocity) {
+    public static Consumer<InputState> angularImpulse(final Velocity angularVelocity) {
         return a -> a.activeMovable.angularImpulse(angularVelocity);
     }
 

@@ -14,6 +14,7 @@ public final class Pose implements Movable {
     private Orientation orientation;
 
     private Velocity velocity;
+    private Velocity angularVelocity;
 
     public static Pose build(Displacement displacement, Orientation orientation) {
         return new Pose(displacement, orientation);
@@ -27,6 +28,7 @@ public final class Pose implements Movable {
     @Override
     public void evolve(final double dt) {
         displacement = displacement.plus(velocity.overTime(dt));
+        orientation = Orientation.rotationVector(angularVelocity.overTime(dt));
     }
 
     @Override
@@ -35,8 +37,8 @@ public final class Pose implements Movable {
     }
 
     @Override
-    public void angularImpulse(AngularVelocity angularVelocity) {
-
+    public void angularImpulse(Velocity angularVelocity) {
+        this.angularVelocity = angularVelocity;
     }
 
     boolean isIdentical(final Pose otherPose, final double tolerance) {
@@ -47,5 +49,6 @@ public final class Pose implements Movable {
         this.displacement = displacement;
         this.orientation = orientation;
         velocity = Velocity.cartesian(0, 0, 0);
+        angularVelocity = Velocity.cartesian(0, 0, 0);
     }
 }
