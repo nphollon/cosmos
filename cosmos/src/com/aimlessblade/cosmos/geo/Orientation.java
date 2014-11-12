@@ -17,6 +17,14 @@ public final class Orientation {
     private final double z;
     private final double w;
 
+    public static Orientation zero() {
+        return NULL_ROTATION;
+    }
+
+    public static Orientation rotationVector(final double rx, final double ry, final double rz) {
+        return rotationVector(Displacement.cartesian(rx, ry, rz));
+    }
+
     public static Orientation rotationVector(final Displacement rotation) {
         final double magnitude = rotation.magnitude();
 
@@ -30,15 +38,6 @@ public final class Orientation {
         final double qz = Math.sin(radians / 2) / magnitude * rotation.getZ();
         final double qw = Math.cos(radians / 2);
 
-        return quaternion(qx, qy, qz, qw);
-    }
-
-    public static Orientation axisAngle(final double x, final double y, final double z, final double angle) {
-        final double radianAngle = Math.toRadians(angle);
-        final double qx = x *Math.sin(radianAngle / 2);
-        final double qy = y *Math.sin(radianAngle / 2);
-        final double qz = z *Math.sin(radianAngle / 2);
-        final double qw = Math.cos(radianAngle / 2);
         return quaternion(qx, qy, qz, qw);
     }
 

@@ -9,7 +9,6 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class PoseTest {
-    private static final Orientation DEFAULT_ORIENTATION = Orientation.axisAngle(1, 0, 0, 0);
     private static final Displacement DEFAULT_DISPLACEMENT = Displacement.cartesian(0, 0, 0);
     private static final double TOLERANCE = 1e-5;
 
@@ -17,14 +16,14 @@ public class PoseTest {
 
     @Before
     public void setup() {
-        testPose = Pose.build(DEFAULT_DISPLACEMENT, DEFAULT_ORIENTATION);
+        testPose = Pose.build(DEFAULT_DISPLACEMENT, Orientation.zero());
     }
 
     @Test
     public void matrixShouldBeDisplacementMatrixIfNoRotation() {
         final Displacement displacement = Displacement.cartesian(1, 2, 3);
 
-        final Pose pose = Pose.build(displacement, DEFAULT_ORIENTATION);
+        final Pose pose = Pose.build(displacement, Orientation.zero());
 
         assertMatrixEquality(pose.toMatrix(), displacement.toMatrix(), TOLERANCE);
     }
@@ -32,7 +31,7 @@ public class PoseTest {
     @Test
     public void matrixShouldBeDisplacementTimesRotation() {
         final Displacement displacement = Displacement.cartesian(1, 2, 3);
-        final Orientation orientation = Orientation.axisAngle(1, 0, 0, 90);
+        final Orientation orientation = Orientation.rotationVector(90, 0, 0);
 
         final Pose pose = Pose.build(displacement, orientation);
 
@@ -42,28 +41,28 @@ public class PoseTest {
 
     @Test
     public void posesShouldBeIdenticalIfOrientationsAndPositionsAre() {
-        final Pose otherPose = Pose.build(Displacement.cartesian(1e-6, 0, 0), Orientation.axisAngle(1, 0, 0, 1e-7));
+        final Pose otherPose = Pose.build(Displacement.cartesian(1e-6, 0, 0), Orientation.rotationVector(1e-6, 0, 0));
 
         assertPoseEquality(testPose, otherPose, TOLERANCE);
     }
 
     @Test
     public void posesShouldNotBeIdenticalIfOrientationsAreNot() {
-        final Pose otherPose = Pose.build(DEFAULT_DISPLACEMENT, Orientation.axisAngle(0, 0.8, 0.6, 45));
+        final Pose otherPose = Pose.build(DEFAULT_DISPLACEMENT, Orientation.rotationVector(4, 5, 6));
 
         assertPoseEquality(testPose, otherPose, TOLERANCE, false);
     }
 
     @Test
     public void posesShouldNotBeIdenticalIfDisplacementsAreNot() {
-        final Pose otherPose = Pose.build(Displacement.cartesian(5, 4, 3), DEFAULT_ORIENTATION);
+        final Pose otherPose = Pose.build(Displacement.cartesian(5, 4, 3), Orientation.zero());
 
         assertPoseEquality(testPose, otherPose, TOLERANCE, false);
     }
 
     @Test
     public void evolveShouldDoNothingIfNoImpulses() {
-        final Pose otherPose = Pose.build(DEFAULT_DISPLACEMENT, DEFAULT_ORIENTATION);
+        final Pose otherPose = Pose.build(DEFAULT_DISPLACEMENT, Orientation.zero());
 
         testPose.evolve(10);
 
@@ -75,7 +74,7 @@ public class PoseTest {
         testPose.impulse(Velocity.cartesian(1, 2, 3));
         testPose.evolve(1);
 
-        final Pose expectedFinalPose = Pose.build(Displacement.cartesian(1, 2, 3), DEFAULT_ORIENTATION);
+        final Pose expectedFinalPose = Pose.build(Displacement.cartesian(1, 2, 3), Orientation.zero());
 
         assertPoseEquality(testPose, expectedFinalPose, TOLERANCE);
     }
@@ -84,7 +83,7 @@ public class PoseTest {
     public void velocityShouldNotBeAppliedUntilEvolveIsCalled() {
         testPose.impulse(Velocity.cartesian(1, 2, 3));
 
-        final Pose expectedFinalPose = Pose.build(DEFAULT_DISPLACEMENT, DEFAULT_ORIENTATION);
+        final Pose expectedFinalPose = Pose.build(DEFAULT_DISPLACEMENT, Orientation.zero());
 
         assertPoseEquality(testPose, expectedFinalPose, TOLERANCE);
     }
@@ -95,7 +94,7 @@ public class PoseTest {
         testPose.evolve(1);
         testPose.evolve(1);
 
-        final Pose expectedFinalPose = Pose.build(Displacement.cartesian(2, 8, 18), DEFAULT_ORIENTATION);
+        final Pose expectedFinalPose = Pose.build(Displacement.cartesian(2, 8, 18), Orientation.zero());
 
         assertPoseEquality(testPose, expectedFinalPose, TOLERANCE);
     }
@@ -105,7 +104,7 @@ public class PoseTest {
         testPose.impulse(Velocity.cartesian(2, 3, 7));
         testPose.evolve(0.5);
 
-        final Pose expectedFinalPose = Pose.build(Displacement.cartesian(1, 1.5, 3.5), DEFAULT_ORIENTATION);
+        final Pose expectedFinalPose = Pose.build(Displacement.cartesian(1, 1.5, 3.5), Orientation.zero());
 
         assertPoseEquality(testPose, expectedFinalPose, TOLERANCE);
     }
@@ -116,7 +115,7 @@ public class PoseTest {
         testPose.impulse(Velocity.cartesian(1, -8, 5.2));
         testPose.evolve(10);
 
-        final Pose expectedFinalPose = Pose.build(DEFAULT_DISPLACEMENT, DEFAULT_ORIENTATION);
+        final Pose expectedFinalPose = Pose.build(DEFAULT_DISPLACEMENT, Orientation.zero());
 
         assertPoseEquality(testPose, expectedFinalPose, TOLERANCE);
     }

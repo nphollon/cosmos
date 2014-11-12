@@ -43,7 +43,7 @@ public final class Application {
     }
 
     private static List<RigidBody> buildEntityList() {
-        final Pose pose = Pose.build(Displacement.cartesian(0, 0, -1), Orientation.axisAngle(0, 0, 1, 0));
+        final Pose pose = Pose.build(Displacement.cartesian(0, 0, -1), Orientation.zero());
         final List<Vertex> vertexList = Arrays.asList(
                 Vertex.build(0, 0, -5, 1, 0, 0),
                 Vertex.build(0, 1, -6, 0, 1, 0),

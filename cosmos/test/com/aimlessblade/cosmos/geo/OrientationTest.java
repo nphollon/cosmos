@@ -14,41 +14,40 @@ public class OrientationTest {
 
     @Test
     public void rotationVectorFactoryShouldConvertMagnitudeToRotationAngle() {
-        assertQuaternionEquality(rotationVector(Displacement.cartesian(3, 0, 0)), axisAngle(1, 0, 0, 3));
-        assertQuaternionEquality(rotationVector(Displacement.cartesian(0, 4, 0)), axisAngle(0, 1, 0, 4));
-        assertQuaternionEquality(rotationVector(Displacement.cartesian(0, 0, 2)), axisAngle(0, 0, 1, 2));
-        assertQuaternionEquality(rotationVector(Displacement.cartesian(3, 0, 4)), axisAngle(0.6, 0, 0.8, 5));
+        final Orientation fromVector = rotationVector(84, 5, 12);
+
+        final double scale = Math.sin(Math.toRadians(85) * 0.5) / 85;
+        final double cosine = Math.cos(Math.toRadians(85) * 0.5);
+
+        final Orientation fromQuaternion = quaternion(scale * 84, scale * 5, scale * 12, cosine);
+        assertQuaternionEquality(fromVector, fromQuaternion);
     }
 
     @Test
     public void nullVectorShouldEqualNullRotation() {
-        assertQuaternionEquality(rotationVector(Displacement.cartesian(0, 0, 0)), axisAngle(1, 0, 0, 0));
+        assertQuaternionEquality(rotationVector(0, 0, 0), zero());
     }
 
     @Test
     public void rotationMatrixShouldBeIdentityIfNullRotation() {
-        Orientation quaternion = rotationVector(Displacement.cartesian(0, 0, 0));
+        Orientation quaternion = rotationVector(0, 0, 0);
 
         assertMatrixEquality(quaternion.toMatrix(), SimpleMatrix.identity(4), TOLERANCE);
     }
 
     @Test
     public void rotationMatrixShouldRotateByArbitraryAngle() {
-        Orientation quaternion = axisAngle(0.632456, 0.6, 0.2, 10.0);
+        // Magnitude of rotation vector = 130
+        // Therefore, rotate by 130 degrees around axis < 30, 40, 120 >
+        Orientation orientation = rotationVector(30, 40, 120);
 
-        SimpleMatrix expectedMatrix = new SimpleMatrix(4, 4);
-        expectedMatrix.set(0, 0, 0.993923);
-        expectedMatrix.set(0, 1, -0.028965);
-        expectedMatrix.set(0, 2, 0.106111);
-        expectedMatrix.set(1, 0, 0.040495);
-        expectedMatrix.set(1, 1, 0.993315);
-        expectedMatrix.set(1, 2, -0.108002);
-        expectedMatrix.set(2, 0, -0.102267);
-        expectedMatrix.set(2, 1, 0.111648);
-        expectedMatrix.set(2, 2, 0.988454);
-        expectedMatrix.set(3, 3, 1);
+        SimpleMatrix expectedMatrix = new SimpleMatrix(4, 4, true,
+         -0.555302, -0.590470, 0.585649, 0,
+          0.823766, -0.487257, 0.289811, 0,
+          0.114237,  0.643370, 0.756984, 0,
+          0,         0,        0,        1 );
 
-        assertMatrixEquality(quaternion.toMatrix(), expectedMatrix, TOLERANCE);
+        assertMatrixEquality(orientation.toMatrix(), expectedMatrix, TOLERANCE);
     }
 
     @Test
