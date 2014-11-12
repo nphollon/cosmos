@@ -62,12 +62,12 @@ public final class Application {
     }
 
     private static ProcessorFactory buildProcessorFactory() {
-        final Velocity west = Velocity.cartesian(1, 0, 0);
-        final Velocity east = Velocity.cartesian(-1, 0, 0);
-        final Velocity up = Velocity.cartesian(0, 1, 0);
-        final Velocity down = Velocity.cartesian(0, -1, 0);
-        final Velocity north = Velocity.cartesian(0, 0, 1);
-        final Velocity south = Velocity.cartesian(0, 0, -1);
+        final Velocity west = Velocity.cartesian(-3, 0, 0);
+        final Velocity east = Velocity.cartesian(3, 0, 0);
+        final Velocity up = Velocity.cartesian(0, 3, 0);
+        final Velocity down = Velocity.cartesian(0, -3, 0);
+        final Velocity north = Velocity.cartesian(0, 0, -3);
+        final Velocity south = Velocity.cartesian(0, 0, 3);
 
         final Map<KeyboardEvent, Consumer<InputState>> keymap = new HashMap<>();
         keymap.put(press(Keyboard.KEY_A), impulse(west));

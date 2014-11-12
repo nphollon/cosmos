@@ -110,6 +110,17 @@ public class PoseTest {
         assertPoseEquality(testPose, expectedFinalPose, TOLERANCE);
     }
 
+    @Test
+    public void evolveShouldChangePoseByTheSumOfDisplacements() {
+        testPose.impulse(Velocity.cartesian(-1, 8, -5.2));
+        testPose.impulse(Velocity.cartesian(1, -8, 5.2));
+        testPose.evolve(10);
+
+        final Pose expectedFinalPose = Pose.build(DEFAULT_DISPLACEMENT, DEFAULT_ORIENTATION);
+
+        assertPoseEquality(testPose, expectedFinalPose, TOLERANCE);
+    }
+
     public static void assertPoseEquality(final Pose pose1, final Pose pose2, final double tolerance) {
         assertPoseEquality(pose1, pose2, tolerance, true);
     }

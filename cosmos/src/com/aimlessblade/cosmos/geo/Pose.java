@@ -31,7 +31,7 @@ public final class Pose implements Movable {
 
     @Override
     public void impulse(final Velocity velocity) {
-        this.velocity = velocity;
+        this.velocity = this.velocity.plus(velocity);
     }
 
     @Override
