@@ -31,10 +31,6 @@ public final class Displacement {
         return Displacement.cartesian(x + addend.x, y + addend.y, z + addend.z);
     }
 
-    Displacement times(final double scale) {
-        return Displacement.cartesian(x * scale, y * scale, z * scale);
-    }
-
     private static boolean doublesEqual(final double a, final double b, final double tolerance) {
         return Math.abs(a - b) < tolerance;
     }

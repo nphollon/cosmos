@@ -3,11 +3,11 @@ package com.aimlessblade.cosmos.geo;
 import org.ejml.simple.SimpleMatrix;
 
 public interface Movable {
-    void evolve(double dt);
+    void evolve(final double dt);
 
-    void impulse(double vx, double vy, double vz);
+    void impulse(final Velocity velocity);
 
-    void angularImpulse(double vPitch, double vYaw, double vRoll);
+    void angularImpulse(final AngularVelocity angularVelocity);
 
     SimpleMatrix toMatrix();
 }

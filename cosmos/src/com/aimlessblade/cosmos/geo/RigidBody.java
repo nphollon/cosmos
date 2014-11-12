@@ -57,12 +57,12 @@ public final class RigidBody implements Entity, Movable {
     }
 
     @Override
-    public void impulse(final double vx, final double vy, final double vz) {
-        pose.impulse(vx, vy, vz);
+    public void impulse(final Velocity velocity) {
+        pose.impulse(velocity);
     }
 
     @Override
-    public void angularImpulse(final double vPitch, final double vYaw, final double vRoll) {
-        pose.angularImpulse(vPitch, vYaw, vRoll);
+    public void angularImpulse(final AngularVelocity angularVelocity) {
+        pose.angularImpulse(angularVelocity);
     }
 }

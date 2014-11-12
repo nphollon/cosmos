@@ -1,6 +1,8 @@
 package com.aimlessblade.cosmos.input;
 
+import com.aimlessblade.cosmos.geo.AngularVelocity;
 import com.aimlessblade.cosmos.geo.Movable;
+import com.aimlessblade.cosmos.geo.Velocity;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -29,12 +31,12 @@ public final class InputState {
         return a -> a.setActiveMovable(newIndex);
     }
 
-    public static Consumer<InputState> impulse(final double vx, final double vy, final double vz) {
-        return a -> a.activeMovable.impulse(vx, vy, vz);
+    public static Consumer<InputState> impulse(final Velocity velocity) {
+        return a -> a.activeMovable.impulse(velocity);
     }
 
-    public static Consumer<InputState> angularImpulse(final double vPitch, final double vYaw, final double vRoll) {
-        return a -> a.activeMovable.angularImpulse(vPitch, vYaw, vRoll);
+    public static Consumer<InputState> angularImpulse(final AngularVelocity angularVelocity) {
+        return a -> a.activeMovable.angularImpulse(angularVelocity);
     }
 
     private void setActiveMovable(final int newIndex) {

@@ -1,6 +1,8 @@
 package com.aimlessblade.cosmos.input;
 
+import com.aimlessblade.cosmos.geo.AngularVelocity;
 import com.aimlessblade.cosmos.geo.Movable;
+import com.aimlessblade.cosmos.geo.Velocity;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -39,22 +41,24 @@ public class InputStateTest {
 
     @Test
     public void impulseShouldBeAppliedToActiveMovable() {
+        final Velocity velocity = Velocity.cartesian(0, 0, 0);
         final List<Movable> movables = movableList(1);
 
-        final Consumer<InputState> impulseCommand = InputState.impulse(1, 2, 3);
+        final Consumer<InputState> impulseCommand = InputState.impulse(velocity);
         impulseCommand.accept(new InputState(movables, 0));
 
-        verify(movables.get(0)).impulse(1, 2, 3);
+        verify(movables.get(0)).impulse(velocity);
     }
 
     @Test
     public void angularImpulseShouldBeAppliedToActiveMovable() {
+        final AngularVelocity angularVelocity = AngularVelocity.cartesian(0, 0, 0);
         final List<Movable> movables = movableList(2);
 
-        final Consumer<InputState> impulseCommand = InputState.angularImpulse(4, 5, 6);
+        final Consumer<InputState> impulseCommand = InputState.angularImpulse(angularVelocity);
         impulseCommand.accept(new InputState(movables, 1));
 
-        verify(movables.get(1)).angularImpulse(4, 5, 6);
+        verify(movables.get(1)).angularImpulse(angularVelocity);
     }
 
     private List<Movable> movableList(final int length) {

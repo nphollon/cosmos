@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.ToString;
 import org.ejml.simple.SimpleMatrix;
 
-@ToString(exclude = "velocityPerSecond")
+@ToString(exclude = "velocity")
 public final class Pose implements Movable {
     @Getter(AccessLevel.PACKAGE)
     private Displacement displacement;
@@ -13,7 +13,7 @@ public final class Pose implements Movable {
     @Getter(AccessLevel.PACKAGE)
     private Orientation orientation;
 
-    private Displacement velocityPerSecond;
+    private Velocity velocity;
 
     public static Pose build(Displacement displacement, Orientation orientation) {
         return new Pose(displacement, orientation);
@@ -26,16 +26,16 @@ public final class Pose implements Movable {
 
     @Override
     public void evolve(final double dt) {
-        displacement = displacement.plus(velocityPerSecond.times(dt));
+        displacement = displacement.plus(velocity.overTime(dt));
     }
 
     @Override
-    public void impulse(final double vx, final double vy, final double vz) {
-        velocityPerSecond = Displacement.cartesian(vx, vy, vz);
+    public void impulse(final Velocity velocity) {
+        this.velocity = velocity;
     }
 
     @Override
-    public void angularImpulse(final double vPitch, final double vYaw, final double vRoll) {
+    public void angularImpulse(AngularVelocity angularVelocity) {
 
     }
 
@@ -46,6 +46,6 @@ public final class Pose implements Movable {
     private Pose(final Displacement displacement, final Orientation orientation) {
         this.displacement = displacement;
         this.orientation = orientation;
-        velocityPerSecond = Displacement.cartesian(0, 0, 0);
+        velocity = Velocity.cartesian(0, 0, 0);
     }
 }

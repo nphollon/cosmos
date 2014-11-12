@@ -62,21 +62,28 @@ public final class Application {
     }
 
     private static ProcessorFactory buildProcessorFactory() {
+        final Velocity west = Velocity.cartesian(1, 0, 0);
+        final Velocity east = Velocity.cartesian(-1, 0, 0);
+        final Velocity up = Velocity.cartesian(0, 1, 0);
+        final Velocity down = Velocity.cartesian(0, -1, 0);
+        final Velocity north = Velocity.cartesian(0, 0, 1);
+        final Velocity south = Velocity.cartesian(0, 0, -1);
+
         final Map<KeyboardEvent, Consumer<InputState>> keymap = new HashMap<>();
-        keymap.put(press(Keyboard.KEY_A), impulse(1, 0, 0));
-        keymap.put(lift(Keyboard.KEY_A), impulse(-1, 0, 0));
-        keymap.put(press(Keyboard.KEY_D), impulse(-1, 0, 0));
-        keymap.put(lift(Keyboard.KEY_D), impulse(1, 0, 0));
+        keymap.put(press(Keyboard.KEY_A), impulse(west));
+        keymap.put(lift(Keyboard.KEY_A), impulse(east));
+        keymap.put(press(Keyboard.KEY_D), impulse(east));
+        keymap.put(lift(Keyboard.KEY_D), impulse(west));
 
-        keymap.put(press(Keyboard.KEY_W), impulse(0, 1, 0));
-        keymap.put(lift(Keyboard.KEY_W), impulse(0, -1, 0));
-        keymap.put(press(Keyboard.KEY_S), impulse(0, -1, 0));
-        keymap.put(lift(Keyboard.KEY_S), impulse(0, 1, 0));
+        keymap.put(press(Keyboard.KEY_W), impulse(up));
+        keymap.put(lift(Keyboard.KEY_W), impulse(down));
+        keymap.put(press(Keyboard.KEY_S), impulse(down));
+        keymap.put(lift(Keyboard.KEY_S), impulse(up));
 
-        keymap.put(press(Keyboard.KEY_Q), impulse(0, 0, 1));
-        keymap.put(lift(Keyboard.KEY_Q), impulse(0, 0, -1));
-        keymap.put(press(Keyboard.KEY_E), impulse(0, 0, -1));
-        keymap.put(lift(Keyboard.KEY_E), impulse(0, 0, 1));
+        keymap.put(press(Keyboard.KEY_Q), impulse(north));
+        keymap.put(lift(Keyboard.KEY_Q), impulse(south));
+        keymap.put(press(Keyboard.KEY_E), impulse(south));
+        keymap.put(lift(Keyboard.KEY_E), impulse(north));
 
         final File vertexShader = new File("/home/nick/IdeaProjects/cosmos/cosmos/shaders/simple.vert");
         final File fragmentShader = new File("/home/nick/IdeaProjects/cosmos/cosmos/shaders/simple.frag");

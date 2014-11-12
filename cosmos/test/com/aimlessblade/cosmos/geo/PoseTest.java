@@ -72,7 +72,7 @@ public class PoseTest {
 
     @Test
     public void impulseShouldSetVelocity() {
-        testPose.impulse(1, 2, 3);
+        testPose.impulse(Velocity.cartesian(1, 2, 3));
         testPose.evolve(1);
 
         final Pose expectedFinalPose = Pose.build(Displacement.cartesian(1, 2, 3), DEFAULT_ORIENTATION);
@@ -82,7 +82,7 @@ public class PoseTest {
 
     @Test
     public void velocityShouldNotBeAppliedUntilEvolveIsCalled() {
-        testPose.impulse(1, 2, 3);
+        testPose.impulse(Velocity.cartesian(1, 2, 3));
 
         final Pose expectedFinalPose = Pose.build(DEFAULT_DISPLACEMENT, DEFAULT_ORIENTATION);
 
@@ -91,7 +91,7 @@ public class PoseTest {
 
     @Test
     public void velocityShouldBeAppliedEachTimeEvolveIsCalled() {
-        testPose.impulse(1, 4, 9);
+        testPose.impulse(Velocity.cartesian(1, 4, 9));
         testPose.evolve(1);
         testPose.evolve(1);
 
@@ -102,7 +102,7 @@ public class PoseTest {
 
     @Test
     public void displacementShouldChangeByVelocityTimesTime() {
-        testPose.impulse(2, 3, 7);
+        testPose.impulse(Velocity.cartesian(2, 3, 7));
         testPose.evolve(0.5);
 
         final Pose expectedFinalPose = Pose.build(Displacement.cartesian(1, 1.5, 3.5), DEFAULT_ORIENTATION);

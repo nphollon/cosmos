@@ -46,9 +46,11 @@ public class RigidBodyTest {
 
     @Test
     public void impulseShouldPassToPose() {
-        body.impulse(5, 6, 7);
+        final Velocity velocity = Velocity.cartesian(0, 0, 0);
 
-        verify(pose).impulse(5, 6, 7);
+        body.impulse(velocity);
+
+        verify(pose).impulse(velocity);
     }
 
     @Test
@@ -60,9 +62,11 @@ public class RigidBodyTest {
 
     @Test
     public void angularImpulseShouldPassToPose() {
-        body.angularImpulse(9, 10, 11);
+        AngularVelocity angularVelocity = AngularVelocity.cartesian(0, 0, 0);
 
-        verify(pose).angularImpulse(9, 10, 11);
+        body.angularImpulse(angularVelocity);
+
+        verify(pose).angularImpulse(angularVelocity);
     }
 
     @Test
