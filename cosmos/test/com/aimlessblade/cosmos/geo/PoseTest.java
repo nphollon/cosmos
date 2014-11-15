@@ -31,7 +31,7 @@ public class PoseTest {
     @Test
     public void matrixShouldBeDisplacementTimesRotation() {
         final Displacement displacement = Displacement.cartesian(1, 2, 3);
-        final Orientation orientation = Orientation.rotationVector(90, 0, 0);
+        final Orientation orientation = Orientation.cartesian(90, 0, 0);
 
         final Pose pose = Pose.build(displacement, orientation);
 
@@ -41,14 +41,14 @@ public class PoseTest {
 
     @Test
     public void posesShouldBeIdenticalIfOrientationsAndPositionsAre() {
-        final Pose otherPose = Pose.build(Displacement.cartesian(1e-6, 0, 0), Orientation.rotationVector(1e-6, 0, 0));
+        final Pose otherPose = Pose.build(Displacement.cartesian(1e-6, 0, 0), Orientation.cartesian(1e-6, 0, 0));
 
         assertPoseEquality(testPose, otherPose, TOLERANCE);
     }
 
     @Test
     public void posesShouldNotBeIdenticalIfOrientationsAreNot() {
-        final Pose otherPose = Pose.build(DEFAULT_DISPLACEMENT, Orientation.rotationVector(4, 5, 6));
+        final Pose otherPose = Pose.build(DEFAULT_DISPLACEMENT, Orientation.cartesian(4, 5, 6));
 
         assertPoseEquality(testPose, otherPose, TOLERANCE, false);
     }
@@ -125,6 +125,19 @@ public class PoseTest {
         final Velocity angularVelocity = Velocity.cartesian(3, -7, 1);
         testPose.angularImpulse(angularVelocity);
         testPose.evolve(2);
+
+        final Orientation expectedOrientation = Orientation.rotationVector(angularVelocity.overTime(2));
+        final Pose expectedFinalPose = Pose.build(DEFAULT_DISPLACEMENT, expectedOrientation);
+
+        assertPoseEquality(testPose, expectedFinalPose, TOLERANCE);
+    }
+
+    @Test
+    public void angularImpulsesShouldStack() {
+        final Velocity angularVelocity = Velocity.cartesian(3, -7, 1);
+        testPose.angularImpulse(angularVelocity);
+        testPose.angularImpulse(angularVelocity);
+        testPose.evolve(1);
 
         final Orientation expectedOrientation = Orientation.rotationVector(angularVelocity.overTime(2));
         final Pose expectedFinalPose = Pose.build(DEFAULT_DISPLACEMENT, expectedOrientation);

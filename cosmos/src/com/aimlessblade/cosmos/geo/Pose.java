@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.ToString;
 import org.ejml.simple.SimpleMatrix;
 
-@ToString(exclude = "velocity")
+@ToString(exclude = { "velocity", "angularVelocity" })
 public final class Pose implements Movable {
     @Getter(AccessLevel.PACKAGE)
     private Displacement displacement;
@@ -28,7 +28,7 @@ public final class Pose implements Movable {
     @Override
     public void evolve(final double dt) {
         displacement = displacement.plus(velocity.overTime(dt));
-        orientation = Orientation.rotationVector(angularVelocity.overTime(dt));
+        orientation = orientation.rotate(angularVelocity.overTime(dt));
     }
 
     @Override
@@ -38,11 +38,12 @@ public final class Pose implements Movable {
 
     @Override
     public void angularImpulse(Velocity angularVelocity) {
-        this.angularVelocity = angularVelocity;
+        this.angularVelocity = this.angularVelocity.plus(angularVelocity);
     }
 
     boolean isIdentical(final Pose otherPose, final double tolerance) {
-        return toMatrix().isIdentical(otherPose.toMatrix(), tolerance);
+        return displacement.isIdentical(otherPose.displacement, tolerance) &&
+                orientation.isIdentical(otherPose.orientation, tolerance);
     }
 
     private Pose(final Displacement displacement, final Orientation orientation) {
