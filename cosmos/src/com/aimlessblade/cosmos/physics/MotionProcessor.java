@@ -1,4 +1,4 @@
-package com.aimlessblade.cosmos.geo;
+package com.aimlessblade.cosmos.physics;
 
 import com.aimlessblade.cosmos.app.Processor;
 import lombok.AccessLevel;

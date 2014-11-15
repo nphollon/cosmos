@@ -1,4 +1,4 @@
-package com.aimlessblade.cosmos.geo;
+package com.aimlessblade.cosmos.physics;
 
 import org.joda.time.DateTimeUtils;
 import org.junit.After;

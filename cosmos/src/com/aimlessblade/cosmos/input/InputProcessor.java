@@ -1,7 +1,7 @@
 package com.aimlessblade.cosmos.input;
 
 import com.aimlessblade.cosmos.app.Processor;
-import com.aimlessblade.cosmos.geo.Movable;
+import com.aimlessblade.cosmos.physics.Movable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.lwjgl.input.Keyboard;

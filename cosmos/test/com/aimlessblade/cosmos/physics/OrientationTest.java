@@ -1,9 +1,9 @@
-package com.aimlessblade.cosmos.geo;
+package com.aimlessblade.cosmos.physics;
 
 import org.ejml.simple.SimpleMatrix;
 import org.junit.Test;
 
-import static com.aimlessblade.cosmos.geo.Orientation.*;
+import static com.aimlessblade.cosmos.physics.Orientation.*;
 import static com.aimlessblade.cosmos.util.Assert.assertMatrixEquality;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;

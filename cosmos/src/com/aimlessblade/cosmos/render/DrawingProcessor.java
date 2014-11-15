@@ -1,9 +1,7 @@
 package com.aimlessblade.cosmos.render;
 
 import com.aimlessblade.cosmos.app.Processor;
-import com.aimlessblade.cosmos.geo.Camera;
-import com.aimlessblade.cosmos.geo.Entity;
-import com.aimlessblade.cosmos.geo.Vertex;
+import com.aimlessblade.cosmos.camera.Camera;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 

@@ -1,4 +1,4 @@
-package com.aimlessblade.cosmos.geo;
+package com.aimlessblade.cosmos.physics;
 
 import org.ejml.simple.SimpleMatrix;
 import org.junit.Before;

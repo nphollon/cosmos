@@ -1,7 +1,7 @@
 package com.aimlessblade.cosmos.input;
 
-import com.aimlessblade.cosmos.geo.Movable;
-import com.aimlessblade.cosmos.geo.Velocity;
+import com.aimlessblade.cosmos.physics.Movable;
+import com.aimlessblade.cosmos.physics.Velocity;
 import org.junit.Test;
 
 import java.util.ArrayList;

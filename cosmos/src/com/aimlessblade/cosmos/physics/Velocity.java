@@ -1,4 +1,4 @@
-package com.aimlessblade.cosmos.geo;
+package com.aimlessblade.cosmos.physics;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

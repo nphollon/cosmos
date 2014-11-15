@@ -1,8 +1,15 @@
 package com.aimlessblade.cosmos.app;
 
-import com.aimlessblade.cosmos.geo.*;
+import com.aimlessblade.cosmos.camera.Camera;
+import com.aimlessblade.cosmos.camera.PerspectiveCamera;
 import com.aimlessblade.cosmos.input.InputState;
 import com.aimlessblade.cosmos.input.KeyboardEvent;
+import com.aimlessblade.cosmos.physics.Displacement;
+import com.aimlessblade.cosmos.physics.Orientation;
+import com.aimlessblade.cosmos.physics.Pose;
+import com.aimlessblade.cosmos.physics.Velocity;
+import com.aimlessblade.cosmos.render.RigidBody;
+import com.aimlessblade.cosmos.render.Vertex;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.ContextAttribs;

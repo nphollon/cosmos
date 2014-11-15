@@ -1,7 +1,6 @@
 package com.aimlessblade.cosmos.render;
 
-import com.aimlessblade.cosmos.geo.Camera;
-import com.aimlessblade.cosmos.geo.Entity;
+import com.aimlessblade.cosmos.camera.Camera;
 import com.aimlessblade.cosmos.render.DrawData.Target;
 import com.aimlessblade.cosmos.util.Assert;
 import org.ejml.simple.SimpleMatrix;

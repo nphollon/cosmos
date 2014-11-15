@@ -1,5 +1,7 @@
-package com.aimlessblade.cosmos.geo;
+package com.aimlessblade.cosmos.render;
 
+import com.aimlessblade.cosmos.physics.Movable;
+import com.aimlessblade.cosmos.physics.Velocity;
 import org.ejml.simple.SimpleMatrix;
 
 import java.util.List;

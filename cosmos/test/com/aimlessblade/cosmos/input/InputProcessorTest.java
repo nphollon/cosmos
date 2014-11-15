@@ -1,6 +1,6 @@
 package com.aimlessblade.cosmos.input;
 
-import com.aimlessblade.cosmos.geo.Movable;
+import com.aimlessblade.cosmos.physics.Movable;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
