@@ -4,11 +4,10 @@ import com.aimlessblade.cosmos.camera.Camera;
 import com.aimlessblade.cosmos.camera.PerspectiveCamera;
 import com.aimlessblade.cosmos.input.InputState;
 import com.aimlessblade.cosmos.input.KeyboardEvent;
-import com.aimlessblade.cosmos.physics.Movable;
 import com.aimlessblade.cosmos.physics.Vectors;
 import com.aimlessblade.cosmos.physics.Velocity;
+import com.aimlessblade.cosmos.render.Bodies;
 import com.aimlessblade.cosmos.render.RigidBody;
-import com.aimlessblade.cosmos.render.Vertex;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.ContextAttribs;
@@ -24,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static com.aimlessblade.cosmos.input.InputState.angularImpulse;
+import static com.aimlessblade.cosmos.input.InputState.impulse;
 import static com.aimlessblade.cosmos.input.KeyboardEvent.lift;
 import static com.aimlessblade.cosmos.input.KeyboardEvent.press;
 import static org.lwjgl.opengl.GL11.*;
@@ -35,7 +34,10 @@ public final class Application {
 
         final Camera camera = new PerspectiveCamera(1.0, 1, 50.0, 1.5);
 
-        final List<RigidBody> entities = buildEntityList();
+        final RigidBody tetrahedron = Bodies.tetrahedron(Vectors.pose(0, 0, -6, 0, 0, 0));
+        final RigidBody octahedron = Bodies.octahedron(Vectors.pose(1, 2, -3, 0, 0, 0));
+
+        final List<RigidBody> entities = Arrays.asList(tetrahedron, octahedron);
 
         try {
             createWindow(800, 600);
@@ -46,25 +48,6 @@ public final class Application {
         } finally {
             destroyWindow();
         }
-    }
-
-    private static List<RigidBody> buildEntityList() {
-        final Movable pose = Vectors.pose(0, 0, -6, 0, 0, 0);
-        final List<Vertex> vertexList = Arrays.asList(
-                Vertex.build(0, 0, 1, 1, 0, 0),
-                Vertex.build(0, 1, -1, 0, 1, 0),
-                Vertex.build(1, -1, -1, 0, 0, 1),
-                Vertex.build(-1, -1, -1, 1, 1, 1)
-        );
-        final int[] drawOrder = new int[] {
-                0, 1, 2,
-                0, 2, 3,
-                0, 3, 1,
-                1, 3, 2
-        };
-        final RigidBody body = new RigidBody(pose, vertexList, drawOrder);
-
-        return Arrays.asList(body);
     }
 
     private static ProcessorFactory buildProcessorFactory() {
@@ -78,20 +61,20 @@ public final class Application {
         final Velocity south = Vectors.velocity(0, 0, v);
 
         final Map<KeyboardEvent, Consumer<InputState>> keymap = new HashMap<>();
-        keymap.put(press(Keyboard.KEY_A), angularImpulse(west));
-        keymap.put(lift(Keyboard.KEY_A), angularImpulse(east));
-        keymap.put(press(Keyboard.KEY_D), angularImpulse(east));
-        keymap.put(lift(Keyboard.KEY_D), angularImpulse(west));
+        keymap.put(press(Keyboard.KEY_A), impulse(west));
+        keymap.put(lift(Keyboard.KEY_A), impulse(east));
+        keymap.put(press(Keyboard.KEY_D), impulse(east));
+        keymap.put(lift(Keyboard.KEY_D), impulse(west));
 
-        keymap.put(press(Keyboard.KEY_W), angularImpulse(up));
-        keymap.put(lift(Keyboard.KEY_W), angularImpulse(down));
-        keymap.put(press(Keyboard.KEY_S), angularImpulse(down));
-        keymap.put(lift(Keyboard.KEY_S), angularImpulse(up));
+        keymap.put(press(Keyboard.KEY_W), impulse(up));
+        keymap.put(lift(Keyboard.KEY_W), impulse(down));
+        keymap.put(press(Keyboard.KEY_S), impulse(down));
+        keymap.put(lift(Keyboard.KEY_S), impulse(up));
 
-        keymap.put(press(Keyboard.KEY_Q), angularImpulse(north));
-        keymap.put(lift(Keyboard.KEY_Q), angularImpulse(south));
-        keymap.put(press(Keyboard.KEY_E), angularImpulse(south));
-        keymap.put(lift(Keyboard.KEY_E), angularImpulse(north));
+        keymap.put(press(Keyboard.KEY_Q), impulse(north));
+        keymap.put(lift(Keyboard.KEY_Q), impulse(south));
+        keymap.put(press(Keyboard.KEY_E), impulse(south));
+        keymap.put(lift(Keyboard.KEY_E), impulse(north));
 
         final File vertexShader = new File("/home/nick/IdeaProjects/cosmos/cosmos/shaders/simple.vert");
         final File fragmentShader = new File("/home/nick/IdeaProjects/cosmos/cosmos/shaders/simple.frag");
