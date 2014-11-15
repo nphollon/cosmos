@@ -57,7 +57,7 @@ public final class DrawingProcessor implements Processor {
     private void configureDepthBuffer() {
         glEnable(GL_DEPTH_TEST);
         glDepthMask(true);
-        glDepthFunc(GL_GEQUAL);
+        glDepthFunc(GL_LEQUAL);
         glDepthRange(0, 1);
     }
 

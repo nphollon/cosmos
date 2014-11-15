@@ -37,7 +37,7 @@ public final class Application {
         final RigidBody tetrahedron = Bodies.tetrahedron(Vectors.pose(0, 0, -6, 0, 0, 0));
         final RigidBody octahedron = Bodies.octahedron(Vectors.pose(1, 2, -3, 0, 0, 0));
 
-        final List<RigidBody> entities = Arrays.asList(tetrahedron, octahedron);
+        final List<RigidBody> entities = Arrays.asList(octahedron, tetrahedron);
 
         try {
             createWindow(800, 600);
@@ -104,8 +104,8 @@ public final class Application {
     }
 
     private static void clearDisplay() {
-        glClearColor(0, 0, 0, 0);
-        glClearDepth(0);
+        glClearColor(0.04f, 0.06f, 0.04f, 0);
+        glClearDepth(1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
