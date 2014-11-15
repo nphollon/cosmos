@@ -1,6 +1,7 @@
 package com.aimlessblade.cosmos.render;
 
 import com.aimlessblade.cosmos.physics.Movable;
+import com.aimlessblade.cosmos.physics.Vectors;
 import com.aimlessblade.cosmos.physics.Velocity;
 import org.ejml.simple.SimpleMatrix;
 import org.junit.Before;
@@ -48,7 +49,7 @@ public class RigidBodyTest {
 
     @Test
     public void impulseShouldPassToPose() {
-        final Velocity velocity = Velocity.cartesian(0, 0, 0);
+        final Velocity velocity = Vectors.velocity(0, 0, 0);
 
         body.impulse(velocity);
 
@@ -64,7 +65,7 @@ public class RigidBodyTest {
 
     @Test
     public void angularImpulseShouldPassToPose() {
-        Velocity angularVelocity = Velocity.cartesian(0, 0, 0);
+        Velocity angularVelocity = Vectors.velocity(0, 0, 0);
 
         body.angularImpulse(angularVelocity);
 

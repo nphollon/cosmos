@@ -1,6 +1,7 @@
 package com.aimlessblade.cosmos.input;
 
 import com.aimlessblade.cosmos.physics.Movable;
+import com.aimlessblade.cosmos.physics.Vectors;
 import com.aimlessblade.cosmos.physics.Velocity;
 import org.junit.Test;
 
@@ -40,7 +41,7 @@ public class InputStateTest {
 
     @Test
     public void impulseShouldBeAppliedToActiveMovable() {
-        final Velocity velocity = Velocity.cartesian(0, 0, 0);
+        final Velocity velocity = Vectors.velocity(0, 0, 0);
         final List<Movable> movables = movableList(1);
 
         final Consumer<InputState> impulseCommand = InputState.impulse(velocity);
@@ -51,7 +52,7 @@ public class InputStateTest {
 
     @Test
     public void angularImpulseShouldBeAppliedToActiveMovable() {
-        final Velocity angularVelocity = Velocity.cartesian(0, 0, 0);
+        final Velocity angularVelocity = Vectors.velocity(0, 0, 0);
         final List<Movable> movables = movableList(2);
 
         final Consumer<InputState> impulseCommand = InputState.angularImpulse(angularVelocity);

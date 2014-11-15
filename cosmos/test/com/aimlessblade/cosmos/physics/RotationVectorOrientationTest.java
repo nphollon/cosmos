@@ -3,53 +3,55 @@ package com.aimlessblade.cosmos.physics;
 import org.ejml.simple.SimpleMatrix;
 import org.junit.Test;
 
-import static com.aimlessblade.cosmos.physics.Orientation.*;
 import static com.aimlessblade.cosmos.util.Assert.assertMatrixEquality;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class OrientationTest {
+public class RotationVectorOrientationTest {
     private static final double TOLERANCE = 1e-5;
 
-    @Test
-    public void nullVectorShouldEqualNullRotation() {
-        assertOrientationEquality(cartesian(0, 0, 0), zero());
+    private Orientation zero() {
+        return new RotationVectorOrientation(Vectors.position(0, 0, 0));
+    }
+
+    private Orientation cartesian(final double x, final double y, final double z) {
+        return new RotationVectorOrientation(Vectors.position(x, y, z));
     }
 
     @Test
     public void rotationMatrixShouldBeIdentityIfNullRotation() {
-        assertMatrixEquality(Orientation.zero().toMatrix(), SimpleMatrix.identity(4), TOLERANCE);
+        assertMatrixEquality(zero().toMatrix(), SimpleMatrix.identity(4), TOLERANCE);
     }
 
     @Test
     public void isIdenticalShouldBeTrueForExactlyEqualQuaternions() {
-        Orientation orientation1 = cartesian(0, 1, 0);
-        Orientation orientation2 = cartesian(0, 1, 0);
-        assertOrientationEquality(orientation1, orientation2);
+        Orientation rotationVectorOrientation1 = cartesian(0, 1, 0);
+        Orientation rotationVectorOrientation2 = cartesian(0, 1, 0);
+        assertOrientationEquality(rotationVectorOrientation1, rotationVectorOrientation2);
     }
 
     @Test
     public void isIdenticalShouldBeTrueForQuaternionsWithinTolerance() {
-        Orientation orientation1 = cartesian(-0.000009, 1.000009, 11.999999);
-        Orientation orientation2 = cartesian(0, 1, 12);
-        assertOrientationEquality(orientation1, orientation2);
+        Orientation rotationVectorOrientation1 = cartesian(-0.000009, 1.000009, 11.999999);
+        Orientation rotationVectorOrientation2 = cartesian(0, 1, 12);
+        assertOrientationEquality(rotationVectorOrientation1, rotationVectorOrientation2);
     }
 
     @Test
     public void isIdenticalShouldBeFalseIfAnyComponentIsDifferent() {
-        Orientation referenceOrientation = cartesian(0, 1, 0);
+        Orientation referenceRotationVectorOrientation = cartesian(0, 1, 0);
         Orientation badX = cartesian(0.01, 1, 0);
         Orientation badY = cartesian(0, 0.99, 0);
         Orientation badZ = cartesian(0, 1, 0.01);
 
-        assertOrientationInequality(referenceOrientation, badX);
-        assertOrientationInequality(referenceOrientation, badY);
-        assertOrientationInequality(referenceOrientation, badZ);
+        assertOrientationInequality(referenceRotationVectorOrientation, badX);
+        assertOrientationInequality(referenceRotationVectorOrientation, badY);
+        assertOrientationInequality(referenceRotationVectorOrientation, badZ);
     }
 
     @Test
     public void toMatrixShouldReturnRotationMatrix() {
-        Orientation orientation = cartesian(7, 5, 3);
+        Orientation rotationVectorOrientation = cartesian(7, 5, 3);
 
         SimpleMatrix expectedMatrix = new SimpleMatrix(4, 4, true,
                 1, -3, 5, 0,
@@ -57,40 +59,40 @@ public class OrientationTest {
                 -5, 7, 1, 0,
                 0, 0, 0, 1);
 
-        assertMatrixEquality(orientation.toMatrix(), expectedMatrix, TOLERANCE);
+        assertMatrixEquality(rotationVectorOrientation.toMatrix(), expectedMatrix, TOLERANCE);
     }
 
     @Test
     public void toMatrixShouldNotGiveAccessToInternalState() {
-        final Orientation orientation = zero();
+        final Orientation rotationVectorOrientation = zero();
 
-        final SimpleMatrix matrixCopy = orientation.toMatrix();
+        final SimpleMatrix matrixCopy = rotationVectorOrientation.toMatrix();
         matrixCopy.set(0, 0, 10);
 
-        assertOrientationEquality(orientation, zero());
+        assertOrientationEquality(rotationVectorOrientation, zero());
     }
 
     @Test
     public void rotatingZeroOrientationShouldReturnTheRotation() {
-        final Displacement rotation = Displacement.cartesian(7, 5, 3);
-        final Orientation orientation = zero();
+        final Displacement rotation = Vectors.position(7, 5, 3);
+        final Orientation rotationVectorOrientation = zero();
 
-        final Orientation finalOrientation = orientation.rotate(rotation);
+        final Orientation finalOrientation = rotationVectorOrientation.rotate(rotation);
 
-        assertOrientationEquality(finalOrientation, rotationVector(rotation));
+        assertOrientationEquality(finalOrientation, new RotationVectorOrientation(rotation));
     }
 
     @Test
     public void rotationsShouldMultiplyMatrices() {
-        final Orientation orientation = cartesian(7, 5, 3);
-        final SimpleMatrix initialMatrix = orientation.toMatrix();
+        final Orientation rotationVectorOrientation = cartesian(7, 5, 3);
+        final SimpleMatrix initialMatrix = rotationVectorOrientation.toMatrix();
 
-        final Displacement rotation = Displacement.cartesian(-1, -2, -3);
-        final SimpleMatrix rotationMatrix = Orientation.rotationVector(rotation).toMatrix();
+        final Displacement rotation = Vectors.position(-1, -2, -3);
+        final SimpleMatrix rotationMatrix = new RotationVectorOrientation(rotation).toMatrix();
 
         final SimpleMatrix expectedFinalMatrix = rotationMatrix.mult(initialMatrix);
 
-        final Orientation finalOrientation = orientation.rotate(rotation);
+        final Orientation finalOrientation = rotationVectorOrientation.rotate(rotation);
 
         assertMatrixEquality(finalOrientation.toMatrix(), expectedFinalMatrix, TOLERANCE);
     }
