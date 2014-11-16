@@ -21,7 +21,7 @@ public final class Vertex {
     }
 
     public List<Double> data() {
-        return Arrays.asList(r, g, b, x, y, z);
+        return Arrays.asList(x, y, z, r, g, b);
     }
 
     public static int getStride() {
@@ -48,9 +48,9 @@ public final class Vertex {
     @Getter
     @AllArgsConstructor
     public static enum Attribute {
-        POSITION(0, 3, 0), COLOR(1, 3, 3 * Float.BYTES);
+        POSITION("position", 3, 0), COLOR("color", 3, 3 * Float.BYTES);
 
-        private final int index;
+        private final String name;
         private final int length;
         private final int offset;
     }

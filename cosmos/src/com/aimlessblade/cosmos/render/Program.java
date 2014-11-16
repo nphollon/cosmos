@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 
 import static org.lwjgl.opengl.GL11.GL_FALSE;
+import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL20.*;
 
 final class Program {
@@ -25,6 +26,18 @@ final class Program {
                 compileShader(fragmentShader, GL20.GL_FRAGMENT_SHADER)
         );
         return new Program(id);
+    }
+
+    void defineAttributes() {
+        for (final Vertex.Attribute attribute: Vertex.getAttributes()) {
+            final String name = attribute.getName();
+            final int length = attribute.getLength();
+            final int offset = attribute.getOffset();
+            final int index = glGetAttribLocation(id, name);
+
+            glEnableVertexAttribArray(index);
+            glVertexAttribPointer(index, length, GL_FLOAT, false, Vertex.getStride(), offset);
+        }
     }
 
     void setPerspective(final FloatBuffer perspective) {
@@ -102,4 +115,5 @@ final class Program {
     private void setUniformMatrix(final int uniform, final FloatBuffer matrixData) {
         glUniformMatrix4(uniform, true, matrixData);
     }
+
 }

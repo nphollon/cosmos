@@ -11,8 +11,6 @@ import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
@@ -72,15 +70,7 @@ public final class DrawingProcessor implements Processor {
 
         glBindBuffer(GL_ARRAY_BUFFER, bufferObject);
         glBufferData(GL_ARRAY_BUFFER, drawData.getVertexBuffer(), drawMode);
-
-        for (final Vertex.Attribute attribute: Vertex.getAttributes()) {
-            final int index = attribute.getIndex();
-            final int length = attribute.getLength();
-            final int offset = attribute.getOffset();
-            glEnableVertexAttribArray(index);
-            glVertexAttribPointer(index, length, GL_FLOAT, false, Vertex.getStride(), offset);
-        }
-
+        program.defineAttributes();
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 

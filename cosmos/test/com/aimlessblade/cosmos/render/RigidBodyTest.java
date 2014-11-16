@@ -86,8 +86,8 @@ public class RigidBodyTest {
     public void vertexDataShouldComeFromVertexList() {
         // This test depends on the behavior of Vertex.data()
         final double[] expectedData = new double[] {
-                20, 21, 22, 17, 18, 19,
-                26, 27, 28, 23, 24, 25
+                17, 18, 19, 20, 21, 22,
+                23, 24, 25, 26, 27, 28
         };
 
         assertThat(body.getVertexData(), is(expectedData));

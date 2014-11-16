@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import static com.aimlessblade.cosmos.input.InputState.impulse;
+import static com.aimlessblade.cosmos.input.InputState.setActiveIndex;
 import static com.aimlessblade.cosmos.input.KeyboardEvent.lift;
 import static com.aimlessblade.cosmos.input.KeyboardEvent.press;
 import static org.lwjgl.opengl.GL11.*;
@@ -75,6 +76,9 @@ public final class Application {
         keymap.put(lift(Keyboard.KEY_Q), impulse(south));
         keymap.put(press(Keyboard.KEY_E), impulse(south));
         keymap.put(lift(Keyboard.KEY_E), impulse(north));
+
+        keymap.put(press(Keyboard.KEY_1), setActiveIndex(0));
+        keymap.put(press(Keyboard.KEY_2), setActiveIndex(1));
 
         final File vertexShader = new File("/home/nick/IdeaProjects/cosmos/cosmos/shaders/simple.vert");
         final File fragmentShader = new File("/home/nick/IdeaProjects/cosmos/cosmos/shaders/simple.frag");
