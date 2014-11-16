@@ -16,11 +16,11 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DrawingProcessor implements Processor {
-    private final Program program;
+    private final ShaderProgram program;
     private final DrawData drawData;
 
     public static Processor build(final File vertexShader, final File fragmentShader, final Camera camera, final List<? extends Entity> entities) throws IOException {
-        final Program program = Program.build(vertexShader, fragmentShader);
+        final ShaderProgram program = ShaderProgram.build(vertexShader, fragmentShader);
         final DrawData drawData = new DrawData(camera, entities);
 
         final DrawingProcessor processor = new DrawingProcessor(program, drawData);

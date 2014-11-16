@@ -24,13 +24,19 @@ final class ProcessorFactory {
     private final File vertexShader;
     private final File fragmentShader;
 
-    Processor build(final Camera camera, final List<RigidBody> entities) throws IOException {
+    Processor build(final Camera camera, final List<RigidBody> entities) {
         final List<Movable> movables = new ArrayList<>();
         movables.addAll(entities);
 
+        final Processor drawingStage;
+        try {
+            drawingStage = DrawingProcessor.build(vertexShader, fragmentShader, camera, entities);
+        } catch (IOException e) {
+            throw new ApplicationException("Failed to find shader files.", e);
+        }
+
         final Processor inputStage = new InputProcessor(keymap, movables);
         final Processor motionStage = new MotionProcessor(movables);
-        final Processor drawingStage = DrawingProcessor.build(vertexShader, fragmentShader, camera, entities);
 
         return new CompositeProcessor(Arrays.asList(inputStage, motionStage, drawingStage));
     }

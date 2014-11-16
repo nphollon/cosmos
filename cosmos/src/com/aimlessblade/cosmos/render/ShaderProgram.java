@@ -15,17 +15,17 @@ import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL20.*;
 
-final class Program {
+final class ShaderProgram {
     private final int id;
     private final int perspectiveUniform;
     private final int geoTransformUniform;
 
-    static Program build(final File vertexShader, final File fragmentShader) throws IOException {
+    static ShaderProgram build(final File vertexShader, final File fragmentShader) throws IOException {
         final int id = linkProgram(
                 compileShader(vertexShader, GL20.GL_VERTEX_SHADER),
                 compileShader(fragmentShader, GL20.GL_FRAGMENT_SHADER)
         );
-        return new Program(id);
+        return new ShaderProgram(id);
     }
 
     void defineAttributes() {
@@ -102,7 +102,7 @@ final class Program {
         return shaderId;
     }
 
-    private Program(final int id) {
+    private ShaderProgram(final int id) {
         this.id = id;
         perspectiveUniform = getUniform("perspectiveMatrix");
         geoTransformUniform = getUniform("geoTransform");
