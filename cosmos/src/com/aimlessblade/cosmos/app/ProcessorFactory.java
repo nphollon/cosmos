@@ -1,6 +1,7 @@
 package com.aimlessblade.cosmos.app;
 
 import com.aimlessblade.cosmos.camera.Camera;
+import com.aimlessblade.cosmos.camera.MovableCamera;
 import com.aimlessblade.cosmos.input.InputProcessor;
 import com.aimlessblade.cosmos.input.InputState;
 import com.aimlessblade.cosmos.input.KeyboardEvent;
@@ -24,9 +25,10 @@ final class ProcessorFactory {
     private final File vertexShader;
     private final File fragmentShader;
 
-    Processor build(final Camera camera, final List<RigidBody> entities) {
+    Processor build(final MovableCamera camera, final List<RigidBody> entities) {
         final List<Movable> movables = new ArrayList<>();
         movables.addAll(entities);
+        movables.add(camera);
 
         final Processor drawingStage;
         try {

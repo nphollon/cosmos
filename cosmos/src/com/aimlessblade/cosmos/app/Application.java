@@ -1,6 +1,7 @@
 package com.aimlessblade.cosmos.app;
 
 import com.aimlessblade.cosmos.camera.Camera;
+import com.aimlessblade.cosmos.camera.MovableCamera;
 import com.aimlessblade.cosmos.camera.PerspectiveCamera;
 import com.aimlessblade.cosmos.input.InputState;
 import com.aimlessblade.cosmos.input.KeyboardEvent;
@@ -25,6 +26,7 @@ public final class Application {
         final ProcessorFactory processor = new ProcessorFactory(keymap, vertexShader, fragmentShader);
 
         final Camera camera = new PerspectiveCamera(1.0, 1, 50.0, 1.5);
+        final MovableCamera movableCamera = new MovableCamera(camera, pose(0, 0, 0, 0, 0, 0));
 
         final RigidBody tetrahedron = tetrahedron(pose(0, 0, -6, 0, 0, 0));
         final RigidBody octahedron = octahedron(pose(1, 2, -3, 0, 0, 0));
@@ -32,7 +34,7 @@ public final class Application {
         final List<RigidBody> entities = Arrays.asList(octahedron, tetrahedron);
 
         Window window = new Window(800, 600);
-        window.loop(processor.build(camera, entities));
+        window.loop(processor.build(movableCamera, entities));
     }
 
 }

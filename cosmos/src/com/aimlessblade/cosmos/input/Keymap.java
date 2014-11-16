@@ -37,6 +37,7 @@ public class Keymap {
                 .toggle(KEY_U, KEY_O, tiltLeft, tiltRight)
                 .select(KEY_1, setActiveIndex(0))
                 .select(KEY_2, setActiveIndex(1))
+                .select(KEY_3, setActiveIndex(2))
                 .build();
     }
 

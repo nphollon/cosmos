@@ -3,7 +3,9 @@ package com.aimlessblade.cosmos.physics;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
+@ToString
 @EqualsAndHashCode
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class CartesianVelocity implements Velocity {
@@ -20,5 +22,10 @@ class CartesianVelocity implements Velocity {
     public Velocity plus(final Velocity addend) {
         Displacement d = addend.overTime(1);
         return new CartesianVelocity(vx + d.getX(), vy + d.getY(), vz + d.getZ());
+    }
+
+    @Override
+    public Velocity negative() {
+        return new CartesianVelocity(-vx, -vy, -vz);
     }
 }
