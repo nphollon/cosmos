@@ -13,7 +13,6 @@ public class MovableCamera implements Camera, Movable {
         this.pose = pose;
     }
 
-
     @Override
     public SimpleMatrix getPerspective() {
         return staticCamera.getPerspective().mult(pose.toMatrix());
