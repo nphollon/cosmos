@@ -13,7 +13,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.aimlessblade.cosmos.util.Assert.assertMatrixEquality;
+import static com.aimlessblade.cosmos.physics.Identity.assertMatrixEquality;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.verify;
@@ -44,7 +44,7 @@ public class RigidBodyTest {
 
         final SimpleMatrix geoTransform = body.getTransform();
 
-        assertMatrixEquality(geoTransform, MATRIX, TOLERANCE);
+        assertMatrixEquality(geoTransform, MATRIX);
     }
 
     @Test

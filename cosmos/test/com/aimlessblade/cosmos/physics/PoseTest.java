@@ -4,7 +4,7 @@ import org.ejml.simple.SimpleMatrix;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.aimlessblade.cosmos.util.Assert.assertMatrixEquality;
+import static com.aimlessblade.cosmos.physics.Identity.assertMatrixEquality;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -26,7 +26,7 @@ public class PoseTest {
 
         final Pose pose = Vectors.pose(displacement, DEFAULT_ORIENTATION);
 
-        assertMatrixEquality(pose.toMatrix(), displacement.toMatrix(), TOLERANCE);
+        assertMatrixEquality(pose.toMatrix(), displacement.toMatrix());
     }
 
     @Test
@@ -37,7 +37,7 @@ public class PoseTest {
         final Pose pose = Vectors.pose(1, 2, 3, 90, 0, 0);
 
         final SimpleMatrix expectedMatrix = displacement.toMatrix().mult(orientation.toMatrix());
-        assertMatrixEquality(pose.toMatrix(), expectedMatrix, TOLERANCE);
+        assertMatrixEquality(pose.toMatrix(), expectedMatrix);
     }
 
     @Test

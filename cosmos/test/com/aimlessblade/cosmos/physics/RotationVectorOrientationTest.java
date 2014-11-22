@@ -3,12 +3,9 @@ package com.aimlessblade.cosmos.physics;
 import org.ejml.simple.SimpleMatrix;
 import org.junit.Test;
 
-import static com.aimlessblade.cosmos.util.Assert.assertMatrixEquality;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static com.aimlessblade.cosmos.physics.Identity.assertMatrixEquality;
 
 public class RotationVectorOrientationTest {
-    private static final double TOLERANCE = 1e-5;
 
     private Orientation zero() {
         return new RotationVectorOrientation(Vectors.position(0, 0, 0));
@@ -20,21 +17,21 @@ public class RotationVectorOrientationTest {
 
     @Test
     public void rotationMatrixShouldBeIdentityIfNullRotation() {
-        assertMatrixEquality(zero().toMatrix(), SimpleMatrix.identity(4), TOLERANCE);
+        assertMatrixEquality(zero().toMatrix(), SimpleMatrix.identity(4));
     }
 
     @Test
     public void isIdenticalShouldBeTrueForExactlyEqualQuaternions() {
         Orientation rotationVectorOrientation1 = cartesian(0, 1, 0);
         Orientation rotationVectorOrientation2 = cartesian(0, 1, 0);
-        assertOrientationEquality(rotationVectorOrientation1, rotationVectorOrientation2);
+        Identity.assertOrientationEquality(rotationVectorOrientation1, rotationVectorOrientation2);
     }
 
     @Test
     public void isIdenticalShouldBeTrueForQuaternionsWithinTolerance() {
         Orientation rotationVectorOrientation1 = cartesian(-0.000009, 1.000009, 11.999999);
         Orientation rotationVectorOrientation2 = cartesian(0, 1, 12);
-        assertOrientationEquality(rotationVectorOrientation1, rotationVectorOrientation2);
+        Identity.assertOrientationEquality(rotationVectorOrientation1, rotationVectorOrientation2);
     }
 
     @Test
@@ -44,9 +41,9 @@ public class RotationVectorOrientationTest {
         Orientation badY = cartesian(0, 0.99, 0);
         Orientation badZ = cartesian(0, 1, 0.01);
 
-        assertOrientationInequality(referenceRotationVectorOrientation, badX);
-        assertOrientationInequality(referenceRotationVectorOrientation, badY);
-        assertOrientationInequality(referenceRotationVectorOrientation, badZ);
+        Identity.assertOrientationInequality(referenceRotationVectorOrientation, badX);
+        Identity.assertOrientationInequality(referenceRotationVectorOrientation, badY);
+        Identity.assertOrientationInequality(referenceRotationVectorOrientation, badZ);
     }
 
     @Test
@@ -59,7 +56,7 @@ public class RotationVectorOrientationTest {
                 -5, 7, 1, 0,
                 0, 0, 0, 1);
 
-        assertMatrixEquality(rotationVectorOrientation.toMatrix(), expectedMatrix, TOLERANCE);
+        assertMatrixEquality(rotationVectorOrientation.toMatrix(), expectedMatrix);
     }
 
     @Test
@@ -69,7 +66,7 @@ public class RotationVectorOrientationTest {
         final SimpleMatrix matrixCopy = rotationVectorOrientation.toMatrix();
         matrixCopy.set(0, 0, 10);
 
-        assertOrientationEquality(rotationVectorOrientation, zero());
+        Identity.assertOrientationEquality(rotationVectorOrientation, zero());
     }
 
     @Test
@@ -79,7 +76,7 @@ public class RotationVectorOrientationTest {
 
         final Orientation finalOrientation = rotationVectorOrientation.rotate(rotation);
 
-        assertOrientationEquality(finalOrientation, new RotationVectorOrientation(rotation));
+        Identity.assertOrientationEquality(finalOrientation, new RotationVectorOrientation(rotation));
     }
 
     @Test
@@ -94,18 +91,7 @@ public class RotationVectorOrientationTest {
 
         final Orientation finalOrientation = rotationVectorOrientation.rotate(rotation);
 
-        assertMatrixEquality(finalOrientation.toMatrix(), expectedFinalMatrix, TOLERANCE);
+        assertMatrixEquality(finalOrientation.toMatrix(), expectedFinalMatrix);
     }
 
-    private static void assertOrientationEquality(final Orientation orientation1, final Orientation orientation2) {
-        String message = "\nActual:\n" + orientation1 + "\nExpected:\n" + orientation2;
-        assertThat(message, orientation1.isIdentical(orientation2, TOLERANCE), is(true));
-        assertThat(message, orientation2.isIdentical(orientation1, TOLERANCE), is(true));
-    }
-
-    private static void assertOrientationInequality(final Orientation orientation1, final Orientation orientation2) {
-        String message = "\nActual:\n" + orientation1 + "\nExpected not to equal:\n" + orientation2;
-        assertThat(message, orientation1.isIdentical(orientation2, TOLERANCE), is(false));
-        assertThat(message, orientation2.isIdentical(orientation1, TOLERANCE), is(false));
-    }
 }

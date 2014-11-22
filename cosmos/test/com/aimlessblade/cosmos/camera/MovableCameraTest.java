@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static com.aimlessblade.cosmos.util.Assert.assertMatrixEquality;
+import static com.aimlessblade.cosmos.physics.Identity.assertMatrixEquality;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.verify;
@@ -42,7 +42,7 @@ public class MovableCameraTest {
     public void shouldGetMatrixFromPose() {
         final SimpleMatrix actualMatrix = movableCamera.toMatrix();
 
-        assertMatrixEquality(actualMatrix, POSE_MATRIX, TOLERANCE);
+        assertMatrixEquality(actualMatrix, POSE_MATRIX);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class MovableCameraTest {
 
         final SimpleMatrix actualPerspective = movableCamera.getPerspective();
 
-        assertMatrixEquality(actualPerspective, expectedPerspective, TOLERANCE);
+        assertMatrixEquality(actualPerspective, expectedPerspective);
     }
 
     @Test

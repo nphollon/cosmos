@@ -1,6 +1,5 @@
 package com.aimlessblade.cosmos.physics;
 
-import com.aimlessblade.cosmos.util.Assert;
 import org.ejml.simple.SimpleMatrix;
 import org.junit.Test;
 
@@ -40,7 +39,7 @@ public class DisplacementTest {
 
     @Test
     public void translationMatrixShouldBeIdentityIfNoOffset() {
-        Assert.assertMatrixEquality(ORIGIN.toMatrix(), SimpleMatrix.identity(4), TOLERANCE);
+        Identity.assertMatrixEquality(ORIGIN.toMatrix(), SimpleMatrix.identity(4));
     }
 
     @Test
@@ -52,7 +51,7 @@ public class DisplacementTest {
         expectedMatrix.set(1, 3, 3);
         expectedMatrix.set(2, 3, 5);
 
-        Assert.assertMatrixEquality(displacement.toMatrix(), expectedMatrix, TOLERANCE);
+        Identity.assertMatrixEquality(displacement.toMatrix(), expectedMatrix);
     }
 
     @Test
