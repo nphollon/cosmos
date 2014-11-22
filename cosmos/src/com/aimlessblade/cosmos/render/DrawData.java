@@ -16,6 +16,7 @@ import java.util.stream.Stream;
 
 import static java.util.Arrays.stream;
 
+@SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
 @RequiredArgsConstructor
 final class DrawData {
     private final Camera camera;
@@ -98,7 +99,7 @@ final class DrawData {
         private final int elementOffset;
 
         FloatBuffer getGeoTransform() {
-            return bufferMatrix(entity.getTransform());
+            return bufferMatrix(entity.toMatrix());
         }
 
         int getElementCount() {

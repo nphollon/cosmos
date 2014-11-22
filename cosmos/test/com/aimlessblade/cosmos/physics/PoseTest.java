@@ -5,13 +5,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static com.aimlessblade.cosmos.physics.Identity.assertMatrixEquality;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static com.aimlessblade.cosmos.physics.Identity.assertMatrixInequality;
 
 public class PoseTest {
     private static final Displacement DEFAULT_DISPLACEMENT = Vectors.position(0, 0, 0);
     private static final Orientation DEFAULT_ORIENTATION = new RotationVectorOrientation(DEFAULT_DISPLACEMENT);
-    private static final double TOLERANCE = 1e-5;
 
     private Pose testPose;
 
@@ -44,21 +42,21 @@ public class PoseTest {
     public void posesShouldBeIdenticalIfOrientationsAndPositionsAre() {
         final Pose otherPose = Vectors.pose(1e-6, 0, 0, 1e-6, 0, 0);
 
-        assertPoseEquality(testPose, otherPose, TOLERANCE);
+        assertMatrixEquality(testPose, otherPose);
     }
 
     @Test
     public void posesShouldNotBeIdenticalIfOrientationsAreNot() {
         final Pose otherPose = Vectors.pose(0, 0, 0, 4, 5, 6);
 
-        assertPoseEquality(testPose, otherPose, TOLERANCE, false);
+        assertMatrixInequality(testPose, otherPose);
     }
 
     @Test
     public void posesShouldNotBeIdenticalIfDisplacementsAreNot() {
         final Pose otherPose = Vectors.pose(5, 4, 3, 0, 0, 0);
 
-        assertPoseEquality(testPose, otherPose, TOLERANCE, false);
+        assertMatrixInequality(testPose, otherPose);
     }
 
     @Test
@@ -67,7 +65,7 @@ public class PoseTest {
 
         testPose.evolve(10);
 
-        assertPoseEquality(testPose, otherPose, TOLERANCE);
+        assertMatrixEquality(testPose, otherPose);
     }
 
     @Test
@@ -77,7 +75,7 @@ public class PoseTest {
 
         final Pose expectedFinalPose = Vectors.pose(Vectors.position(1, 2, 3), DEFAULT_ORIENTATION);
 
-        assertPoseEquality(testPose, expectedFinalPose, TOLERANCE);
+        assertMatrixEquality(testPose, expectedFinalPose);
     }
 
     @Test
@@ -86,7 +84,7 @@ public class PoseTest {
 
         final Pose expectedFinalPose = Vectors.pose(DEFAULT_DISPLACEMENT, DEFAULT_ORIENTATION);
 
-        assertPoseEquality(testPose, expectedFinalPose, TOLERANCE);
+        assertMatrixEquality(testPose, expectedFinalPose);
     }
 
     @Test
@@ -97,7 +95,7 @@ public class PoseTest {
 
         final Pose expectedFinalPose = Vectors.pose(2, 8, 18, 0, 0, 0);
 
-        assertPoseEquality(testPose, expectedFinalPose, TOLERANCE);
+        assertMatrixEquality(testPose, expectedFinalPose);
     }
 
     @Test
@@ -107,7 +105,7 @@ public class PoseTest {
 
         final Pose expectedFinalPose = Vectors.pose(1, 1.5, 3.5, 0, 0, 0);
 
-        assertPoseEquality(testPose, expectedFinalPose, TOLERANCE);
+        assertMatrixEquality(testPose, expectedFinalPose);
     }
 
     @Test
@@ -118,7 +116,7 @@ public class PoseTest {
 
         final Pose expectedFinalPose = Vectors.pose(DEFAULT_DISPLACEMENT, DEFAULT_ORIENTATION);
 
-        assertPoseEquality(testPose, expectedFinalPose, TOLERANCE);
+        assertMatrixEquality(testPose, expectedFinalPose);
     }
 
     @Test
@@ -130,7 +128,7 @@ public class PoseTest {
         final Orientation expectedOrientation = new RotationVectorOrientation(angularVelocity.overTime(2));
         final Pose expectedFinalPose = Vectors.pose(DEFAULT_DISPLACEMENT, expectedOrientation);
 
-        assertPoseEquality(testPose, expectedFinalPose, TOLERANCE);
+        assertMatrixEquality(testPose, expectedFinalPose);
     }
 
     @Test
@@ -143,16 +141,6 @@ public class PoseTest {
         final Orientation expectedOrientation = new RotationVectorOrientation(angularVelocity.overTime(2));
         final Pose expectedFinalPose = Vectors.pose(DEFAULT_DISPLACEMENT, expectedOrientation);
 
-        assertPoseEquality(testPose, expectedFinalPose, TOLERANCE);
-    }
-
-    public static void assertPoseEquality(final Pose pose1, final Pose pose2, final double tolerance) {
-        assertPoseEquality(pose1, pose2, tolerance, true);
-    }
-
-    public static void assertPoseEquality(final Pose pose1, final Pose pose2, final double tolerance, final boolean expected) {
-        String message = "\nActual:\n" + pose1 + "\nExpected:\n" + pose2;
-        assertThat(message, pose1.isIdentical(pose2, tolerance), is(expected));
-        assertThat(message, pose2.isIdentical(pose1, tolerance), is(expected));
+        assertMatrixEquality(testPose, expectedFinalPose);
     }
 }

@@ -17,7 +17,7 @@ import static org.lwjgl.input.Keyboard.getEventKeyState;
 public final class InputProcessor implements Processor {
     private final Map<KeyboardEvent, Consumer<InputState>> keymap;
     private final List<Movable> movables;
-    private InputState state;
+    private final InputState state;
 
     public InputProcessor(final Map<KeyboardEvent, Consumer<InputState>> keymap, final List<Movable> movables) {
         this.keymap = keymap;

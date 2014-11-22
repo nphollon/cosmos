@@ -1,10 +1,18 @@
 package com.aimlessblade.cosmos.physics;
 
+import org.ejml.simple.SimpleMatrix;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static com.aimlessblade.cosmos.physics.Identity.assertMatrixEquality;
 
 public class QuaternionOrientationTest {
-    private static final double TOLERANCE = 1e-5;
 
+    private Orientation zero() {
+        return new QuaternionOrientation(Vectors.position(0, 0, 0));
+    }
+
+    @Test
+    public void rotationMatrixShouldBeIdentityIfNullRotation() {
+        assertMatrixEquality(zero().toMatrix(), SimpleMatrix.identity(4));
+    }
 }

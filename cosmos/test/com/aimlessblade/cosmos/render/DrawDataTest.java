@@ -2,7 +2,6 @@ package com.aimlessblade.cosmos.render;
 
 import com.aimlessblade.cosmos.camera.Camera;
 import com.aimlessblade.cosmos.render.DrawData.Target;
-import com.aimlessblade.cosmos.physics.Identity;
 import org.ejml.simple.SimpleMatrix;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,31 +29,17 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DrawDataTest {
-    private static final double PRECISION = 1e-3;
-
     private static final double[] MATRIX_DATA = new double[]{
             1, 0, 0, 0,
             0, 1, 0, 0,
             0, 0, 1, 0,
             0, 0, 0, 1
     };
+    private static final double TOLERANCE = 1e-5;
 
     @Mock
     private Camera camera;
     private List<Entity> entities;
-
-    public static void assertBufferContents(final IntBuffer buffer, final int[] expectedData) {
-        assertThat(buffer.limit(), is(expectedData.length));
-        stream(expectedData).forEach(checkNextBufferEntry(buffer));
-    }
-
-    public static DoubleConsumer checkNextBufferEntry(final FloatBuffer buffer, final double tolerance) {
-        return d -> assertThat((double) buffer.get(), closeTo(d, tolerance));
-    }
-
-    private static IntConsumer checkNextBufferEntry(final IntBuffer buffer) {
-        return i -> assertThat(buffer.get(), is(i));
-    }
 
     @Before
     public void setup() {
@@ -68,14 +53,14 @@ public class DrawDataTest {
         final DrawData drawData = new DrawData(camera, entities);
         final FloatBuffer perspectiveBuffer = drawData.getPerspective();
 
-        Identity.assertBufferContents(perspectiveBuffer, MATRIX_DATA);
+        assertBufferContents(perspectiveBuffer, MATRIX_DATA);
     }
 
     @Test
     public void vertexBufferShouldBeEmptyIfNoEntities() {
         final DrawData drawData = new DrawData(camera, entities);
         final FloatBuffer vertexBuffer = drawData.getVertexBuffer();
-        Identity.assertBufferContents(vertexBuffer, new double[0]);
+        assertBufferContents(vertexBuffer, new double[0]);
     }
 
     @Test
@@ -86,7 +71,7 @@ public class DrawDataTest {
         final DrawData drawData = new DrawData(camera, entities);
         final FloatBuffer vertexBuffer = drawData.getVertexBuffer();
 
-        Identity.assertBufferContents(vertexBuffer, expectedVertexData);
+        assertBufferContents(vertexBuffer, expectedVertexData);
     }
 
     @Test
@@ -99,7 +84,7 @@ public class DrawDataTest {
         final DrawData drawData = new DrawData(camera, entities);
         final FloatBuffer vertexBuffer = drawData.getVertexBuffer();
 
-        Identity.assertBufferContents(vertexBuffer, addAll(vertexDataA, vertexDataB));
+        assertBufferContents(vertexBuffer, addAll(vertexDataA, vertexDataB));
     }
 
     @Test
@@ -213,13 +198,13 @@ public class DrawDataTest {
     public void targetGeoTransformShouldContainPoseMatrixData() {
         final Entity entity = mock(Entity.class);
         when(entity.getElementData()).thenReturn(new int[0]);
-        when(entity.getTransform()).thenReturn(SimpleMatrix.identity(4));
+        when(entity.toMatrix()).thenReturn(SimpleMatrix.identity(4));
         entities.add(entity);
 
         final List<Target> targets = new DrawData(camera, entities).getTargets();
         final Target target = targets.get(0);
 
-        Identity.assertBufferContents(target.getGeoTransform(), MATRIX_DATA);
+        assertBufferContents(target.getGeoTransform(), MATRIX_DATA);
     }
 
     @Test
@@ -246,5 +231,23 @@ public class DrawDataTest {
         final Entity entity = mock(Entity.class);
         when(entity.getVertexData()).thenReturn(data);
         entities.add(entity);
+    }
+
+    public static void assertBufferContents(final IntBuffer buffer, final int[] expectedData) {
+        assertThat(buffer.limit(), is(expectedData.length));
+        stream(expectedData).forEach(checkNextBufferEntry(buffer));
+    }
+
+    public static DoubleConsumer checkNextBufferEntry(final FloatBuffer buffer, final double tolerance) {
+        return d -> assertThat((double) buffer.get(), closeTo(d, tolerance));
+    }
+
+    private static IntConsumer checkNextBufferEntry(final IntBuffer buffer) {
+        return i -> assertThat(buffer.get(), is(i));
+    }
+
+    public static void assertBufferContents(final FloatBuffer buffer, final double[] expectedData) {
+        assertThat(buffer.limit(), is(expectedData.length));
+        stream(expectedData).forEach(checkNextBufferEntry(buffer, TOLERANCE));
     }
 }

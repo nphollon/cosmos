@@ -7,7 +7,7 @@ import org.ejml.simple.SimpleMatrix;
 @EqualsAndHashCode
 @ToString
 final class RotationVectorOrientation implements Orientation {
-    private SimpleMatrix matrix;
+    private final SimpleMatrix matrix;
 
     RotationVectorOrientation(final Displacement rotation) {
         matrix = vectorToTensor(rotation);
@@ -32,11 +32,6 @@ final class RotationVectorOrientation implements Orientation {
                 z, 1, -x, 0,
                 -y, x, 1, 0,
                 0, 0, 0, 1);
-    }
-
-    @Override
-    public boolean isIdentical(final Orientation other, final double tolerance) {
-        return matrix.isIdentical(other.toMatrix(), tolerance);
     }
 
     @Override

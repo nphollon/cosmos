@@ -45,8 +45,8 @@ public final class DrawingProcessor implements Processor {
 
     private void loadVertexData() {
         glBindVertexArray(glGenVertexArrays());
-        initializeVertexBuffer(GL_STREAM_DRAW);
-        initializeElementBuffer(GL_STREAM_DRAW);
+        initializeVertexBuffer();
+        initializeElementBuffer();
 
         configureFaceCulling();
         configureDepthBuffer();
@@ -65,18 +65,18 @@ public final class DrawingProcessor implements Processor {
         glFrontFace(GL_CW);
     }
 
-    private void initializeVertexBuffer(final int drawMode) {
+    private void initializeVertexBuffer() {
         final int bufferObject = glGenBuffers();
 
         glBindBuffer(GL_ARRAY_BUFFER, bufferObject);
-        glBufferData(GL_ARRAY_BUFFER, drawData.getVertexBuffer(), drawMode);
+        glBufferData(GL_ARRAY_BUFFER, drawData.getVertexBuffer(), GL_STREAM_DRAW);
         program.defineAttributes();
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    private void initializeElementBuffer(final int drawMode) {
+    private void initializeElementBuffer() {
         final int bufferObject = glGenBuffers();
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferObject);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, drawData.getElementBuffer(), drawMode);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, drawData.getElementBuffer(), GL_STREAM_DRAW);
     }
 }

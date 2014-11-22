@@ -13,13 +13,6 @@ final class CartesianDisplacement implements Displacement {
     private final double z;
 
     @Override
-    public boolean isIdentical(final Displacement other, final double tolerance) {
-        return doublesEqual(x, other.getX(), tolerance) &&
-                doublesEqual(y, other.getY(), tolerance) &&
-                doublesEqual(z, other.getZ(), tolerance);
-    }
-
-    @Override
     public SimpleMatrix toMatrix() {
         final SimpleMatrix matrix = SimpleMatrix.identity(4);
         matrix.set(0, 3, x);
@@ -33,7 +26,8 @@ final class CartesianDisplacement implements Displacement {
         return Vectors.position(x + addend.getX(), y + addend.getY(), z + addend.getZ());
     }
 
-    private static boolean doublesEqual(final double a, final double b, final double tolerance) {
-        return Math.abs(a - b) < tolerance;
+    @Override
+    public double getMagnitude() {
+        return Math.sqrt(x*x + y*y + z*z);
     }
 }

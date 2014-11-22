@@ -44,11 +44,6 @@ public final class RigidBody implements Entity, Movable {
     }
 
     @Override
-    public SimpleMatrix getTransform() {
-        return toMatrix();
-    }
-
-    @Override
     public SimpleMatrix toMatrix() {
         return pose.toMatrix();
     }

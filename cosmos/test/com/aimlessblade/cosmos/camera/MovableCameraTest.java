@@ -20,7 +20,6 @@ public class MovableCameraTest {
     private static final SimpleMatrix POSE_MATRIX = SimpleMatrix.diag(2, 3);
     private static final SimpleMatrix STATIC_PERSPECTIVE = SimpleMatrix.diag(8, 9);
     private static final Velocity VELOCITY = Vectors.velocity(1, 2, 3);
-    private static final double TOLERANCE = 1e-6;
 
     @Mock
     private Movable pose;

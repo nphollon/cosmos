@@ -1,13 +1,9 @@
 package com.aimlessblade.cosmos.physics;
 
-import org.ejml.simple.SimpleMatrix;
-
-public interface Movable {
+public interface Movable extends ToMatrix {
     void evolve(final double dt);
 
     void impulse(final Velocity velocity);
 
     void angularImpulse(final Velocity angularVelocity);
-
-    SimpleMatrix toMatrix();
 }

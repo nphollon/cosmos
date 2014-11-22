@@ -24,14 +24,14 @@ public class RotationVectorOrientationTest {
     public void isIdenticalShouldBeTrueForExactlyEqualQuaternions() {
         Orientation rotationVectorOrientation1 = cartesian(0, 1, 0);
         Orientation rotationVectorOrientation2 = cartesian(0, 1, 0);
-        Identity.assertOrientationEquality(rotationVectorOrientation1, rotationVectorOrientation2);
+        Identity.assertMatrixEquality(rotationVectorOrientation1, rotationVectorOrientation2);
     }
 
     @Test
     public void isIdenticalShouldBeTrueForQuaternionsWithinTolerance() {
         Orientation rotationVectorOrientation1 = cartesian(-0.000009, 1.000009, 11.999999);
         Orientation rotationVectorOrientation2 = cartesian(0, 1, 12);
-        Identity.assertOrientationEquality(rotationVectorOrientation1, rotationVectorOrientation2);
+        Identity.assertMatrixEquality(rotationVectorOrientation1, rotationVectorOrientation2);
     }
 
     @Test
@@ -41,9 +41,9 @@ public class RotationVectorOrientationTest {
         Orientation badY = cartesian(0, 0.99, 0);
         Orientation badZ = cartesian(0, 1, 0.01);
 
-        Identity.assertOrientationInequality(referenceRotationVectorOrientation, badX);
-        Identity.assertOrientationInequality(referenceRotationVectorOrientation, badY);
-        Identity.assertOrientationInequality(referenceRotationVectorOrientation, badZ);
+        Identity.assertMatrixInequality(referenceRotationVectorOrientation, badX);
+        Identity.assertMatrixInequality(referenceRotationVectorOrientation, badY);
+        Identity.assertMatrixInequality(referenceRotationVectorOrientation, badZ);
     }
 
     @Test
@@ -66,7 +66,7 @@ public class RotationVectorOrientationTest {
         final SimpleMatrix matrixCopy = rotationVectorOrientation.toMatrix();
         matrixCopy.set(0, 0, 10);
 
-        Identity.assertOrientationEquality(rotationVectorOrientation, zero());
+        Identity.assertMatrixEquality(rotationVectorOrientation, zero());
     }
 
     @Test
@@ -76,7 +76,7 @@ public class RotationVectorOrientationTest {
 
         final Orientation finalOrientation = rotationVectorOrientation.rotate(rotation);
 
-        Identity.assertOrientationEquality(finalOrientation, new RotationVectorOrientation(rotation));
+        Identity.assertMatrixEquality(finalOrientation, new RotationVectorOrientation(rotation));
     }
 
     @Test

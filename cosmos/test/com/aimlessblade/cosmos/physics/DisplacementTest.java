@@ -3,43 +3,41 @@ package com.aimlessblade.cosmos.physics;
 import org.ejml.simple.SimpleMatrix;
 import org.junit.Test;
 
+import static com.aimlessblade.cosmos.physics.Identity.assertMatrixEquality;
+import static com.aimlessblade.cosmos.physics.Identity.assertMatrixInequality;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class DisplacementTest {
-    private static final double TOLERANCE = 1e-5;
     private static final Displacement ORIGIN = Vectors.position(0, 0, 0);
 
     @Test
     public void positionsShouldBeIdenticalIfWithinTolerance() {
         Displacement nearOrigin = Vectors.position(0.000001, -0.000001, 0.000009);
-        assertThat(ORIGIN.isIdentical(nearOrigin, TOLERANCE), is(true));
+        assertMatrixEquality(ORIGIN, nearOrigin);
     }
 
     @Test
     public void positionsShouldNotBeIdenticalIfXIsDifferent() {
         Displacement displacement = Vectors.position(0.0001, 0, 0);
-        assertThat(ORIGIN.isIdentical(displacement, TOLERANCE), is(false));
-        assertThat(displacement.isIdentical(ORIGIN, TOLERANCE), is(false));
+        assertMatrixInequality(ORIGIN, displacement);
     }
 
     @Test
     public void positionsShouldNotBeIdenticalIfYIsDifferent() {
         Displacement displacement = Vectors.position(0.0, 0.0001, 0);
-        assertThat(ORIGIN.isIdentical(displacement, TOLERANCE), is(false));
-        assertThat(displacement.isIdentical(ORIGIN, TOLERANCE), is(false));
+        assertMatrixInequality(ORIGIN, displacement);
     }
 
     @Test
     public void positionsShouldNotBeIdenticalIfZIsDifferent() {
         Displacement displacement = Vectors.position(0, 0, 0.0001);
-        assertThat(ORIGIN.isIdentical(displacement, TOLERANCE), is(false));
-        assertThat(displacement.isIdentical(ORIGIN, TOLERANCE), is(false));
+        assertMatrixInequality(ORIGIN, displacement);
     }
 
     @Test
     public void translationMatrixShouldBeIdentityIfNoOffset() {
-        Identity.assertMatrixEquality(ORIGIN.toMatrix(), SimpleMatrix.identity(4));
+        assertMatrixEquality(ORIGIN.toMatrix(), SimpleMatrix.identity(4));
     }
 
     @Test
@@ -51,7 +49,7 @@ public class DisplacementTest {
         expectedMatrix.set(1, 3, 3);
         expectedMatrix.set(2, 3, 5);
 
-        Identity.assertMatrixEquality(displacement.toMatrix(), expectedMatrix);
+        assertMatrixEquality(displacement.toMatrix(), expectedMatrix);
     }
 
     @Test

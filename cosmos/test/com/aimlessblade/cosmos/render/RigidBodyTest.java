@@ -27,7 +27,6 @@ public class RigidBodyTest {
             Vertex.build(17, 18, 19, 20, 21, 22),
             Vertex.build(23, 24, 25, 26, 27, 28 )
     );
-    private static final double TOLERANCE = 1e-5;
 
     @Mock private Movable pose;
 
@@ -42,7 +41,7 @@ public class RigidBodyTest {
     public void geoTransformShouldComeFromPose() {
         when(pose.toMatrix()).thenReturn(MATRIX);
 
-        final SimpleMatrix geoTransform = body.getTransform();
+        final SimpleMatrix geoTransform = body.toMatrix();
 
         assertMatrixEquality(geoTransform, MATRIX);
     }

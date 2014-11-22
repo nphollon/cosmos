@@ -43,9 +43,4 @@ final class Pose implements Movable {
     public SimpleMatrix toMatrix() {
         return displacement.toMatrix().mult(orientation.toMatrix());
     }
-
-    boolean isIdentical(final Pose otherPose, final double tolerance) {
-        return displacement.isIdentical(otherPose.displacement, tolerance) &&
-                orientation.isIdentical(otherPose.orientation, tolerance);
-    }
 }
