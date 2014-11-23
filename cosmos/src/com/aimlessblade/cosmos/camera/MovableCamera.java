@@ -25,12 +25,12 @@ public class MovableCamera implements Camera, Movable {
 
     @Override
     public void impulse(Velocity velocity) {
-        pose.impulse(velocity.negative());
+        pose.impulse(velocity);
     }
 
     @Override
     public void angularImpulse(Velocity angularVelocity) {
-        pose.angularImpulse(angularVelocity.negative());
+        pose.angularImpulse(angularVelocity);
     }
 
     @Override

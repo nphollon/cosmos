@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import static com.aimlessblade.cosmos.physics.Vectors.inversePose;
 import static com.aimlessblade.cosmos.physics.Vectors.pose;
 import static com.aimlessblade.cosmos.render.Bodies.octahedron;
 import static com.aimlessblade.cosmos.render.Bodies.tetrahedron;
@@ -33,7 +34,7 @@ final class ProcessorFactory {
         File fragmentShader = new File("/home/nick/IdeaProjects/cosmos/cosmos/shaders/simple.frag");
 
         final Camera camera = new PerspectiveCamera(1.0, 1, 50.0, 1.5);
-        final MovableCamera movableCamera = new MovableCamera(camera, pose(0, 0, 0, 0, 0, 0));
+        final MovableCamera movableCamera = new MovableCamera(camera, inversePose(0, 0, 0, 0, 0, 0));
 
         final RigidBody tetrahedron = tetrahedron(pose(0, 0, -6, 0, 0, 0));
         final RigidBody octahedron = octahedron(pose(1, 2, -3, 0, 0, 0));

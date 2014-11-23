@@ -52,17 +52,17 @@ public class MovableCameraTest {
     }
 
     @Test
-    public void impulseShouldReverseVelocity() {
+    public void shouldSendImpulseToPose() {
         movableCamera.impulse(VELOCITY);
 
-        verify(pose).impulse(VELOCITY.negative());
+        verify(pose).impulse(VELOCITY);
     }
 
     @Test
-    public void angularImpulseShouldReverseVelocity() {
+    public void shouldSendAngularImpulseToPose() {
         movableCamera.angularImpulse(VELOCITY);
 
-        verify(pose).angularImpulse(VELOCITY.negative());
+        verify(pose).angularImpulse(VELOCITY);
     }
 
     @Test

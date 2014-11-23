@@ -18,6 +18,13 @@ public final class Vectors {
         return new Pose(displacement, orientation);
     }
 
+    public static Movable inversePose(final double x, final double y, final double z,
+                                      final double rx, final double ry, final double rz) {
+        final Displacement displacement = position(x, y, z);
+        final Orientation orientation = rotation(rx, ry, rz);
+        return new InversePose(displacement, orientation);
+    }
+
     public static Pose pose(final double x, final double y, final double z,
                             final double rx, final double ry, final double rz) {
         final Displacement displacement = position(x, y, z);

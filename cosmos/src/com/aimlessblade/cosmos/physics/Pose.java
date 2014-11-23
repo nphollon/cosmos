@@ -30,17 +30,18 @@ final class Pose implements Movable {
     }
 
     @Override
-    public void impulse(final Velocity velocity) {
-        this.velocity = this.velocity.plus(velocity);
+    public void impulse(final Velocity velocityChange) {
+        this.velocity = this.velocity.plus(velocityChange);
     }
 
     @Override
-    public void angularImpulse(Velocity angularVelocity) {
-        this.angularVelocity = this.angularVelocity.plus(angularVelocity);
+    public void angularImpulse(Velocity angularVelocityChange) {
+        this.angularVelocity = this.angularVelocity.plus(angularVelocityChange);
     }
 
     @Override
     public SimpleMatrix toMatrix() {
         return displacement.toMatrix().mult(orientation.toMatrix());
     }
+
 }

@@ -1,31 +1,26 @@
 package com.aimlessblade.cosmos.physics;
 
-import org.ejml.simple.SimpleMatrix;
 import org.junit.Before;
 import org.junit.Test;
 
 import static com.aimlessblade.cosmos.physics.Identity.assertMatrixEquality;
 
-public class PoseTest {
+public class InversePoseTest {
     private static final Displacement DEFAULT_DISPLACEMENT = Vectors.position(0, 0, 0);
-    private static final Orientation DEFAULT_ORIENTATION = new QuaternionOrientation(DEFAULT_DISPLACEMENT);
-
-    private Pose testPose;
+    private static final Orientation DEFAULT_ORIENTATION = Vectors.rotation(0, 0, 0);
+    private Movable testPose;
 
     @Before
     public void setup() {
-        testPose = Vectors.pose(DEFAULT_DISPLACEMENT, DEFAULT_ORIENTATION);
+        testPose = new InversePose(DEFAULT_DISPLACEMENT, DEFAULT_ORIENTATION);
     }
 
     @Test
-    public void matrixShouldBeDisplacementTimesRotation() {
-        final Displacement displacement = Vectors.position(1, 2, 3);
-        final Orientation orientation = Vectors.rotation(90, 0, 0);
-
-        final Pose pose = Vectors.pose(1, 2, 3, 90, 0, 0);
-
-        final SimpleMatrix expectedMatrix = displacement.toMatrix().mult(orientation.toMatrix());
-        assertMatrixEquality(pose.toMatrix(), expectedMatrix);
+    public void toMatrixShouldMultiplyOrientationByDisplacement() {
+        Displacement displacement = Vectors.position(5, 4, 3);
+        Orientation orientation = Vectors.rotation(8, 9, 10);
+        Movable pose = new InversePose(displacement, orientation);
+        assertMatrixEquality(pose.toMatrix(), orientation.toMatrix().mult(displacement.toMatrix()));
     }
 
     @Test
@@ -38,11 +33,11 @@ public class PoseTest {
     }
 
     @Test
-    public void impulseShouldSetVelocity() {
+    public void impulseShouldSetNegativeVelocity() {
         testPose.impulse(Vectors.velocity(1, 2, 3));
         testPose.evolve(1);
 
-        final Pose expectedFinalPose = Vectors.pose(Vectors.position(1, 2, 3), DEFAULT_ORIENTATION);
+        final Pose expectedFinalPose = Vectors.pose(Vectors.position(-1, -2, -3), DEFAULT_ORIENTATION);
 
         assertMatrixEquality(testPose, expectedFinalPose);
     }
@@ -62,17 +57,17 @@ public class PoseTest {
         testPose.evolve(1);
         testPose.evolve(1);
 
-        final Pose expectedFinalPose = Vectors.pose(2, 8, 18, 0, 0, 0);
+        final Pose expectedFinalPose = Vectors.pose(-2, -8, -18, 0, 0, 0);
 
         assertMatrixEquality(testPose, expectedFinalPose);
     }
-
+    
     @Test
     public void displacementShouldChangeByVelocityTimesTime() {
         testPose.impulse(Vectors.velocity(2, 3, 7));
         testPose.evolve(0.5);
 
-        final Pose expectedFinalPose = Vectors.pose(1, 1.5, 3.5, 0, 0, 0);
+        final Pose expectedFinalPose = Vectors.pose(-1, -1.5, -3.5, 0, 0, 0);
 
         assertMatrixEquality(testPose, expectedFinalPose);
     }
@@ -94,7 +89,7 @@ public class PoseTest {
         testPose.angularImpulse(angularVelocity);
         testPose.evolve(2);
 
-        final Orientation expectedOrientation = new QuaternionOrientation(angularVelocity.overTime(2));
+        final Orientation expectedOrientation = new QuaternionOrientation(angularVelocity.negative().overTime(2));
         final Pose expectedFinalPose = Vectors.pose(DEFAULT_DISPLACEMENT, expectedOrientation);
 
         assertMatrixEquality(testPose, expectedFinalPose);
@@ -107,7 +102,7 @@ public class PoseTest {
         testPose.angularImpulse(angularVelocity);
         testPose.evolve(1);
 
-        final Orientation expectedOrientation = new QuaternionOrientation(angularVelocity.overTime(2));
+        final Orientation expectedOrientation = new QuaternionOrientation(angularVelocity.negative().overTime(2));
         final Pose expectedFinalPose = Vectors.pose(DEFAULT_DISPLACEMENT, expectedOrientation);
 
         assertMatrixEquality(testPose, expectedFinalPose);
