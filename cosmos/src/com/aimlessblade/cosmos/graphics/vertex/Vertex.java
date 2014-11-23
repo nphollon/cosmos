@@ -1,4 +1,4 @@
-package com.aimlessblade.cosmos.render;
+package com.aimlessblade.cosmos.graphics.vertex;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
