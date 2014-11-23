@@ -4,36 +4,11 @@ import org.ejml.simple.SimpleMatrix;
 import org.junit.Test;
 
 import static com.aimlessblade.cosmos.physics.Identity.assertMatrixEquality;
-import static com.aimlessblade.cosmos.physics.Identity.assertMatrixInequality;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class DisplacementTest {
     private static final Displacement ORIGIN = Vectors.position(0, 0, 0);
-
-    @Test
-    public void positionsShouldBeIdenticalIfWithinTolerance() {
-        Displacement nearOrigin = Vectors.position(0.000001, -0.000001, 0.000009);
-        assertMatrixEquality(ORIGIN, nearOrigin);
-    }
-
-    @Test
-    public void positionsShouldNotBeIdenticalIfXIsDifferent() {
-        Displacement displacement = Vectors.position(0.0001, 0, 0);
-        assertMatrixInequality(ORIGIN, displacement);
-    }
-
-    @Test
-    public void positionsShouldNotBeIdenticalIfYIsDifferent() {
-        Displacement displacement = Vectors.position(0.0, 0.0001, 0);
-        assertMatrixInequality(ORIGIN, displacement);
-    }
-
-    @Test
-    public void positionsShouldNotBeIdenticalIfZIsDifferent() {
-        Displacement displacement = Vectors.position(0, 0, 0.0001);
-        assertMatrixInequality(ORIGIN, displacement);
-    }
 
     @Test
     public void translationMatrixShouldBeIdentityIfNoOffset() {

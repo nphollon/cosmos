@@ -3,7 +3,7 @@ package com.aimlessblade.cosmos.physics;
 public final class Vectors {
 
     public static Orientation rotation(final double rx, final double ry, final double rz) {
-        return new RotationVectorOrientation(position(rx, ry, rz));
+        return new QuaternionOrientation(position(rx, ry, rz));
     }
 
     public static Displacement position(final double x, final double y, final double z) {
