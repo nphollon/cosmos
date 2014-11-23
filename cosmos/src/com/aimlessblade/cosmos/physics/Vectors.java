@@ -22,7 +22,7 @@ public final class Vectors {
                                       final double rx, final double ry, final double rz) {
         final Displacement displacement = position(x, y, z);
         final Orientation orientation = rotation(rx, ry, rz);
-        return new InversePose(displacement, orientation);
+        return new CameraPose(displacement, orientation);
     }
 
     public static Pose pose(final double x, final double y, final double z,

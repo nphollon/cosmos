@@ -2,13 +2,13 @@ package com.aimlessblade.cosmos.physics;
 
 import org.ejml.simple.SimpleMatrix;
 
-public class InversePose implements Movable {
+public class CameraPose implements Movable {
     private Displacement displacement;
     private Orientation orientation;
     private Velocity velocity;
     private Velocity angularVelocity;
 
-    public InversePose(Displacement displacement, Orientation orientation) {
+    public CameraPose(Displacement displacement, Orientation orientation) {
         this.displacement = displacement;
         this.orientation = orientation;
 

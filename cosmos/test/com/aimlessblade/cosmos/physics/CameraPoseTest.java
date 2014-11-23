@@ -5,21 +5,21 @@ import org.junit.Test;
 
 import static com.aimlessblade.cosmos.physics.Identity.assertMatrixEquality;
 
-public class InversePoseTest {
+public class CameraPoseTest {
     private static final Displacement DEFAULT_DISPLACEMENT = Vectors.position(0, 0, 0);
     private static final Orientation DEFAULT_ORIENTATION = Vectors.rotation(0, 0, 0);
     private Movable testPose;
 
     @Before
     public void setup() {
-        testPose = new InversePose(DEFAULT_DISPLACEMENT, DEFAULT_ORIENTATION);
+        testPose = new CameraPose(DEFAULT_DISPLACEMENT, DEFAULT_ORIENTATION);
     }
 
     @Test
     public void toMatrixShouldMultiplyOrientationByDisplacement() {
         Displacement displacement = Vectors.position(5, 4, 3);
         Orientation orientation = Vectors.rotation(8, 9, 10);
-        Movable pose = new InversePose(displacement, orientation);
+        Movable pose = new CameraPose(displacement, orientation);
         assertMatrixEquality(pose.toMatrix(), orientation.toMatrix().mult(displacement.toMatrix()));
     }
 
