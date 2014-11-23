@@ -21,7 +21,7 @@ public final class Bodies {
                 0, 3, 1,
                 1, 3, 2
         };
-        return new RigidBody(pose, vertexList, drawOrder);
+        return new RigidBody(pose, new VertexListEntity(vertexList, drawOrder));
     }
 
     public static RigidBody octahedron(final Movable pose) {
@@ -43,6 +43,6 @@ public final class Bodies {
                 1, 3, 4,
                 1, 4, 2
         };
-        return new RigidBody(pose, vertexList, drawOrder);
+        return new RigidBody(pose, new VertexListEntity(vertexList, drawOrder));
     }
 }

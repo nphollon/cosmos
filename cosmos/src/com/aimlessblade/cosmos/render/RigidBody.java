@@ -4,43 +4,28 @@ import com.aimlessblade.cosmos.physics.Movable;
 import com.aimlessblade.cosmos.physics.Velocity;
 import org.ejml.simple.SimpleMatrix;
 
-import java.util.List;
-
 public final class RigidBody implements Entity, Movable {
     private final Movable pose;
-    private final List<Vertex> vertexList;
-    private final int[] drawOrder;
+    private final Entity vertexEntity;
 
-    public RigidBody(final Movable pose, final List<Vertex> vertexList, final int[] drawOrder) {
+    public RigidBody(final Movable pose, final Entity vertexEntity) {
         this.pose = pose;
-        this.vertexList = vertexList;
-        this.drawOrder = drawOrder;
+        this.vertexEntity = vertexEntity;
     }
 
     @Override
     public double[] getVertexData() {
-        final int size = getVertexCount() * Vertex.getLength();
-        final double[] data = new double[size];
-
-        int i = 0;
-        for (final Vertex vertex : vertexList) {
-            for (final Double d : vertex.data()) {
-                data[i] = d;
-                i++;
-            }
-        }
-
-        return data;
+        return vertexEntity.getVertexData();
     }
 
     @Override
     public int getVertexCount() {
-        return vertexList.size();
+        return vertexEntity.getVertexCount();
     }
 
     @Override
     public int[] getElementData() {
-        return drawOrder;
+        return vertexEntity.getElementData();
     }
 
     @Override
