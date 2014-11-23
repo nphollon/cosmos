@@ -1,4 +1,4 @@
-package com.aimlessblade.cosmos.render;
+package com.aimlessblade.cosmos.graphics;
 
 import com.aimlessblade.cosmos.physics.Movable;
 import com.aimlessblade.cosmos.physics.Vectors;

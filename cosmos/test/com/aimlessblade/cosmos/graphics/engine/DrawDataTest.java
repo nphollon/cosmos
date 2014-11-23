@@ -1,7 +1,8 @@
-package com.aimlessblade.cosmos.render;
+package com.aimlessblade.cosmos.graphics.engine;
 
-import com.aimlessblade.cosmos.camera.Camera;
-import com.aimlessblade.cosmos.render.DrawData.Target;
+import com.aimlessblade.cosmos.graphics.Entity;
+import com.aimlessblade.cosmos.graphics.camera.Camera;
+import com.aimlessblade.cosmos.graphics.engine.DrawData.Target;
 import org.ejml.simple.SimpleMatrix;
 import org.junit.Before;
 import org.junit.Test;

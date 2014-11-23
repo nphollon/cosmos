@@ -1,4 +1,4 @@
-package com.aimlessblade.cosmos.camera;
+package com.aimlessblade.cosmos.graphics.camera;
 
 import org.junit.Test;
 

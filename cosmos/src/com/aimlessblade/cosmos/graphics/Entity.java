@@ -1,9 +1,8 @@
-package com.aimlessblade.cosmos.render;
+package com.aimlessblade.cosmos.graphics;
 
 import com.aimlessblade.cosmos.physics.ToMatrix;
-import org.ejml.simple.SimpleMatrix;
 
-interface Entity extends ToMatrix {
+public interface Entity extends ToMatrix {
 
     double[] getVertexData();
 

@@ -17,10 +17,5 @@ public final class Identity {
         assertMatrixEquality(actual.toMatrix(), expected.toMatrix());
     }
 
-    public static void assertMatrixInequality(ToMatrix actual, ToMatrix expected) {
-        String error = "Actual:\n" + actual + "Expected not to equal:\n" + expected;
-        assertThat(error, actual.toMatrix().isIdentical(expected.toMatrix(), TOLERANCE), is(false));
-    }
-
     private Identity() {}
 }

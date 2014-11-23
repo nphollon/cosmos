@@ -1,7 +1,6 @@
 package com.aimlessblade.cosmos.physics;
 
 import org.ejml.simple.SimpleMatrix;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.aimlessblade.cosmos.physics.Identity.assertMatrixEquality;

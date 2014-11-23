@@ -1,5 +1,6 @@
-package com.aimlessblade.cosmos.render;
+package com.aimlessblade.cosmos.graphics.vertex;
 
+import com.aimlessblade.cosmos.graphics.Entity;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,22 +11,20 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class VertexListEntityTest {
-    private static final int[] DRAW_ORDER = new int[]{12, 13, 14, 15, 16};
-    private static final double[] VERTEX_DATA = new double[]{
-            17, 18, 19, 20, 21, 22,
-            23, 24, 25, 26, 27, 28
-    };
+    private static final int[] DRAW_ORDER = new int[]{1, 0};
+    private static final double[] VERTEX_DATA = new double[]{17, 18, 23, 24};
 
     private Entity entity;
     private List<Vertex> vertices;
 
     @Before
     public void setup() {
+        VertexFactory factory = new VertexFactory(new Attribute("dummy", 2));
         vertices = new ArrayList<>();
-        vertices.add(Vertex.build(17, 18, 19, 20, 21, 22));
-        vertices.add(Vertex.build(23, 24, 25, 26, 27, 28));
+        vertices.add(factory.build(17, 18));
+        vertices.add(factory.build(23, 24));
 
-        entity = new VertexListEntity(vertices, DRAW_ORDER);
+        entity = new VertexListEntity(vertices, DRAW_ORDER, factory.getLength());
     }
 
     @Test
