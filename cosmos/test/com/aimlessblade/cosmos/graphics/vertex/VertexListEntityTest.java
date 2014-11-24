@@ -20,10 +20,10 @@ public class VertexListEntityTest {
 
     @Before
     public void setup() {
-        VertexFactory factory = new VertexFactory(new Attribute("dummy", 2));
+        VertexFactory factory = new VertexFactory(new AttributeInfo("dummy", 2));
         vertices = new ArrayList<>();
-        vertices.add(factory.build(17, 18));
-        vertices.add(factory.build(23, 24));
+        vertices.add(factory.build(Arrays.asList(17., 18.)));
+        vertices.add(factory.build(Arrays.asList(23., 24.)));
 
         entity = new VertexListEntity(vertices, DRAW_ORDER);
     }

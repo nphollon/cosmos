@@ -81,8 +81,10 @@ final class DrawData {
 
     private FloatBuffer bufferMatrix(final SimpleMatrix matrix) {
         final double[] flatMatrixData = matrix.getMatrix().getData();
+
         final FloatBuffer buffer = BufferUtils.createFloatBuffer(flatMatrixData.length);
         addToBuffer(flatMatrixData, buffer);
+
         buffer.flip();
         return buffer;
     }

@@ -9,7 +9,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 @AllArgsConstructor
-public class Attribute {
+public class AttributeInfo {
     private final String name;
     private final int length;
 }

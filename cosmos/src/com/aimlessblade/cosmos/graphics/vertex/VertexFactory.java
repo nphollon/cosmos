@@ -1,9 +1,6 @@
 package com.aimlessblade.cosmos.graphics.vertex;
 
-import org.apache.commons.lang.ArrayUtils;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public final class VertexFactory {
@@ -12,24 +9,31 @@ public final class VertexFactory {
     private final List<LoadedAttribute> loadedAttributes;
     private final int length;
 
-    public VertexFactory(final Attribute... attributes) {
+    public VertexFactory(final AttributeInfo... attributes) {
         loadedAttributes = new ArrayList<>(attributes.length);
         length = loadAttributesAndGetLength(attributes);
     }
 
-    private int loadAttributesAndGetLength(final Attribute[] attributes) {
-        int totalAttributeLength = 0;
-        for (final Attribute a : attributes) {
-            final int offset = totalAttributeLength * COMPONENT_SIZE;
-            loadedAttributes.add(new LoadedAttribute(a.getName(), a.getLength(), offset));
-            totalAttributeLength += a.getLength();
+    private int loadAttributesAndGetLength(final AttributeInfo[] attributes) {
+        int componentCount = 0;
+
+        for (final AttributeInfo attributeInfo : attributes) {
+            load(attributeInfo, componentCount);
+            componentCount += attributeInfo.getLength();
         }
-        return totalAttributeLength;
+
+        return componentCount;
     }
 
-    public Vertex build(final double... components) {
-        validateComponentNumber(components.length);
-        return new FactoryVertex(Arrays.asList(ArrayUtils.toObject(components)));
+    private void load(final AttributeInfo attributeInfo, final int componentOffset) {
+        final int byteOffset = componentOffset * COMPONENT_SIZE;
+        final LoadedAttribute loadedAttribute = new LoadedAttribute(attributeInfo.getName(), attributeInfo.getLength(), byteOffset);
+        loadedAttributes.add(loadedAttribute);
+    }
+
+    public Vertex build(final List<Double> components) {
+        validateComponentNumber(components.size());
+        return new FactoryVertex(components);
     }
 
     private void validateComponentNumber(final int componentCount) {

@@ -11,14 +11,14 @@ import static org.junit.Assert.assertThat;
 public class VertexFactoryTest {
     @Test
     public void factoryStrideShouldBeLengthTimeSizeOfFloat() {
-        VertexFactory factory = new VertexFactory(new Attribute("color", 3), new Attribute("position", 3));
+        VertexFactory factory = new VertexFactory(new AttributeInfo("color", 3), new AttributeInfo("position", 3));
 
         assertThat(factory.getStride(), is(6 * Float.BYTES));
     }
 
     @Test
     public void firstFactoryAttributeShouldHaveOffsetZero() {
-        VertexFactory factory = new VertexFactory(new Attribute("color", 3));
+        VertexFactory factory = new VertexFactory(new AttributeInfo("color", 3));
 
         List<LoadedAttribute> attributes = factory.getAttributes();
 
@@ -28,7 +28,7 @@ public class VertexFactoryTest {
 
     @Test
     public void factoryAttributeOffsetShouldIncreaseBySizeOfPreviousAttribute() {
-        VertexFactory factory = new VertexFactory(new Attribute("color", 3), new Attribute("position", 3));
+        VertexFactory factory = new VertexFactory(new AttributeInfo("color", 3), new AttributeInfo("position", 3));
 
         List<LoadedAttribute> attributes = factory.getAttributes();
 
@@ -39,19 +39,23 @@ public class VertexFactoryTest {
 
     @Test
     public void factoryWithLengthThreeShouldAcceptThreeVertexComponents() {
-        VertexFactory factory = new VertexFactory(new Attribute("color", 3));
-        Vertex vertex = factory.build(11, 12, 13);
+        VertexFactory factory = new VertexFactory(new AttributeInfo("color", 3));
+        final List<Double> vertexData = Arrays.asList(11., 12., 13.);
 
-        assertThat(vertex.data(), is(Arrays.asList(11., 12., 13. )));
+        Vertex vertex = factory.build(vertexData);
+
+        assertThat(vertex.data(), is(vertexData));
     }
 
     @Test(expected = VertexDataException.class)
     public void factoryShouldNotAcceptTooManyComponents() {
-        new VertexFactory(new Attribute("temperature", 1)).build(5, 5.3);
+        final VertexFactory factory = new VertexFactory(new AttributeInfo("temperature", 1));
+        factory.build(Arrays.asList(0.1, 0.2));
     }
 
     @Test(expected = VertexDataException.class)
     public void factoryShouldNotAcceptTooFewComponents() {
-        new VertexFactory(new Attribute("smell", 5)).build(5, 5.3, 9, 1);
+        final VertexFactory factory = new VertexFactory(new AttributeInfo("smell", 5));
+        factory.build(Arrays.asList(5.3));
     }
 }
