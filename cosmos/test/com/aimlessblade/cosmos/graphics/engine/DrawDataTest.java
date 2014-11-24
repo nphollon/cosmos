@@ -16,9 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.IntConsumer;
 
-import static java.util.Arrays.stream;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
@@ -98,12 +96,12 @@ public class DrawDataTest {
     public void elementBufferShouldBeEmptyIfNoEntities() {
         final DrawData drawData = new DrawData(camera, entities);
         final IntBuffer elementBuffer = drawData.getElementBuffer();
-        assertBufferContents(elementBuffer, new int[0]);
+        assertBufferContents(elementBuffer, new ArrayList<>());
     }
 
     @Test
     public void elementBufferShouldContainDataFromEntity() {
-        final int[] expectedElementList = new int[]{1, 2};
+        final List<Integer> expectedElementList = Arrays.asList(1, 2);
         addEntityWithElementData(expectedElementList, 2);
 
         final DrawData drawData = new DrawData(camera, entities);
@@ -114,10 +112,10 @@ public class DrawDataTest {
 
     @Test
     public void elementBufferShouldOffsetIndexesByCumulativeVertexCount() {
-        addEntityWithElementData(new int[]{1}, 1);
-        addEntityWithElementData(new int[]{2, 1}, 2);
+        addEntityWithElementData(Arrays.asList(1), 1);
+        addEntityWithElementData(Arrays.asList(2, 1), 2);
 
-        final int[] expectedContents = new int[]{1, 3, 2};
+        final List<Integer> expectedContents = Arrays.asList(1, 3, 2);
 
         final DrawData drawData = new DrawData(camera, entities);
         final IntBuffer elementBuffer = drawData.getElementBuffer();
@@ -127,10 +125,10 @@ public class DrawDataTest {
 
     @Test
     public void elementBufferShouldOffsetIndexesByCumulativeVertexCount2() {
-        addEntityWithElementData(new int[]{1, 2}, 2);
-        addEntityWithElementData(new int[]{2, 1}, 2);
+        addEntityWithElementData(Arrays.asList(1, 2), 2);
+        addEntityWithElementData(Arrays.asList(2, 1), 2);
 
-        final int[] expectedContents = new int[]{1, 2, 4, 3};
+        final List<Integer> expectedContents = Arrays.asList(1, 2, 4, 3);
 
         final DrawData drawData = new DrawData(camera, entities);
         final IntBuffer elementBuffer = drawData.getElementBuffer();
@@ -140,10 +138,10 @@ public class DrawDataTest {
 
     @Test
     public void elementBufferShouldOffsetIndexesByCumulativeVertexCount3() {
-        addEntityWithElementData(new int[]{1, 2, 1}, 2);
-        addEntityWithElementData(new int[]{2, 1}, 2);
+        addEntityWithElementData(Arrays.asList(1, 2, 1), 2);
+        addEntityWithElementData(Arrays.asList(2, 1), 2);
 
-        final int[] expectedContents = new int[]{1, 2, 1, 4, 3};
+        final List<Integer> expectedContents = Arrays.asList(1, 2, 1, 4, 3);
 
         final DrawData drawData = new DrawData(camera, entities);
         final IntBuffer elementBuffer = drawData.getElementBuffer();
@@ -153,15 +151,15 @@ public class DrawDataTest {
 
     @Test
     public void elementBufferShouldOffsetIndexesByCumulativeVertexCount4() {
-        addEntityWithElementData(new int[]{1, 2, 1}, 2);
-        addEntityWithElementData(new int[]{1, 4, 3, 2, 3, 1}, 4);
-        addEntityWithElementData(new int[]{2, 1}, 2);
+        addEntityWithElementData(Arrays.asList(1, 2, 1), 2);
+        addEntityWithElementData(Arrays.asList(1, 4, 3, 2, 3, 1), 4);
+        addEntityWithElementData(Arrays.asList(2, 1), 2);
 
-        final int[] expectedContents = new int[]{
+        final List<Integer> expectedContents = Arrays.asList(
                 1, 2, 1,
                 3, 6, 5, 4, 5, 3,
                 8, 7
-        };
+        );
 
 
         final DrawData drawData = new DrawData(camera, entities);
@@ -178,7 +176,7 @@ public class DrawDataTest {
 
     @Test
     public void targetShouldHaveElementCountForEntity() {
-        addEntityWithElementData(new int[]{1, 2, 1}, 2);
+        addEntityWithElementData(Arrays.asList(1, 2, 1), 2);
 
         final List<Target> targets = new DrawData(camera, entities).getTargets();
         assertThat(targets, hasSize(1));
@@ -189,8 +187,8 @@ public class DrawDataTest {
 
     @Test
     public void targetOffsetShouldBeCumulativeElementCount() {
-        addEntityWithElementData(new int[]{1, 2, 1}, 2);
-        addEntityWithElementData(new int[]{2, 1}, 2);
+        addEntityWithElementData(Arrays.asList(1, 2, 1), 2);
+        addEntityWithElementData(Arrays.asList(2, 1), 2);
 
         final List<Target> targets = new DrawData(camera, entities).getTargets();
 
@@ -204,7 +202,7 @@ public class DrawDataTest {
     @Test
     public void targetGeoTransformShouldContainPoseMatrixData() {
         final Entity entity = mock(Entity.class);
-        when(entity.getElementData()).thenReturn(new int[0]);
+        when(entity.getElementData()).thenReturn(new ArrayList<>());
         when(entity.toMatrix()).thenReturn(SimpleMatrix.identity(4));
         entities.add(entity);
 
@@ -217,7 +215,7 @@ public class DrawDataTest {
     @Test
     public void targetListShouldBeCached() {
         final Entity entity = mock(Entity.class);
-        when(entity.getElementData()).thenReturn(new int[0]);
+        when(entity.getElementData()).thenReturn(new ArrayList<>());
         entities.add(entity);
 
         final DrawData drawData = new DrawData(camera, entities);
@@ -227,7 +225,7 @@ public class DrawDataTest {
         assertThat(firstTargetList, sameInstance(secondTargetList));
     }
 
-    private void addEntityWithElementData(final int[] data, final int vertexCount) {
+    private void addEntityWithElementData(final List<Integer> data, final int vertexCount) {
         final Entity entity = mock(Entity.class);
         when(entity.getElementData()).thenReturn(data);
         when(entity.getVertexCount()).thenReturn(vertexCount);
@@ -240,21 +238,21 @@ public class DrawDataTest {
         entities.add(entity);
     }
 
-    public static void assertBufferContents(final IntBuffer buffer, final int[] expectedData) {
-        assertThat(buffer.limit(), is(expectedData.length));
-        stream(expectedData).forEach(checkNextBufferEntry(buffer));
+    private static void assertBufferContents(final IntBuffer buffer, final List<Integer> expectedData) {
+        assertThat(buffer.limit(), is(expectedData.size()));
+        expectedData.stream().forEach(checkNextBufferEntry(buffer));
     }
 
-    public static Consumer<Double> checkNextBufferEntry(final FloatBuffer buffer, final double tolerance) {
-        return d -> assertThat((double) buffer.get(), closeTo(d, tolerance));
+    private static Consumer<Double> checkNextBufferEntry(final FloatBuffer buffer) {
+        return d -> assertThat((double) buffer.get(), closeTo(d, TOLERANCE));
     }
 
-    private static IntConsumer checkNextBufferEntry(final IntBuffer buffer) {
+    private static Consumer<Integer> checkNextBufferEntry(final IntBuffer buffer) {
         return i -> assertThat(buffer.get(), is(i));
     }
 
-    public static void assertBufferContents(final FloatBuffer buffer, final List<Double> expectedData) {
+    private static void assertBufferContents(final FloatBuffer buffer, final List<Double> expectedData) {
         assertThat(buffer.limit(), is(expectedData.size()));
-        expectedData.stream().forEach(checkNextBufferEntry(buffer, TOLERANCE));
+        expectedData.stream().forEach(checkNextBufferEntry(buffer));
     }
 }

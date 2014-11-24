@@ -12,7 +12,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class VertexListEntityTest {
-    private static final int[] DRAW_ORDER = new int[]{1, 0};
+    private static final List<Integer> DRAW_ORDER = Arrays.asList(1, 0);
     private static final List<Double> VERTEX_DATA = Arrays.asList(17., 18., 23., 24.);
 
     private Entity entity;

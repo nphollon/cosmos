@@ -26,12 +26,12 @@ public final class Bodies {
                 vertexFactory.build(1, -1, -1, 0, 0, 1),
                 vertexFactory.build(-1, -1, -1, 1, 1, 1)
         );
-        final int[] drawOrder = new int[] {
+        final List<Integer> drawOrder = Arrays.asList(
                 0, 1, 2,
                 0, 2, 3,
                 0, 3, 1,
                 1, 3, 2
-        };
+        );
         return new RigidBody(pose, new VertexListEntity(vertexList, drawOrder));
     }
 
@@ -44,7 +44,7 @@ public final class Bodies {
                 vertexFactory.build(1, 0, 0, 1, 0, 1),
                 vertexFactory.build(-1, 0, 0, 0, 1, 1)
         );
-        final int[] drawOrder = new int[] {
+        final List<Integer> drawOrder = Arrays.asList(
                 0, 2, 4,
                 0, 4, 3,
                 0, 3, 5,
@@ -53,7 +53,7 @@ public final class Bodies {
                 1, 5, 3,
                 1, 3, 4,
                 1, 4, 2
-        };
+        );
         return new RigidBody(pose, new VertexListEntity(vertexList, drawOrder));
     }
 }

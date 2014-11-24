@@ -26,7 +26,7 @@ public final class RigidBody implements Entity, Movable {
     }
 
     @Override
-    public int[] getElementData() {
+    public List<Integer> getElementData() {
         return vertexEntity.getElementData();
     }
 

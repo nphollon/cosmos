@@ -45,14 +45,14 @@ final class DrawData {
     }
 
     IntBuffer getElementBuffer() {
-        final int elementLength = streamElementData().mapToInt(e -> e.length).sum();
+        final int elementLength = streamElementData().mapToInt(List::size).sum();
 
         final IntBuffer buffer = BufferUtils.createIntBuffer(elementLength);
 
         int entityCount = 0;
         for (Entity entity : entities) {
             final int offset = entityCount;
-            stream(entity.getElementData()).map(e -> e + offset).forEach(buffer::put);
+            entity.getElementData().stream().map(e -> e + offset).forEach(buffer::put);
             entityCount += entity.getVertexCount();
         }
 
@@ -75,7 +75,7 @@ final class DrawData {
         return entities.stream().map(Entity::getVertexData);
     }
 
-    private Stream<int[]> streamElementData() {
+    private Stream<List<Integer>> streamElementData() {
         return entities.stream().map(Entity::getElementData);
     }
 
@@ -92,7 +92,7 @@ final class DrawData {
     }
 
     private void addToBuffer(final List<Double> data, final FloatBuffer buffer) {
-        data.stream().forEach(d -> buffer.put(d.floatValue()));
+        data.stream().map(Double::floatValue).forEach(buffer::put);
     }
 
     @AllArgsConstructor
@@ -107,7 +107,7 @@ final class DrawData {
         }
 
         int getElementCount() {
-            return entity.getElementData().length;
+            return entity.getElementData().size();
         }
     }
 }

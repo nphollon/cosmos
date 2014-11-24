@@ -10,5 +10,5 @@ public interface Entity extends ToMatrix {
 
     int getVertexCount();
 
-    int[] getElementData();
+    List<Integer> getElementData();
 }

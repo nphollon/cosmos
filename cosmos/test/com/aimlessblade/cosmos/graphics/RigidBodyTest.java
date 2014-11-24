@@ -69,7 +69,7 @@ public class RigidBodyTest {
 
     @Test
     public void elementDataShouldComeFromDrawOrder() {
-        final int[] drawOrder = new int[]{12, 13, 14, 15, 16};
+        final List<Integer> drawOrder = Arrays.asList(12, 13, 14, 15, 16);
         when(entity.getElementData()).thenReturn(drawOrder);
 
         assertThat(body.getElementData(), is(drawOrder));
