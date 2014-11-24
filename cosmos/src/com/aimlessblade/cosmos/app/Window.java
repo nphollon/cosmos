@@ -1,5 +1,6 @@
 package com.aimlessblade.cosmos.app;
 
+import com.aimlessblade.cosmos.processor.Processor;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;

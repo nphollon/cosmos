@@ -1,6 +1,6 @@
 package com.aimlessblade.cosmos.physics;
 
-import com.aimlessblade.cosmos.app.Processor;
+import com.aimlessblade.cosmos.processor.Processor;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.joda.time.DateTimeUtils;

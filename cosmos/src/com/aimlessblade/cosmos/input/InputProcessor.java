@@ -1,6 +1,6 @@
 package com.aimlessblade.cosmos.input;
 
-import com.aimlessblade.cosmos.app.Processor;
+import com.aimlessblade.cosmos.processor.Processor;
 import com.aimlessblade.cosmos.physics.Movable;
 import lombok.AccessLevel;
 import lombok.Getter;

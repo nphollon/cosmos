@@ -1,4 +1,4 @@
-package com.aimlessblade.cosmos.app;
+package com.aimlessblade.cosmos.processor;
 
 public interface Processor {
     void run();

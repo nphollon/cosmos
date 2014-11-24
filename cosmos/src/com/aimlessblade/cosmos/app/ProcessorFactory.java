@@ -12,6 +12,8 @@ import com.aimlessblade.cosmos.input.KeyboardEvent;
 import com.aimlessblade.cosmos.input.Keymap;
 import com.aimlessblade.cosmos.physics.MotionProcessor;
 import com.aimlessblade.cosmos.physics.Movable;
+import com.aimlessblade.cosmos.processor.CompositeProcessor;
+import com.aimlessblade.cosmos.processor.Processor;
 import lombok.AllArgsConstructor;
 
 import java.io.File;

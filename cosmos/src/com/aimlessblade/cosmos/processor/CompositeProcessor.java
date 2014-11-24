@@ -1,11 +1,11 @@
-package com.aimlessblade.cosmos.app;
+package com.aimlessblade.cosmos.processor;
 
 import lombok.AllArgsConstructor;
 
 import java.util.List;
 
 @AllArgsConstructor
-final class CompositeProcessor implements Processor {
+public final class CompositeProcessor implements Processor {
     private final List<Processor> stages;
 
     @Override
