@@ -10,20 +10,6 @@ import static org.junit.Assert.assertThat;
 
 public class VertexFactoryTest {
     @Test
-    public void factoryLengthShouldBeLengthOfOnlyAttribute() {
-        VertexFactory factory = new VertexFactory(new Attribute("color", 3));
-
-        assertThat(factory.getLength(), is(3));
-    }
-
-    @Test
-    public void factoryLengthShouldBeSumOfAttributeLengths() {
-        VertexFactory factory = new VertexFactory(new Attribute("color", 3), new Attribute("height", 1));
-
-        assertThat(factory.getLength(), is(4));
-    }
-
-    @Test
     public void factoryStrideShouldBeLengthTimeSizeOfFloat() {
         VertexFactory factory = new VertexFactory(new Attribute("color", 3), new Attribute("position", 3));
 
@@ -56,7 +42,7 @@ public class VertexFactoryTest {
         VertexFactory factory = new VertexFactory(new Attribute("color", 3));
         Vertex vertex = factory.build(11, 12, 13);
 
-        assertThat(vertex.data(), is(new double[] { 11, 12, 13 }));
+        assertThat(vertex.data(), is(Arrays.asList(11., 12., 13. )));
     }
 
     @Test(expected = VertexDataException.class)

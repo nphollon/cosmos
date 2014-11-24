@@ -17,7 +17,6 @@ import java.util.stream.Stream;
 
 import static java.util.Arrays.stream;
 
-@SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
 @RequiredArgsConstructor
 final class DrawData {
     private final Camera camera;
@@ -36,7 +35,7 @@ final class DrawData {
     }
 
     FloatBuffer getVertexBuffer() {
-        final int dataLength = streamVertexData().mapToInt(e -> e.length).sum();
+        final int dataLength = streamVertexData().mapToInt(List::size).sum();
 
         final FloatBuffer buffer = BufferUtils.createFloatBuffer(dataLength);
         streamVertexData().forEach(d -> addToBuffer(d, buffer));
@@ -72,7 +71,7 @@ final class DrawData {
         }
     }
 
-    private Stream<double[]> streamVertexData() {
+    private Stream<List<Double>> streamVertexData() {
         return entities.stream().map(Entity::getVertexData);
     }
 
@@ -81,7 +80,7 @@ final class DrawData {
     }
 
     private FloatBuffer bufferMatrix(final SimpleMatrix matrix) {
-        final double[] flatMatrixData = matrix.getMatrix().data;
+        final double[] flatMatrixData = matrix.getMatrix().getData();
         final FloatBuffer buffer = BufferUtils.createFloatBuffer(flatMatrixData.length);
         addToBuffer(flatMatrixData, buffer);
         buffer.flip();
@@ -90,6 +89,10 @@ final class DrawData {
 
     private void addToBuffer(final double[] data, final FloatBuffer buffer) {
         stream(data).forEach(d -> buffer.put((float) d));
+    }
+
+    private void addToBuffer(final List<Double> data, final FloatBuffer buffer) {
+        data.stream().forEach(d -> buffer.put(d.floatValue()));
     }
 
     @AllArgsConstructor

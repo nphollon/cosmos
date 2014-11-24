@@ -13,12 +13,12 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.function.DoubleConsumer;
+import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
 import static java.util.Arrays.stream;
-import static org.apache.commons.lang.ArrayUtils.addAll;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
@@ -30,12 +30,12 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DrawDataTest {
-    private static final double[] MATRIX_DATA = new double[]{
-            1, 0, 0, 0,
-            0, 1, 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1
-    };
+    private static final List<Double> MATRIX_DATA = Arrays.asList(
+            1., 0., 0., 0.,
+            0., 1., 0., 0.,
+            0., 0., 1., 0.,
+            0., 0., 0., 1.
+    );
     private static final double TOLERANCE = 1e-5;
 
     @Mock
@@ -61,12 +61,12 @@ public class DrawDataTest {
     public void vertexBufferShouldBeEmptyIfNoEntities() {
         final DrawData drawData = new DrawData(camera, entities);
         final FloatBuffer vertexBuffer = drawData.getVertexBuffer();
-        assertBufferContents(vertexBuffer, new double[0]);
+        assertBufferContents(vertexBuffer, new ArrayList<>());
     }
 
     @Test
     public void vertexBufferShouldContainDataFromEntity() {
-        final double[] expectedVertexData = new double[]{1, 2, 3, 4, 5, 6};
+        final List<Double> expectedVertexData = Arrays.asList(1.0, 2.0, 3.0, 4.0, 5.0, 6.0);
         addEntityWithVertexData(expectedVertexData);
 
         final DrawData drawData = new DrawData(camera, entities);
@@ -76,16 +76,22 @@ public class DrawDataTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void vertexBufferShouldContainDataFromAllEntities() {
-        final double[] vertexDataA = new double[]{1, 2, 3, 4, 5, 6};
-        final double[] vertexDataB = new double[]{36, 25, 16, 9, 4, 1};
+        final List<Double> expectedBufferContents = new ArrayList<>();
+
+        final List<Double> vertexDataA = Arrays.asList(1.0, 2.0, 3.0, 4.0, 5.0, 6.0);
         addEntityWithVertexData(vertexDataA);
+        expectedBufferContents.addAll(vertexDataA);
+
+        final List<Double> vertexDataB = Arrays.asList(36.0, 25.0, 16.0, 9.0, 4.0, 1.0);
         addEntityWithVertexData(vertexDataB);
+        expectedBufferContents.addAll(vertexDataB);
 
         final DrawData drawData = new DrawData(camera, entities);
         final FloatBuffer vertexBuffer = drawData.getVertexBuffer();
 
-        assertBufferContents(vertexBuffer, addAll(vertexDataA, vertexDataB));
+        assertBufferContents(vertexBuffer, expectedBufferContents);
     }
 
     @Test
@@ -228,7 +234,7 @@ public class DrawDataTest {
         entities.add(entity);
     }
 
-    private void addEntityWithVertexData(final double[] data) {
+    private void addEntityWithVertexData(final List<Double> data) {
         final Entity entity = mock(Entity.class);
         when(entity.getVertexData()).thenReturn(data);
         entities.add(entity);
@@ -239,7 +245,7 @@ public class DrawDataTest {
         stream(expectedData).forEach(checkNextBufferEntry(buffer));
     }
 
-    public static DoubleConsumer checkNextBufferEntry(final FloatBuffer buffer, final double tolerance) {
+    public static Consumer<Double> checkNextBufferEntry(final FloatBuffer buffer, final double tolerance) {
         return d -> assertThat((double) buffer.get(), closeTo(d, tolerance));
     }
 
@@ -247,8 +253,8 @@ public class DrawDataTest {
         return i -> assertThat(buffer.get(), is(i));
     }
 
-    public static void assertBufferContents(final FloatBuffer buffer, final double[] expectedData) {
-        assertThat(buffer.limit(), is(expectedData.length));
-        stream(expectedData).forEach(checkNextBufferEntry(buffer, TOLERANCE));
+    public static void assertBufferContents(final FloatBuffer buffer, final List<Double> expectedData) {
+        assertThat(buffer.limit(), is(expectedData.size()));
+        expectedData.stream().forEach(checkNextBufferEntry(buffer, TOLERANCE));
     }
 }

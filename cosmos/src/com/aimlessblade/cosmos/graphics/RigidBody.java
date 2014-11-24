@@ -4,6 +4,8 @@ import com.aimlessblade.cosmos.physics.Movable;
 import com.aimlessblade.cosmos.physics.Velocity;
 import org.ejml.simple.SimpleMatrix;
 
+import java.util.List;
+
 public final class RigidBody implements Entity, Movable {
     private final Movable pose;
     private final Entity vertexEntity;
@@ -14,7 +16,7 @@ public final class RigidBody implements Entity, Movable {
     }
 
     @Override
-    public double[] getVertexData() {
+    public List<Double> getVertexData() {
         return vertexEntity.getVertexData();
     }
 

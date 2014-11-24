@@ -10,6 +10,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static com.aimlessblade.cosmos.physics.Identity.assertMatrixEquality;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -81,7 +84,7 @@ public class RigidBodyTest {
 
     @Test
     public void vertexDataShouldComeFromVertexList() {
-        final double[] vertexData = new double[]{ 17, 18, 19, 20 };
+        final List<Double> vertexData = Arrays.asList(17.0, 18.0, 19.0, 20.0);
         when(entity.getVertexData()).thenReturn(vertexData);
 
         assertThat(body.getVertexData(), is(vertexData));
