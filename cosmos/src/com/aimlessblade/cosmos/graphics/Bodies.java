@@ -1,9 +1,9 @@
 package com.aimlessblade.cosmos.graphics;
 
-import com.aimlessblade.cosmos.graphics.vertex.AttributeInfo;
+import com.aimlessblade.cosmos.graphics.vertex.AttributeType;
 import com.aimlessblade.cosmos.graphics.vertex.Vertex;
-import com.aimlessblade.cosmos.graphics.vertex.VertexFactory;
 import com.aimlessblade.cosmos.graphics.vertex.VertexListEntity;
+import com.aimlessblade.cosmos.graphics.vertex.VertexType;
 import com.aimlessblade.cosmos.physics.Movable;
 import lombok.Getter;
 
@@ -12,19 +12,19 @@ import java.util.List;
 
 @Getter
 public final class Bodies {
-    private final VertexFactory vertexFactory;
+    private final VertexType vertexType;
 
     public Bodies() {
-        vertexFactory = new VertexFactory(new AttributeInfo("position", 3), new AttributeInfo("color", 3));
+        vertexType = new VertexType(new AttributeType("position", 3), new AttributeType("color", 3));
     }
 
     public RigidBody tetrahedron(final Movable pose) {
 
         final List<Vertex> vertexList = Arrays.asList(
-                vertexFactory.build(Arrays.asList(0., 0., 1., 1., 0., 0.)),
-                vertexFactory.build(Arrays.asList(0., 1., -1., 0., 1., 0.)),
-                vertexFactory.build(Arrays.asList(1., -1., -1., 0., 0., 1.)),
-                vertexFactory.build(Arrays.asList(-1., -1., -1., 1., 1., 1.))
+                vertexType.build(Arrays.asList(0., 0., 1., 1., 0., 0.)),
+                vertexType.build(Arrays.asList(0., 1., -1., 0., 1., 0.)),
+                vertexType.build(Arrays.asList(1., -1., -1., 0., 0., 1.)),
+                vertexType.build(Arrays.asList(-1., -1., -1., 1., 1., 1.))
         );
         final List<Integer> drawOrder = Arrays.asList(
                 0, 1, 2,
@@ -37,12 +37,12 @@ public final class Bodies {
 
     public RigidBody octahedron(final Movable pose) {
         final List<Vertex> vertexList = Arrays.asList(
-                vertexFactory.build(Arrays.asList(0., 0., 1., 1., 0., 0.)),
-                vertexFactory.build(Arrays.asList(0., 0., -1., 0., 1., 0.)),
-                vertexFactory.build(Arrays.asList(0., 1., 0., 0., 0., 1.)),
-                vertexFactory.build(Arrays.asList(0., -1., 0., 1., 1., 0.)),
-                vertexFactory.build(Arrays.asList(1., 0., 0., 1., 0., 1.)),
-                vertexFactory.build(Arrays.asList(-1., 0., 0., 0., 1., 1.))
+                vertexType.build(Arrays.asList(0., 0., 1., 1., 0., 0.)),
+                vertexType.build(Arrays.asList(0., 0., -1., 0., 1., 0.)),
+                vertexType.build(Arrays.asList(0., 1., 0., 0., 0., 1.)),
+                vertexType.build(Arrays.asList(0., -1., 0., 1., 1., 0.)),
+                vertexType.build(Arrays.asList(1., 0., 0., 1., 0., 1.)),
+                vertexType.build(Arrays.asList(-1., 0., 0., 0., 1., 1.))
         );
         final List<Integer> drawOrder = Arrays.asList(
                 0, 2, 4,

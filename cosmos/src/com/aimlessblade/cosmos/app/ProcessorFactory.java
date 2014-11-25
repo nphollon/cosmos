@@ -48,7 +48,7 @@ final class ProcessorFactory {
 
         final Processor drawingStage;
         try {
-            drawingStage = DrawingProcessor.build(vertexShader, fragmentShader, bodyFactory.getVertexFactory(), movableCamera, entities);
+            drawingStage = DrawingProcessor.build(vertexShader, fragmentShader, bodyFactory.getVertexType(), movableCamera, entities);
         } catch (IOException e) {
             throw new ApplicationException("Failed to find shader files.", e);
         }

@@ -8,19 +8,19 @@ import java.util.List;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-public class VertexFactoryTest {
+public class VertexTypeTest {
     @Test
     public void factoryStrideShouldBeLengthTimeSizeOfFloat() {
-        VertexFactory factory = new VertexFactory(new AttributeInfo("color", 3), new AttributeInfo("position", 3));
+        VertexType vertexType = new VertexType(new AttributeType("color", 3), new AttributeType("position", 3));
 
-        assertThat(factory.getStride(), is(6 * Float.BYTES));
+        assertThat(vertexType.getStride(), is(6 * Float.BYTES));
     }
 
     @Test
     public void firstFactoryAttributeShouldHaveOffsetZero() {
-        VertexFactory factory = new VertexFactory(new AttributeInfo("color", 3));
+        VertexType vertexType = new VertexType(new AttributeType("color", 3));
 
-        List<LoadedAttribute> attributes = factory.getAttributes();
+        List<LoadedAttribute> attributes = vertexType.getAttributes();
 
         List<LoadedAttribute> expectedAttributes = Arrays.asList(new LoadedAttribute("color", 3, 0));
         assertThat(attributes, is(expectedAttributes));
@@ -28,9 +28,9 @@ public class VertexFactoryTest {
 
     @Test
     public void factoryAttributeOffsetShouldIncreaseBySizeOfPreviousAttribute() {
-        VertexFactory factory = new VertexFactory(new AttributeInfo("color", 3), new AttributeInfo("position", 3));
+        VertexType vertexType = new VertexType(new AttributeType("color", 3), new AttributeType("position", 3));
 
-        List<LoadedAttribute> attributes = factory.getAttributes();
+        List<LoadedAttribute> attributes = vertexType.getAttributes();
 
         List<LoadedAttribute> expectedAttributes = Arrays.asList(new LoadedAttribute("color", 3, 0),
                 new LoadedAttribute("position", 3, 3 * Float.BYTES));
@@ -39,23 +39,31 @@ public class VertexFactoryTest {
 
     @Test
     public void factoryWithLengthThreeShouldAcceptThreeVertexComponents() {
-        VertexFactory factory = new VertexFactory(new AttributeInfo("color", 3));
+        VertexType vertexType = new VertexType(new AttributeType("color", 3));
         final List<Double> vertexData = Arrays.asList(11., 12., 13.);
 
-        Vertex vertex = factory.build(vertexData);
+        Vertex vertex = vertexType.build(vertexData);
 
         assertThat(vertex.data(), is(vertexData));
     }
 
     @Test(expected = VertexDataException.class)
     public void factoryShouldNotAcceptTooManyComponents() {
-        final VertexFactory factory = new VertexFactory(new AttributeInfo("temperature", 1));
-        factory.build(Arrays.asList(0.1, 0.2));
+        final VertexType vertexType = new VertexType(new AttributeType("temperature", 1));
+        vertexType.build(Arrays.asList(0.1, 0.2));
     }
 
     @Test(expected = VertexDataException.class)
     public void factoryShouldNotAcceptTooFewComponents() {
-        final VertexFactory factory = new VertexFactory(new AttributeInfo("smell", 5));
-        factory.build(Arrays.asList(5.3));
+        final VertexType vertexType = new VertexType(new AttributeType("smell", 5));
+        vertexType.build(Arrays.asList(5.3));
+    }
+
+    @Test
+    public void constructedVertexShouldHaveReferenceToVertexInfo() {
+        final VertexType vertexType = new VertexType(new AttributeType("moxie", 1));
+        Vertex vertex = vertexType.build(Arrays.asList(1.2));
+
+        assertThat(vertex.getType(), is(vertexType));
     }
 }

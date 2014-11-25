@@ -1,7 +1,7 @@
 package com.aimlessblade.cosmos.graphics.engine;
 
 import com.aimlessblade.cosmos.graphics.vertex.LoadedAttribute;
-import com.aimlessblade.cosmos.graphics.vertex.VertexFactory;
+import com.aimlessblade.cosmos.graphics.vertex.VertexType;
 import org.apache.commons.io.FileUtils;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL20;
@@ -30,15 +30,15 @@ final class ShaderProgram {
         return new ShaderProgram(id);
     }
 
-    void defineAttributes(final VertexFactory vertexFactory) {
-        for (final LoadedAttribute attribute: vertexFactory.getAttributes()) {
+    void defineAttributes(final VertexType vertexType) {
+        for (final LoadedAttribute attribute: vertexType.getAttributes()) {
             final String name = attribute.getName();
             final int length = attribute.getLength();
             final int offset = attribute.getOffset();
             final int index = glGetAttribLocation(id, name);
 
             glEnableVertexAttribArray(index);
-            glVertexAttribPointer(index, length, GL_FLOAT, false, vertexFactory.getStride(), offset);
+            glVertexAttribPointer(index, length, GL_FLOAT, false, vertexType.getStride(), offset);
         }
     }
 

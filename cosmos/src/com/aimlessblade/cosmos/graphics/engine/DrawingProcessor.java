@@ -1,9 +1,9 @@
 package com.aimlessblade.cosmos.graphics.engine;
 
-import com.aimlessblade.cosmos.processor.Processor;
 import com.aimlessblade.cosmos.graphics.Entity;
 import com.aimlessblade.cosmos.graphics.camera.Camera;
-import com.aimlessblade.cosmos.graphics.vertex.VertexFactory;
+import com.aimlessblade.cosmos.graphics.vertex.VertexType;
+import com.aimlessblade.cosmos.processor.Processor;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
@@ -20,13 +20,13 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 public final class DrawingProcessor implements Processor {
     private final ShaderProgram program;
     private final DrawData drawData;
-    private final VertexFactory vertexFactory;
+    private final VertexType vertexType;
 
-    public static Processor build(final File vertexShader, final File fragmentShader, final VertexFactory vertexFactory, final Camera camera, final List<? extends Entity> entities) throws IOException {
+    public static Processor build(final File vertexShader, final File fragmentShader, final VertexType vertexType, final Camera camera, final List<? extends Entity> entities) throws IOException {
         final ShaderProgram program = ShaderProgram.build(vertexShader, fragmentShader);
         final DrawData drawData = new DrawData(camera, entities);
 
-        final DrawingProcessor processor = new DrawingProcessor(program, drawData, vertexFactory);
+        final DrawingProcessor processor = new DrawingProcessor(program, drawData, vertexType);
 
         processor.loadVertexData();
 
@@ -73,7 +73,7 @@ public final class DrawingProcessor implements Processor {
 
         glBindBuffer(GL_ARRAY_BUFFER, bufferObject);
         glBufferData(GL_ARRAY_BUFFER, drawData.getVertexBuffer(), GL_STREAM_DRAW);
-        program.defineAttributes(vertexFactory);
+        program.defineAttributes(vertexType);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 

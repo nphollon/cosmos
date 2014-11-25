@@ -1,4 +1,4 @@
-package com.aimlessblade.cosmos.app;
+package com.aimlessblade.cosmos.processor;
 
 import org.junit.Before;
 import org.junit.Test;

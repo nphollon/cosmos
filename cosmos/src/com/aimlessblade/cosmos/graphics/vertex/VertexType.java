@@ -1,33 +1,36 @@
 package com.aimlessblade.cosmos.graphics.vertex;
 
+import lombok.ToString;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public final class VertexFactory {
+@ToString
+public final class VertexType {
     private static final int COMPONENT_SIZE = Float.BYTES;
 
     private final List<LoadedAttribute> loadedAttributes;
     private final int length;
 
-    public VertexFactory(final AttributeInfo... attributes) {
+    public VertexType(final AttributeType... attributes) {
         loadedAttributes = new ArrayList<>(attributes.length);
         length = loadAttributesAndGetLength(attributes);
     }
 
-    private int loadAttributesAndGetLength(final AttributeInfo[] attributes) {
+    private int loadAttributesAndGetLength(final AttributeType[] attributes) {
         int componentCount = 0;
 
-        for (final AttributeInfo attributeInfo : attributes) {
-            load(attributeInfo, componentCount);
-            componentCount += attributeInfo.getLength();
+        for (final AttributeType attributeType : attributes) {
+            load(attributeType, componentCount);
+            componentCount += attributeType.getLength();
         }
 
         return componentCount;
     }
 
-    private void load(final AttributeInfo attributeInfo, final int componentOffset) {
+    private void load(final AttributeType attributeType, final int componentOffset) {
         final int byteOffset = componentOffset * COMPONENT_SIZE;
-        final LoadedAttribute loadedAttribute = new LoadedAttribute(attributeInfo.getName(), attributeInfo.getLength(), byteOffset);
+        final LoadedAttribute loadedAttribute = new LoadedAttribute(attributeType.getName(), attributeType.getLength(), byteOffset);
         loadedAttributes.add(loadedAttribute);
     }
 
@@ -50,7 +53,7 @@ public final class VertexFactory {
         return loadedAttributes;
     }
 
-    private static class FactoryVertex implements Vertex {
+    private class FactoryVertex implements Vertex {
         private final List<Double> components;
 
         public FactoryVertex(final List<Double> components) {
@@ -60,6 +63,11 @@ public final class VertexFactory {
         @Override
         public List<Double> data() {
             return components;
+        }
+
+        @Override
+        public VertexType getType() {
+            return VertexType.this;
         }
     }
 }
