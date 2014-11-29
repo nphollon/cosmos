@@ -19,7 +19,7 @@ public class VertexListEntityTest {
     private List<Vertex> vertices;
 
     @Before
-    public void setup() {
+    public void setup() throws Exception {
         VertexType factory = new VertexType(new AttributeType("dummy", 2));
         vertices = new ArrayList<>();
         vertices.add(factory.build(Arrays.asList(17., 18.)));

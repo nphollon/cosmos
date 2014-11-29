@@ -38,7 +38,7 @@ public class VertexTypeTest {
     }
 
     @Test
-    public void factoryWithLengthThreeShouldAcceptThreeVertexComponents() {
+    public void factoryWithLengthThreeShouldAcceptThreeVertexComponents() throws Exception {
         VertexType vertexType = new VertexType(new AttributeType("color", 3));
         final List<Double> vertexData = Arrays.asList(11., 12., 13.);
 
@@ -48,19 +48,19 @@ public class VertexTypeTest {
     }
 
     @Test(expected = VertexDataException.class)
-    public void factoryShouldNotAcceptTooManyComponents() {
+    public void factoryShouldNotAcceptTooManyComponents() throws Exception {
         final VertexType vertexType = new VertexType(new AttributeType("temperature", 1));
         vertexType.build(Arrays.asList(0.1, 0.2));
     }
 
     @Test(expected = VertexDataException.class)
-    public void factoryShouldNotAcceptTooFewComponents() {
+    public void factoryShouldNotAcceptTooFewComponents() throws Exception {
         final VertexType vertexType = new VertexType(new AttributeType("smell", 5));
         vertexType.build(Arrays.asList(5.3));
     }
 
     @Test
-    public void constructedVertexShouldHaveReferenceToVertexInfo() {
+    public void constructedVertexShouldHaveReferenceToVertexInfo() throws Exception {
         final VertexType vertexType = new VertexType(new AttributeType("moxie", 1));
         Vertex vertex = vertexType.build(Arrays.asList(1.2));
 

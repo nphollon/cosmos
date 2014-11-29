@@ -6,6 +6,7 @@ import com.aimlessblade.cosmos.graphics.camera.Camera;
 import com.aimlessblade.cosmos.graphics.camera.MovableCamera;
 import com.aimlessblade.cosmos.graphics.camera.PerspectiveCamera;
 import com.aimlessblade.cosmos.graphics.engine.DrawingProcessor;
+import com.aimlessblade.cosmos.graphics.vertex.VertexDataException;
 import com.aimlessblade.cosmos.input.InputProcessor;
 import com.aimlessblade.cosmos.input.InputState;
 import com.aimlessblade.cosmos.input.KeyboardEvent;
@@ -29,7 +30,7 @@ import static com.aimlessblade.cosmos.physics.Vectors.pose;
 
 @AllArgsConstructor
 final class ProcessorFactory {
-    static Processor build() {
+    static Processor build() throws VertexDataException {
         Map<KeyboardEvent, Consumer<InputState>> keymap = Keymap.standard(5, 3);
         File vertexShader = new File("/home/nick/IdeaProjects/cosmos/cosmos/shaders/simple.vert");
         File fragmentShader = new File("/home/nick/IdeaProjects/cosmos/cosmos/shaders/simple.frag");

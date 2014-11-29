@@ -3,7 +3,7 @@ package com.aimlessblade.cosmos.graphics.vertex.io;
 import com.aimlessblade.cosmos.graphics.Entity;
 import org.junit.Test;
 
-import java.io.Reader;
+import java.io.BufferedReader;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -12,8 +12,8 @@ import static org.mockito.Mockito.when;
 
 public class PLYEntityFactoryTest {
     @Test
-    public void shouldParseHeaderAndBodySeparately() {
-        final Reader reader = mock(Reader.class);
+    public void shouldParseHeaderAndBodySeparately() throws Exception {
+        final BufferedReader reader = mock(BufferedReader.class);
         final Entity expectedEntity = mock(Entity.class);
         final PLYHeader header = mock(PLYHeader.class);
 

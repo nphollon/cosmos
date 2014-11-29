@@ -1,9 +1,6 @@
 package com.aimlessblade.cosmos.graphics;
 
-import com.aimlessblade.cosmos.graphics.vertex.AttributeType;
-import com.aimlessblade.cosmos.graphics.vertex.Vertex;
-import com.aimlessblade.cosmos.graphics.vertex.VertexListEntity;
-import com.aimlessblade.cosmos.graphics.vertex.VertexType;
+import com.aimlessblade.cosmos.graphics.vertex.*;
 import com.aimlessblade.cosmos.physics.Movable;
 import lombok.Getter;
 
@@ -18,7 +15,7 @@ public final class Bodies {
         vertexType = new VertexType(new AttributeType("position", 3), new AttributeType("color", 3));
     }
 
-    public RigidBody tetrahedron(final Movable pose) {
+    public RigidBody tetrahedron(final Movable pose) throws VertexDataException {
 
         final List<Vertex> vertexList = Arrays.asList(
                 vertexType.build(Arrays.asList(0., 0., 1., 1., 0., 0.)),
@@ -35,7 +32,7 @@ public final class Bodies {
         return new RigidBody(pose, new VertexListEntity(vertexList, drawOrder));
     }
 
-    public RigidBody octahedron(final Movable pose) {
+    public RigidBody octahedron(final Movable pose) throws VertexDataException {
         final List<Vertex> vertexList = Arrays.asList(
                 vertexType.build(Arrays.asList(0., 0., 1., 1., 0., 0.)),
                 vertexType.build(Arrays.asList(0., 0., -1., 0., 1., 0.)),

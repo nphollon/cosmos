@@ -1,6 +1,6 @@
 package com.aimlessblade.cosmos.graphics.vertex;
 
-class VertexDataException extends RuntimeException {
+public class VertexDataException extends Exception {
     public VertexDataException(final String message) {
         super(message);
     }

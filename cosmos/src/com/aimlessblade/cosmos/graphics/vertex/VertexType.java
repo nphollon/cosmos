@@ -34,12 +34,12 @@ public final class VertexType {
         loadedAttributes.add(loadedAttribute);
     }
 
-    public Vertex build(final List<Double> components) {
+    public Vertex build(final List<Double> components) throws VertexDataException {
         validateComponentNumber(components.size());
         return new FactoryVertex(components);
     }
 
-    private void validateComponentNumber(final int componentCount) {
+    private void validateComponentNumber(final int componentCount) throws VertexDataException {
         if (componentCount != length) {
             throw new VertexDataException("Expected " + length + " vertex components, but received " + componentCount);
         }
