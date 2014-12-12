@@ -25,7 +25,7 @@ public class VertexListEntityTest {
         vertices.add(factory.build(Arrays.asList(17., 18.)));
         vertices.add(factory.build(Arrays.asList(23., 24.)));
 
-        entity = new VertexListEntity(vertices, DRAW_ORDER);
+        entity = new VertexListEntity(new VertexType(), vertices, DRAW_ORDER);
     }
 
     @Test

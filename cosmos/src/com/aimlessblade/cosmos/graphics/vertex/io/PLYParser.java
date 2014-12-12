@@ -42,9 +42,10 @@ public class PLYParser {
     }
 
     public Entity buildEntityFromBody(final BufferedReader reader, final PLYHeader header) throws PLYParseError {
+        final VertexType vertexType = header.getVertexType();
         final List<Vertex> vertexList = readVertexList(reader, header);
         final List<Integer> elementData = readElementList(reader, header);
-        return new VertexListEntity(vertexList, elementData);
+        return new VertexListEntity(vertexType, vertexList, elementData);
     }
 
     private List<Vertex> readVertexList(final BufferedReader reader, final PLYHeader header) throws PLYParseError {

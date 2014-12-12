@@ -1,5 +1,6 @@
 package com.aimlessblade.cosmos.graphics;
 
+import com.aimlessblade.cosmos.graphics.vertex.VertexType;
 import com.aimlessblade.cosmos.physics.Movable;
 import com.aimlessblade.cosmos.physics.Velocity;
 import org.ejml.simple.SimpleMatrix;
@@ -28,6 +29,11 @@ public final class RigidBody implements Entity, Movable {
     @Override
     public List<Integer> getElementData() {
         return vertexEntity.getElementData();
+    }
+
+    @Override
+    public VertexType getVertexType() {
+        return vertexEntity.getVertexType();
     }
 
     @Override

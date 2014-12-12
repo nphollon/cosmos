@@ -13,10 +13,12 @@ import java.util.stream.Collectors;
 public class VertexListEntity implements Entity {
     private final List<Double> vertexData;
     private final List<Integer> elementData;
+    private final VertexType vertexType;
     private final int vertexCount;
 
-    public VertexListEntity(final List<Vertex> vertexList, final List<Integer> elementData) {
+    public VertexListEntity(final VertexType vertexType, final List<Vertex> vertexList, final List<Integer> elementData) {
         this.elementData = elementData;
+        this.vertexType = vertexType;
         vertexCount = vertexList.size();
         vertexData = flattenVertexList(vertexList);
     }
@@ -38,6 +40,11 @@ public class VertexListEntity implements Entity {
     @Override
     public List<Integer> getElementData() {
         return elementData;
+    }
+
+    @Override
+    public VertexType getVertexType() {
+        return vertexType;
     }
 
     @Override

@@ -97,6 +97,13 @@ public class PLYParserTest {
         assertThat(entity.getElementData(), is(Arrays.asList(2, 0, 1, 2, 1, 0)));
     }
 
+    @Test
+    public void entityShouldHaveVertexTypeOfHeader() throws Exception {
+        final Entity entity = parser.buildEntityFromBody(reader, header(0, 0));
+
+        assertThat(entity.getVertexType(), is(VERTEX_TYPE));
+    }
+
     @Test(expected = PLYParseError.class)
     public void shouldThrowErrorIfNotEnoughVertexLines() throws Exception {
 
