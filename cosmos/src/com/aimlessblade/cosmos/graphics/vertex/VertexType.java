@@ -1,11 +1,13 @@
 package com.aimlessblade.cosmos.graphics.vertex;
 
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @ToString
+@EqualsAndHashCode
 public final class VertexType {
     private static final int COMPONENT_SIZE = Float.BYTES;
 

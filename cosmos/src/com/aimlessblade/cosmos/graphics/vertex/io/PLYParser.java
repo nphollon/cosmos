@@ -12,22 +12,33 @@ import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
 public class PLYParser {
-
     private static final String PROPERTY_SEPARATOR = " +";
     private static final int ELEMENT_COUNT = 3;
     private static final int FACE_START = 1;
     private static final int FACE_END = FACE_START + ELEMENT_COUNT;
+    private static final VertexType VERTEX_TYPE =
+            new VertexType(new AttributeType("position", 3), new AttributeType("color", 3));
 
     public PLYHeader readHeader(final BufferedReader reader) throws PLYParseError {
-        try {
-            String line = reader.readLine();
-            while (!"end_header".equals(line)) {
-                line = reader.readLine();
-            }
-            return new PLYHeader(3, 1, new VertexType(new AttributeType("dummy", 6)));
-        } catch (IOException e) {
-            throw new PLYParseError(e);
-        }
+        final int vertexCount = parseElement(reader, "vertex");
+        final int faceCount = parseElement(reader, "face");
+
+        findLineStartingWith("end_header", reader);
+
+        return new PLYHeader(vertexCount, faceCount, VERTEX_TYPE);
+    }
+
+    private int parseElement(final BufferedReader reader, final String elementName) throws PLYParseError {
+        final String vertexLine = findLineStartingWith("element " + elementName, reader);
+        return Integer.parseInt(vertexLine.split(PROPERTY_SEPARATOR)[2]);
+    }
+
+    private String findLineStartingWith(final String prefix, final BufferedReader reader) throws PLYParseError {
+        String line;
+        do {
+            line = readLine(reader);
+        } while (!line.startsWith(prefix));
+        return line;
     }
 
     public Entity buildEntityFromBody(final BufferedReader reader, final PLYHeader header) throws PLYParseError {

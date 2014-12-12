@@ -35,6 +35,31 @@ public class PLYParserTest {
     }
 
     @Test
+    public void readHeaderShouldParseFaceAndVertexCountsFromStream() throws Exception {
+        when(reader.readLine()).thenReturn(
+                "ply",
+                "format ascii 1.0",
+                "element vertex 10",
+                "property float x",
+                "property float y",
+                "property float z",
+                "property float r",
+                "property float g",
+                "property float b",
+                "element face 23",
+                "property list uchar int vertex_index",
+                "end_header",
+                null
+        );
+
+        final PLYHeader header = parser.readHeader(reader);
+
+        assertThat(header.getVertexCount(), is(10));
+        assertThat(header.getFaceCount(), is(23));
+        assertThat(header.getVertexType(), is(VERTEX_TYPE));
+    }
+
+    @Test
     public void entityShouldHaveNoDataIfHeaderCountsAreZero() throws Exception {
 
         final Entity entity = parser.buildEntityFromBody(reader, header(0, 0));
