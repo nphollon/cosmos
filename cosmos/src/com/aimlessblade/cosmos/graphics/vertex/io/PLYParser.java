@@ -112,6 +112,10 @@ public class PLYParser {
             throw new PLYParseError("Reached end of input stream before expected");
         }
 
+        if (line.startsWith("comment")) {
+            return readLine(reader);
+        }
+
         return line;
     }
 }
