@@ -12,24 +12,31 @@ import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 
 public class PLYParser {
+    private static final String COMMENT_KEYWORD = "comment";
+    private static final String END_HEADER_KEYWORD = "end_header";
+    private static final String VERTEX_KEYWORD = "vertex";
+    private static final String FACE_KEYWORD = "face";
+    private static final String ELEMENT_KEYWORD = "element";
     private static final String PROPERTY_SEPARATOR = " +";
+
     private static final int ELEMENT_COUNT = 3;
     private static final int FACE_START = 1;
     private static final int FACE_END = FACE_START + ELEMENT_COUNT;
+
     private static final VertexType VERTEX_TYPE =
             new VertexType(new AttributeType("position", 3), new AttributeType("color", 3));
 
     public PLYHeader readHeader(final BufferedReader reader) throws PLYParseError {
-        final int vertexCount = parseElement(reader, "vertex");
-        final int faceCount = parseElement(reader, "face");
+        final int vertexCount = parseElement(reader, VERTEX_KEYWORD);
+        final int faceCount = parseElement(reader, FACE_KEYWORD);
 
-        findLineStartingWith("end_header", reader);
+        findLineStartingWith(END_HEADER_KEYWORD, reader);
 
         return new PLYHeader(vertexCount, faceCount, VERTEX_TYPE);
     }
 
     private int parseElement(final BufferedReader reader, final String elementName) throws PLYParseError {
-        final String vertexLine = findLineStartingWith("element " + elementName, reader);
+        final String vertexLine = findLineStartingWith(ELEMENT_KEYWORD + " " + elementName, reader);
         return Integer.parseInt(vertexLine.split(PROPERTY_SEPARATOR)[2]);
     }
 
@@ -112,7 +119,7 @@ public class PLYParser {
             throw new PLYParseError("Reached end of input stream before expected");
         }
 
-        if (line.startsWith("comment")) {
+        if (line.startsWith(COMMENT_KEYWORD)) {
             return readLine(reader);
         }
 

@@ -1,0 +1,24 @@
+ply
+format ascii 1.0
+comment spherical coordinates
+element vertex 8
+property double theta
+property double phi
+property double rho
+element face 6
+property list uchar int vertex_index
+end_header
+0 0 1
+70.52877936550931 0 1
+70.52877936550931 120 1
+70.52877936550931 240 1
+109.47122063449069 60 1
+109.47122063449069 180 1
+109.47122063449069 300 1
+180 0 1
+4 0 2 4 1
+4 0 3 5 2
+4 0 1 6 3
+4 7 4 2 5
+4 7 5 3 6
+4 7 6 1 4

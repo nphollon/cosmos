@@ -1,0 +1,18 @@
+ply
+format ascii 1.0
+comment spherical coordinates
+element vertex 4
+property double theta
+property double phi
+property double rho
+element face 4
+property list uchar int vertex_index
+end_header
+0 0 1
+109.47122063449069 0 1
+109.47122063449069 120 1
+109.47122063449069 240 1
+3 0 2 1
+3 0 3 2
+3 0 1 3
+3 1 3 2
