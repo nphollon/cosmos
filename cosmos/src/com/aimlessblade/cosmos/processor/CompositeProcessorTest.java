@@ -1,5 +1,7 @@
 package com.aimlessblade.cosmos.processor;
 
+import com.aimlessblade.cosmos.processor.CompositeProcessor;
+import com.aimlessblade.cosmos.processor.Processor;
 import org.junit.Before;
 import org.junit.Test;
 
